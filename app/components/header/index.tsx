@@ -14,7 +14,9 @@ export function Header() {
     <header ref={ref} className='fixed top-0 w-full z-10 '>
       <div className=' bg-[linear-gradient(180deg,rgba(85,5,5,0.30)_26%,rgba(40,3,3,0.00)_100%)] border-b backdrop-blur-[20px] border-[#550E0E] shadow-[0px_4px_20px_1px_rgba(0,0,0,0.20)] '>
         <div className='flex justify-between items-center w-full max-w-[1117px] mx-auto  h-[50px] sm:h-[60px] px-4 pt-3 pb-[11px]'>
-          <Image src={Logo} alt='' className='w-[77px] sm:w-[108px]' />
+          <Link href='/'>
+            <Image src={Logo} alt='' className='w-[77px] sm:w-[108px]' />
+          </Link>
           <div onClick={() => setOpen(!open)} className='relative'>
             <Image src={UserIcon} alt='' className='w-[30px] h-[30px] sm:w-[38px] sm:h-[38px]' />
           </div>

@@ -2,7 +2,7 @@ import { Bangkok } from '@/app/layout';
 
 export default function FortuneNumberSection() {
   return (
-    <section className='relative w-[343px] mt-4 mx-auto rounded-md border-[0.5px] border-[#FFD66B] bg-[linear-gradient(180deg,#FDF5CB_0%,#FDF5CB_0.01%,#FFF9DB_100%)] p-4 flex flex-col gap-4'>
+    <section className='relative w-[343px] md:w-[260px] mt-4 mx-auto rounded-md border-[0.5px] border-[#FFD66B] bg-[linear-gradient(180deg,#FDF5CB_0%,#FDF5CB_0.01%,#FFF9DB_100%)] p-4 flex flex-col gap-4'>
       <div className='absolute inset-x-[15px] -top-[23px] flex justify-between'>
         <div className='rounded-[3px] bg-[linear-gradient(98deg,#FA7519_-2.01%,#FFCB7E_109.77%)] w-2 h-7'></div>
         <div className='rounded-[3px] bg-[linear-gradient(98deg,#FA7519_-2.01%,#FFCB7E_109.77%)] w-2 h-7'></div>
@@ -47,7 +47,7 @@ export default function FortuneNumberSection() {
           </svg>
           <div className='truncate w-full text-sm leading-6 font-medium text-[#292929]'>CODE01CODE01</div>
           <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'>
-            <g clip-path='url(#clip0_183_3898)'>
+            <g clipPath='url(#clip0_183_3898)'>
               <path
                 d='M13.3333 6H7.33333C6.59695 6 6 6.59695 6 7.33333V13.3333C6 14.0697 6.59695 14.6667 7.33333 14.6667H13.3333C14.0697 14.6667 14.6667 14.0697 14.6667 13.3333V7.33333C14.6667 6.59695 14.0697 6 13.3333 6Z'
                 stroke='#6D3A0A'
