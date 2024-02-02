@@ -1,80 +1,119 @@
 'use client'
 
-import BlueLixi from '@/assets/blue-lixi.svg'
-import GoldLixi from '@/assets/gold-lixi.svg'
 import Background from '@/assets/home-background.png'
 import MBackground from '@/assets/home-background_mobile.png'
-import LixiStage from '@/assets/lixi-stage.svg'
-import Lixi from '@/assets/lixi.svg'
-import RedLixi from '@/assets/red-lixi.svg'
-import { useDisclosure } from '@nextui-org/react'
+import Stage from '@/assets/home-stage.svg'
+import { Context } from '@/context'
+import getConfig from 'next/config'
 import Image from 'next/image'
-import { Bangkok, Go3 } from '../../layout'
-import GiftModal from '../modal/giftModal'
+import { useParams } from 'next/navigation'
+import { useContext, useState } from 'react'
 import FortuneNumberSection from './fortuneNumberSection'
 import LeaderboardSection from './leaderboardSection'
+import LixiStage from './lixiStage'
 import RuleSection from './ruleSection'
-import RedGem from '@/assets/red-gem.svg'
+
 export default function HomePage() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { account, submitCode } = useContext(Context)
+  const [value, setValue] = useState('')
+  const [errorMsg, setErrorMsg] = useState('')
+  const config = getConfig()
+  const params = useParams()
+
+  const connectXHandler = () => {
+    window.location.href = `${config.REST_API_ENDPOINT}/auth/twitter`
+  }
+
+  const submitCodeHandler = async () => {
+    try {
+      await submitCode(value)
+    } catch (error) {}
+  }
+
+  if (account && account.code) {
+    return (
+      <div className='relative min-h-screen'>
+        {/* background  */}
+        <div className='absolute inset-x-0 top-0 overflow-hidden flex flex-col items-center'>
+          <Image src={Background} alt='' className='w-full min-w-[1008px] hidden sm:block' />
+          <Image src={MBackground} alt='' className='w-full min-w-[375px] mt-[50px] sm:hidden' />
+        </div>
+        {/* background  */}
+        <div className='flex flex-col items-center xl:flex-row xl:items-start xl:justify-center xl:gap-12 xl:pt-7'>
+          <LixiStage />
+          <div className='flex flex-col items-center xl:mt-20'>
+            <RuleSection />
+            <div className='flex flex-col items-center md:flex-row md:items-start md:gap-[14px] md:ml-6'>
+              <FortuneNumberSection />
+              <LeaderboardSection />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className='relative min-h-screen'>
-      <GiftModal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <div className='flex flex-col items-center'>
-          <div className={`${Bangkok.className} text-[#8E0B09] text-sm`}>Congratulations!</div>
-          <div className='mt-[6px] text-sm leading-5 text-center'>You have received a prize.<br /> Don’t forget to claim it in inventory</div>
-          <Image src={RedGem} alt='' className='mt-4 w-[72px]' />
-          <div className='text-[#000] font-bold text-sm mt-[8px]'>Red Gem</div>
-        </div>
-      </GiftModal>
       {/* background  */}
-      <div className='absolute inset-x-0 top-0 overflow-hidden flex flex-col items-center'>
+      <div className='absolute inset-0 overflow-hidden flex flex-col items-center'>
         <Image src={Background} alt='' className='w-full min-w-[1008px] hidden sm:block' />
         <Image src={MBackground} alt='' className='w-full min-w-[375px] mt-[50px] sm:hidden' />
       </div>
       {/* background  */}
-      <div className='flex flex-col items-center xl:flex-row xl:items-start xl:justify-center xl:gap-12 xl:pt-7'>
-        <div className='relative flex flex-col items-center w-full xl:w-fit xl:mx-0 mx-auto mb-[9.2rem]'>
-          <Image src={Lixi} alt='' className='mt-20 relative z-[2] -mb-3' />
-          <Image src={LixiStage} alt='' className='relative z-[1]' />
-          <div className='absolute z-[3] top-[19.75rem] flex flex-col items-center'>
-            <button
-              onClick={onOpen}
-              className=' text-[#6D3A0A] font-semibold p-[10px] rounded-2xl bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] flex items-center gap-2 h-10 w-[149px] justify-center'>
-              OPEN
-            </button>
-            <div className='mt-10 text-[#F9E2A4] text-sm leading-[18px] '>
-              You don’t have any Li Xi, refer your friends to earn more.
-            </div>
-            <div className='flex mt-4 relative z-[2] gap-1'>
-              <Image src={BlueLixi} alt='' className='w-[105px] h-[108px]' />
-              <Image src={RedLixi} alt='' className='w-[105px] h-[108px]' />
-              <Image src={GoldLixi} alt='' className='w-[105px] h-[108px]' />
-            </div>
-            <div className='relative grid place-items-center w-[347px] h-[83px] -mt-8 z-[1] rounded-md border-[5px] border-[#EDB48D] bg-[#B43325] shadow-[0px_4px_9.9px_0px_rgba(0,0,0,0.10),0px_4px_4px_0px_rgba(0,0,0,0.25)] '>
-              <div className='flex w-[286px] justify-between absolute bottom-[11px]'>
-                <div
-                  className={`${Go3.className} h-[22px] rounded-2xl px-[10px] text-center min-w-[54px] bg-[#860204] shadow-[0px_2px_3.5px_0px_rgba(0,0,0,0.10)_inset] `}>
-                  0
-                </div>
-                <div
-                  className={`${Go3.className} h-[22px] rounded-2xl px-[10px] text-center min-w-[54px] bg-[#860204] shadow-[0px_2px_3.5px_0px_rgba(0,0,0,0.10)_inset] `}>
-                  1888
-                </div>
-                <div
-                  className={`${Go3.className} h-[22px] rounded-2xl px-[10px] text-center min-w-[54px] bg-[#860204] shadow-[0px_2px_3.5px_0px_rgba(0,0,0,0.10)_inset] `}>
-                  0
-                </div>
+      <div className='relative overflow-hidden flex flex-col items-center w-full mx-auto'>
+        <Image src={Stage} alt='' className='mt-16 max-w-[390px] w-[110%] mr-[2.3rem]' />
+        <div className='absolute top-[69%] inset-x-0 flex flex-col items-center'>
+          {account && !account?.code ? (
+            <>
+              <div className='text-[#F7C983] text-sm leading-4 font-semibold'>Fortune Number</div>
+              <div className='mt-4 w-[311px] flex gap-4'>
+                <input
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                  title='Fortune Number'
+                  className={`text-sm leading-[18px] p-[10px] bg-[#fff] rounded-lg shadow-[0px_4px_8.8px_0px_rgba(0,0,0,0.25)_inset] w-[251px] ${
+                    errorMsg ? 'text-[#F23A3A]' : 'text-[#292929]'
+                  } focus:outline-none`}
+                />
+                <button
+                  onClick={submitCodeHandler}
+                  disabled={!value || !!errorMsg}
+                  className='cursor-pointer p-[10px] bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] rounded-2xl disabled:bg-[linear-gradient(180deg,#EFEBE4_0%,#B3AAA0_100%)] [&_path]:disabled:stroke-[#9D9D9D]'>
+                  <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'>
+                    <path d='M5 12H19' stroke='#6D3A0A' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
+                    <path
+                      d='M12 5L19 12L12 19'
+                      stroke='#6D3A0A'
+                      strokeWidth='2'
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                    />
+                  </svg>
+                </button>
               </div>
-            </div>
-          </div>
-        </div>
-        <div className='flex flex-col items-center xl:mt-20'>
-          <RuleSection />
-          <div className='flex flex-col items-center md:flex-row md:items-start md:gap-[14px] md:ml-6'>
-            <FortuneNumberSection />
-            <LeaderboardSection />
-          </div>
+              {errorMsg && <div className='text-sm leading-[18px] text-[#F23A3A] mt-[6px] w-[311px]'>{errorMsg}</div>}
+            </>
+          ) : (
+            <>
+              <button
+                onClick={connectXHandler}
+                className='p-[10px] rounded-2xl bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] flex items-center gap-2 h-10 w-[149px] justify-center'>
+                <span className='font-medium text-[#6D3A0A]'>Connect</span>
+                <span className='p-[3px]'>
+                  <svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'>
+                    <path
+                      d='M0.0340664 0L5.4393 7.7218L0 14H1.22427L5.98647 8.50322L9.83407 14H14L8.29052 5.84394L13.3534 0H12.1292L7.74358 5.06227L4.2 0H0.0340664ZM1.8344 0.963405H3.74821L12.1994 13.0366H10.2856L1.8344 0.963405Z'
+                      fill='#6D3A0A'
+                    />
+                  </svg>
+                </span>
+              </button>
+              <div className='text-[#FEA768] italic text-sm leading-4 mt-11'>
+                *Please connect your X account to continue
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

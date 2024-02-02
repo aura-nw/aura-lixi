@@ -3,11 +3,13 @@
 import Image from 'next/image'
 import Logo from 'assets/logo.svg'
 import UserIcon from '@/assets/user-icon.svg'
-import { useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { useClickOutside } from '@/hooks'
 import Link from 'next/link'
+import { Context } from '@/context'
 export function Header() {
   const [open, setOpen] = useState(false)
+  const { disconnect, account } = useContext(Context)
   const ref = useRef(null)
   useClickOutside(ref, () => setOpen(false))
   return (
@@ -17,12 +19,15 @@ export function Header() {
           <Link href='/'>
             <Image src={Logo} alt='' className='w-[77px] sm:w-[108px]' />
           </Link>
-          <div onClick={() => setOpen(!open)} className='relative'>
-            <Image src={UserIcon} alt='' className='w-[30px] h-[30px] sm:w-[38px] sm:h-[38px]' />
-          </div>
+          {account && (
+            <div onClick={() => setOpen(!open)} className='relative flex items-center gap-2 cursor-pointer'>
+              <Image src={UserIcon} alt='' className='w-[30px] h-[30px] sm:w-[38px] sm:h-[38px]' />
+              <span className='text-[#F7C983] text-sm'>{account.username}</span>
+            </div>
+          )}
         </div>
       </div>
-      {open && (
+      {open && account && (
         <div className='absolute top-full right-[max(16px,calc(50%-545px))] p-4 rounded-b-md flex flex-col gap-4 border-x border-b border-[#D52121] bg-[linear-gradient(180deg,rgba(117,20,20,0.50)_0%,rgba(133,7,7,0.50)_0.01%,rgba(244,63,63,0.50)_100%)] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] backdrop-blur-[6px]'>
           <Link
             href='/my-inventory'
@@ -30,7 +35,7 @@ export function Header() {
             <span className='w-[9px] h-[9px] rounded-sm rotate-45 bg-[#F0C865] shrink-0'></span>
             My Inventory
           </Link>
-          <div className='text-sm leading-6 font-medium flex items-center gap-2 whitespace-nowrap'>
+          <div className='text-sm leading-6 font-medium flex items-center gap-2 whitespace-nowrap cursor-pointer' onClick={disconnect}>
             <span className='w-[9px] h-[9px] rounded-sm rotate-45 bg-[#F0C865] shrink-0'></span>
             Disconnect
           </div>

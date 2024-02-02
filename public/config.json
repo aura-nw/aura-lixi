@@ -1,0 +1,4 @@
+{
+  "REST_API_ENDPOINT": "https://campaign-api.dev.aura.network",
+  "HASURA_ENDPOINT": "https://campaign-hasura.dev.aura.network"
+}

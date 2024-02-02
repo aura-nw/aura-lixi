@@ -1,4 +1,4 @@
-import { Bangkok } from '@/app/layout'
+import { Bangkok } from '@/context'
 import Medal1 from '@/assets/medal_1.svg'
 import Medal2 from '@/assets/medal_2.svg'
 import Medal3 from '@/assets/medal_3.svg'
@@ -24,7 +24,7 @@ export default function LeaderboardSection() {
           <div className='flex items-center gap-[6px]'>
             <div>Point</div>
             <Tooltip content='1 point = 1 successful referral'>
-              <div className='w-4 h-4 rounded-full bg-[linear-gradient(98deg,#EDB48D_-2.01%,#FFCB7E_109.77%)] grid place-items-center'>
+              <div className='w-4 h-4 rounded-full bg-[linear-gradient(98deg,#EDB48D_-2.01%,#FFCB7E_109.77%)] grid place-items-center cursor-help'>
                 <svg xmlns='http://www.w3.org/2000/svg' width='4' height='8' viewBox='0 0 4 8' fill='none'>
                   <path
                     d='M2.53401 1.67801H1.40601V0.562012H2.53401V1.67801ZM3.11001 7.43801H0.890015V6.16601H1.22601V3.46601H0.890015V2.19401H2.77401V6.16601H3.11001V7.43801Z'
