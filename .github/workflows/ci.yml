@@ -30,6 +30,7 @@ jobs:
           tags: |
             ${{ env.CONTAINER_RELEASE_IMAGE }}
   update-manifest:
+    needs: build-and-push
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
