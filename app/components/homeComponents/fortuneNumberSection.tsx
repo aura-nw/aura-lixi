@@ -1,18 +1,17 @@
-import { Bangkok } from '@/context'
-import { Context } from '@/context'
-import { useContext, useEffect, useState } from 'react'
-import CopyToClipboard from 'react-copy-to-clipboard'
-import Modal from '../modal'
+import { Bangkok, Context } from '@/context'
+import { fetchHistory } from '@/services'
 import { useDisclosure } from '@nextui-org/react'
-import Tooltip from '../tooltip'
-import { useQuery } from '@apollo/client'
-import { GET_USER_REF_HISTORY } from '@/services'
 import moment from 'moment'
+import { useContext } from 'react'
+import CopyToClipboard from 'react-copy-to-clipboard'
+import useSWR from 'swr'
+import Modal from '../modal'
 export default function FortuneNumberSection() {
   const { account } = useContext(Context)
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
-  const [history, setHistory] = useState()
-  const { loading, error, data, refetch } = useQuery(GET_USER_REF_HISTORY(account?.id as string))
+  const { data } = useSWR('fetchHistory', fetchHistory, {
+    refreshInterval: 30000,
+  })
   return (
     <>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -28,12 +27,12 @@ export default function FortuneNumberSection() {
           </div>
           <div
             className={`w-full [&>div:nth-child(odd)]:bg-[#F5E3BC] [&>div:nth-child(even)]:bg-[transparent] max-h-[222px] overflow-auto custom-scrollbar ${
-              data?.task_referrals.length > 7 ? 'pr-4' : ''
+              data?.length > 7 ? 'pr-4' : ''
             }`}>
-            {data?.task_referrals.map((row: any, index: number) => (
+            {data?.map((row: any, index: number) => (
               <div key={index} className='flex p-1 rounded-md text-sm items-center'>
                 <div className='text-[#292929] text-sm leading-6 w-[138px]'>{row.code}</div>
-                <div className='text-[#B93139] flex-1'>{row?.userByReferrerId?.username}</div>
+                <div className='text-[#B93139] flex-1'>{row?.referee?.username}</div>
                 <div className='text-[#B93139]'>{moment(row.created_at).format('DD/MM/yyyy HH:mm')}</div>
               </div>
             ))}
@@ -61,7 +60,6 @@ export default function FortuneNumberSection() {
           </CopyToClipboard>
           <button
             onClick={() => {
-              refetch()
               onOpen()
             }}
             className='p-[6px] rounded-[10px] bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] flex items-center gap-[2px] h-6 text-[9px] justify-center'>

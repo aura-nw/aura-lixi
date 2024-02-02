@@ -1,5 +1,6 @@
 import { privateAxios } from '@/context'
 import { gql } from '@apollo/client'
+import axios from 'axios'
 import getConfig from 'next/config'
 export const GET_USER_DATA = gql`
   query GET_USER_DATA {
@@ -54,12 +55,28 @@ export const applyCode = async (code: string) => {
     const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/referrals/apply`, {
       code,
     })
-    return res
+    return res.data
   } catch (error: any) {
     window.alert(error?.message || 'Something went wrong')
   }
 }
 
+export const fetchLeaderboard = async () => {
+  try {
+    const res = await axios.get(`${getConfig().REST_API_ENDPOINT}/campaigns/leader-board`)
+    return res.data
+  } catch (error: any) {
+    window.alert(error?.message || 'Something went wrong')
+  }
+}
+export const fetchHistory = async () => {
+  try {
+    const res = await privateAxios.get(`${getConfig().REST_API_ENDPOINT}/referrals/history`)
+    return res.data
+  } catch (error: any) {
+    window.alert(error?.message || 'Something went wrong')
+  }
+}
 export const sample = async () => {
   try {
   } catch (error: any) {

@@ -4,7 +4,15 @@ import Medal2 from '@/assets/medal_2.svg'
 import Medal3 from '@/assets/medal_3.svg'
 import Image from 'next/image'
 import Tooltip from '../tooltip'
+import useSWR from 'swr'
+import { fetchHistory, fetchLeaderboard } from '@/services'
 export default function LeaderboardSection() {
+  const { data } = useSWR('fetchLeaderboard', fetchLeaderboard, {
+    refreshInterval: 30000,
+  })
+  const { data: history } = useSWR('fetchHistory', fetchHistory, {
+    refreshInterval: 30000,
+  })
   return (
     <section className='relative w-[343px] md:w-[317px] mt-4 mx-auto rounded-md border-[0.5px] border-[#FFD66B] bg-[linear-gradient(180deg,#FDF5CB_0%,#FDF5CB_0.01%,#FFF9DB_100%)] p-4 flex flex-col gap-4'>
       <div className='absolute inset-x-[15px] -top-[23px] flex justify-between'>
@@ -16,7 +24,10 @@ export default function LeaderboardSection() {
         Leaderboard
       </div>
       <div className='flex flex-col w-full gap-2'>
-        <div className='flex justify-between items-center text-[#000] text-sm leading-6 font-medium pr-6'>
+        <div
+          className={`flex justify-between items-center text-[#000] text-sm leading-6 font-medium  ${
+            data?.length > 6 ? 'pr-6' : ''
+          }`}>
           <div className='flex items-center gap-6'>
             <div>Rank</div>
             <div>Participant</div>
@@ -35,74 +46,34 @@ export default function LeaderboardSection() {
             </Tooltip>
           </div>
         </div>
-        <div className='w-full [&>div:nth-child(odd)]:bg-[#F5E3BC] [&>div:nth-child(even)]:bg-[transparent] max-h-[192px] overflow-auto custom-scrollbar pr-4'>
-          <div className='w-full  flex items-center justify-between p-1 rounded-md text-sm leading-[18px]'>
-            <div className='flex items-center gap-2'>
-              <Image src={Medal1} alt='' className='h-6' />
-              <div className='text-[#B93139]'>Hoang Son Pham</div>
-            </div>
-            <div className='text-[#292929]'>11330</div>
-          </div>
-          <div className='w-full  flex items-center justify-between p-1 rounded-md text-sm leading-[18px]'>
-            <div className='flex items-center gap-2'>
-              <Image src={Medal2} alt='' className='h-6' />
-              <div className='text-[#B93139]'>Hoang Son Pham</div>
-            </div>
-            <div className='text-[#292929]'>11330</div>
-          </div>
-          <div className='w-full  flex items-center justify-between p-1 rounded-md text-sm leading-[18px]'>
-            <div className='flex items-center gap-2'>
-              <Image src={Medal3} alt='' className='h-6' />
-              <div className='text-[#B93139]'>Hoang Son Pham</div>
-            </div>
-            <div className='text-[#292929]'>11330</div>
-          </div>
-          <div className='w-full  flex items-center justify-between p-1 rounded-md text-sm leading-[18px]'>
-            <div className='flex items-center gap-2'>
-              <div className='text-[#292929] grid place-items-center font-semibold w-5 h-6'>4</div>
-              <div className='text-[#B93139]'>Hoang Son Pham</div>
-            </div>
-            <div className='text-[#292929]'>11330</div>
-          </div>
-          <div className='w-full  flex items-center justify-between p-1 rounded-md text-sm leading-[18px]'>
-            <div className='flex items-center gap-2'>
-              <div className='text-[#292929] grid place-items-center font-semibold w-5 h-6'>5</div>
-              <div className='text-[#B93139]'>Hoang Son Pham</div>
-            </div>
-            <div className='text-[#292929]'>11330</div>
-          </div>
-          <div className='w-full  flex items-center justify-between p-1 rounded-md text-sm leading-[18px]'>
-            <div className='flex items-center gap-2'>
-              <div className='text-[#292929] grid place-items-center font-semibold w-5 h-6'>6</div>
-              <div className='text-[#B93139]'>Hoang Son Pham</div>
-            </div>
-            <div className='text-[#292929]'>11330</div>
-          </div>
-          <div className='w-full  flex items-center justify-between p-1 rounded-md text-sm leading-[18px]'>
-            <div className='flex items-center gap-2'>
-              <div className='text-[#292929] grid place-items-center font-semibold w-5 h-6'>7</div>
-              <div className='text-[#B93139]'>Hoang Son Pham</div>
-            </div>
-            <div className='text-[#292929]'>11330</div>
-          </div>
-          <div className='w-full  flex items-center justify-between p-1 rounded-md text-sm leading-[18px]'>
-            <div className='flex items-center gap-2'>
-              <div className='text-[#292929] grid place-items-center font-semibold w-5 h-6'>8</div>
-              <div className='text-[#B93139]'>Hoang Son Pham</div>
-            </div>
-            <div className='text-[#292929]'>11330</div>
-          </div>
-          <div className='w-full  flex items-center justify-between p-1 rounded-md text-sm leading-[18px]'>
-            <div className='flex items-center gap-2'>
-              <div className='text-[#292929] grid place-items-center font-semibold w-5 h-6'>9</div>
-              <div className='text-[#B93139]'>Hoang Son Pham</div>
-            </div>
-            <div className='text-[#292929]'>11330</div>
-          </div>
+        <div
+          className={`w-full [&>div:nth-child(odd)]:bg-[#F5E3BC] [&>div:nth-child(even)]:bg-[transparent] h-[192px] overflow-auto custom-scrollbar ${
+            data?.length > 6 ? 'pr-4' : ''
+          }`}>
+          {data
+            ?.sort((a: any, b: any) => b.referrals_count - a.referrals_count)
+            ?.map((row: any, index: number) => (
+              <div
+                key={index}
+                className='w-full  flex items-center justify-between p-1 rounded-md text-sm leading-[18px]'>
+                <div className='flex items-center gap-2'>
+                  {index == 0 ? (
+                    <Image src={Medal1} alt='' className='h-6' />
+                  ) : index == 1 ? (
+                    <Image src={Medal2} alt='' className='h-6' />
+                  ) : index == 2 ? (
+                    <Image src={Medal3} alt='' className='h-6' />
+                  ) : (
+                    <div className='text-[#292929] grid place-items-center font-semibold w-5 h-6'>{index + 1}</div>
+                  )}
+                  <div className='text-[#B93139]'>{row.username}</div>
+                </div>
+                <div className='text-[#292929]'>{row.referrals_count}</div>
+              </div>
+            ))}
         </div>
-        <div className='border-t border-[#F5E3BC] pt-[6px] flex items-center justify-between text-sm leading-6 text-[#6D3A0A] font-medium'>
-          <div>Your rank: 12 </div>
-          <div>1234 pts</div>
+        <div className='border-t border-[#F5E3BC] pt-[6px] flex justify-end text-sm leading-6 text-[#6D3A0A] font-medium'>
+          {`Your points: ${history?.length || 0}`}
         </div>
       </div>
     </section>
