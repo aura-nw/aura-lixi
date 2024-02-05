@@ -7,14 +7,15 @@ import { Context } from '@/context'
 import getConfig from 'next/config'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import FortuneNumberSection from './fortuneNumberSection'
 import LeaderboardSection from './leaderboardSection'
 import LixiStage from './lixiStage'
 import RuleSection from './ruleSection'
-
+import BlueLixi from '@/assets/blue-lixi.svg'
 export default function HomePage() {
   const { account, submitCode } = useContext(Context)
+  const [loading, setLoading] = useState(false)
   const [value, setValue] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const config = getConfig()
@@ -23,16 +24,28 @@ export default function HomePage() {
   const connectXHandler = () => {
     window.location.href = `${config.REST_API_ENDPOINT}/auth/twitter`
   }
-
+  useEffect(() => {
+    setErrorMsg('')
+  }, [value])
   const submitCodeHandler = async () => {
     try {
+      if (loading) return
+      setLoading(true)
       await submitCode(value)
-    } catch (error) {}
+      setLoading(false)
+    } catch (error: any) {
+      setLoading(false)
+      if (error?.message || typeof error == 'string') {
+        setErrorMsg(error?.message || error)
+      } else {
+        setErrorMsg('Something went wrong. Please try again.')
+      }
+    }
   }
 
   if (account && account.code) {
     return (
-      <div className='relative min-h-screen'>
+      <main className='relative min-h-screen'>
         {/* background  */}
         <div className='absolute inset-x-0 top-0 overflow-hidden flex flex-col items-center'>
           <Image src={Background} alt='' className='w-full min-w-[1008px] hidden sm:block' />
@@ -49,12 +62,12 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      </div>
+      </main>
     )
   }
 
   return (
-    <div className='relative min-h-screen'>
+    <main className='relative min-h-screen'>
       {/* background  */}
       <div className='absolute inset-0 overflow-hidden flex flex-col items-center'>
         <Image src={Background} alt='' className='w-full min-w-[1008px] hidden sm:block' />
@@ -92,7 +105,11 @@ export default function HomePage() {
                   </svg>
                 </button>
               </div>
-              {errorMsg && <div className='text-sm leading-[18px] text-[#F23A3A] mt-[6px] w-[311px]'>{errorMsg}</div>}
+              <div className='text-sm leading-[18px] text-[#F23A3A] mt-[6px] w-[311px] min-h-[18px]'>{errorMsg}</div>
+              <div className='flex items-center gap-[10px] mt-2'>
+                <Image src={BlueLixi} alt='' className='h-8 w-8' />
+                <div className='text-[#FEA768] text-sm italic'>Collect a Fortune Number to receive a Blue Li Xi</div>
+              </div>
             </>
           ) : (
             <>
@@ -116,6 +133,6 @@ export default function HomePage() {
           )}
         </div>
       </div>
-    </div>
+    </main>
   )
 }

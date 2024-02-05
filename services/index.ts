@@ -11,10 +11,42 @@ export const GET_USER_DATA = gql`
     }
   }
 `
+export const GET_USER_INVENTORY = gql`
+  subscription MyQuery {
+    lixi(where: { status: { _eq: "OPENED" } }) {
+      created_at
+      status
+      type
+      prize_nft
+      prize_aura
+      id
+      updated_at
+    }
+  }
+`
 export const GET_USER_REFFERAL_CODE = gql`
   query GET_USER_REFFERAL_CODE {
     referrals {
       code
+    }
+  }
+`
+export const GET_LIXI = gql`
+  subscription MyQuery {
+    lixi(order_by: { type: desc }, where: { status: { _eq: "CREATED" } }) {
+      id
+      type
+      status
+    }
+  }
+`
+export const GET_REQUEST_MANAGER = gql`
+  subscription MyQuery($id: Int!) {
+    request_manager(where: { id: { _eq: $id } }) {
+      id
+      request
+      request_hash
+      response
     }
   }
 `
@@ -55,9 +87,18 @@ export const applyCode = async (code: string) => {
     const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/referrals/apply`, {
       code,
     })
-    return res.data
+    return res
   } catch (error: any) {
-    window.alert(error?.message || 'Something went wrong')
+    return error
+  }
+}
+
+export const checkRepost = async () => {
+  try {
+    const res = await privateAxios.get(`${getConfig().REST_API_ENDPOINT}/campaigns/check-repost`)
+    return res
+  } catch (error: any) {
+    // window.alert(error?.message || 'Something went wrong')
   }
 }
 
@@ -66,13 +107,33 @@ export const fetchLeaderboard = async () => {
     const res = await axios.get(`${getConfig().REST_API_ENDPOINT}/campaigns/leader-board`)
     return res.data
   } catch (error: any) {
-    window.alert(error?.message || 'Something went wrong')
+    // window.alert(error?.message || 'Something went wrong')
   }
 }
 export const fetchHistory = async () => {
   try {
     const res = await privateAxios.get(`${getConfig().REST_API_ENDPOINT}/referrals/history`)
     return res.data
+  } catch (error: any) {
+    // window.alert(error?.message || 'Something went wrong')
+  }
+}
+export const openLixi = async (id: string) => {
+  try {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/lixi/open`, {
+      id,
+    })
+    return res
+  } catch (error: any) {
+    window.alert(error?.message || 'Something went wrong')
+  }
+}
+export const claimPrize = async (walletAddress: string) => {
+  try {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/lixi/claim`, {
+      walletAddress,
+    })
+    return res
   } catch (error: any) {
     window.alert(error?.message || 'Something went wrong')
   }

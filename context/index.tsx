@@ -12,6 +12,7 @@ import { setConfig } from 'next/config'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import localFont from 'next/font/local'
+import Modal from '@/app/components/modal'
 
 export const Context = createContext<{
   account: Account | undefined
@@ -37,96 +38,110 @@ function ContextProvider({ children }: { children: ReactNode }) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const init = async () => {
-    //set up config
-    const { data } = await axios.get('/config.json')
-    setConfig(data)
+    try {
+      //set up config
+      const { data } = await axios.get('/config.json')
+      setConfig(data)
 
-    //set token
-    let token = searchParams.get('access_token') || getItem('token')
-    if (searchParams.get('access_token')) {
-      setItem('token', searchParams.get('access_token') as string)
-    }
-    //setup apolo client
-    const hasuraEndpoint = data.HASURA_ENDPOINT.split('//')
-    const httpLink = new HttpLink({
-      uri: `https://${hasuraEndpoint[1]}/v1/graphql`,
-    })
-
-    const wsLink = new GraphQLWsLink(
-      createClient({
-        url: `wss://${hasuraEndpoint[1]}/v1/graphql`,
-      })
-    )
-
-    const authLink = setContext((_, { headers }) => {
-      // return the headers to the context so httpLink can read them
-      return {
-        headers: {
-          ...headers,
-          authorization: token ? `Bearer ${token}` : '',
-        },
+      //set token
+      let token = searchParams.get('access_token') || getItem('token')
+      if (searchParams.get('access_token')) {
+        setItem('token', searchParams.get('access_token') as string)
       }
-    })
 
-    const splitLink = split(
-      ({ query }) => {
-        const definition = getMainDefinition(query)
-        return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
-      },
-      wsLink,
-      httpLink
-    )
+      const hasuraEndpoint = data.HASURA_ENDPOINT.split('//')
+      const httpLink = new HttpLink({
+        uri: `https://${hasuraEndpoint[1]}/v1/graphql`,
+      })
 
-    const client = new ApolloClient({
-      link: authLink.concat(splitLink),
-      cache: new InMemoryCache(),
-    })
-    setClient(client)
+      const wsLink = new GraphQLWsLink(
+        createClient({
+          url: `wss://${hasuraEndpoint[1]}/v1/graphql`,
+          connectionParams: {
+            headers: {
+              Authorization: token ? `Bearer ${token}` : '',
+            },
+          },
+        })
+      )
 
-    //setup private axios
-    privateAxios.interceptors.request.use(
-      (config) => {
-        const token = getItem('token')
-        if (token) {
-          config.headers['Authorization'] = `Bearer ${token}`
+      const authLink = setContext((_, { headers }) => {
+        // return the headers to the context so httpLink can read them
+        return {
+          headers: {
+            ...headers,
+            Authorization: token ? `Bearer ${token}` : '',
+          },
         }
-        return config
-      },
-      (error) => {
-        Promise.reject(error)
-      }
-    )
-
-    //fetch user data
-    if (token) {
-      const userData = await client.query({
-        query: GET_USER_DATA,
       })
-      if (userData.data.users?.[0]) {
-        const codeData = await client.query({
-          query: GET_USER_CODE(userData.data.users?.[0].id),
+
+      const splitLink = split(
+        ({ query }) => {
+          const definition = getMainDefinition(query)
+          return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
+        },
+        wsLink,
+        httpLink
+      )
+
+      const client = new ApolloClient({
+        link: authLink.concat(splitLink),
+        cache: new InMemoryCache(),
+      })
+      setClient(client)
+
+      //setup private axios
+      privateAxios.interceptors.request.use(
+        (config) => {
+          const token = getItem('token')
+          if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`
+          }
+          return config
+        },
+        (error) => {
+          Promise.reject(error)
+        }
+      )
+
+      //fetch user data
+      if (token) {
+        const userData = await client.query({
+          query: GET_USER_DATA,
         })
-        const refferalCodeData = await client.query({
-          query: GET_USER_REFFERAL_CODE,
-        })
-        const refferalCode = await client.query({
-          query: CHECK_CODE(refferalCodeData?.data?.referrals.map((c:any) => c.code)),
-        })
-        setAccount({
-          ...userData.data.users?.[0],
-          code: codeData.data.task_referrals.length ? codeData.data.task_referrals[0].code : undefined,
-          refferal_code: refferalCodeData?.data?.referrals.map((code: any) => {
-            const refCode = code.code
-            return {
-              code: refCode,
-              isUsed: refferalCode.data.task_referrals.some((c:any) => c.code == refCode),
-            }
-          }),
-        })
+        if (userData.data.users?.[0]) {
+          const codeData = await client.query({
+            query: GET_USER_CODE(userData.data.users?.[0].id),
+          })
+          const refferalCodeData = await client.query({
+            query: GET_USER_REFFERAL_CODE,
+          })
+          const refferalCode = await client.query({
+            query: CHECK_CODE(refferalCodeData?.data?.referrals.map((c: any) => c.code)),
+          })
+          setAccount({
+            ...userData.data.users?.[0],
+            code: codeData.data.task_referrals.length ? codeData.data.task_referrals[0].code : undefined,
+            refferal_code: refferalCodeData?.data?.referrals.map((code: any) => {
+              const refCode = code.code
+              return {
+                code: refCode,
+                isUsed: refferalCode.data.task_referrals.some((c: any) => c.code == refCode),
+              }
+            }),
+          })
+        }
+        router.push(location.pathname)
       }
-      router.push('/')
+      setIsInit(false)
+    } catch (error: any) {
+      console.log(error?.message)
+      if (error?.message.includes('JWTExpired')) {
+        setAccount(undefined)
+        removeItem('token')
+        setIsInit(false)
+      }
     }
-    setIsInit(false)
   }
 
   useEffect(() => {
@@ -142,15 +157,22 @@ function ContextProvider({ children }: { children: ReactNode }) {
 
   const submitCode = async (code: string) => {
     const res = await applyCode(code)
-    if (res) {
+    if (res?.data) {
       setAccount({
         ...(account as Account),
         code,
       })
+    } else {
+      throw new Error(res?.response?.data?.message || 'Something went wrong. Please try again')
     }
   }
 
-  if (isInit || !client) return null
+  if (isInit || !client)
+    return (
+      <Modal isOpen={true} onOpenChange={() => {}} isLoading>
+        Initializing
+      </Modal>
+    )
   return (
     <Context.Provider
       value={{

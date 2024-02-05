@@ -10,7 +10,7 @@ export default function FortuneNumberSection() {
   const { account } = useContext(Context)
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const { data } = useSWR('fetchHistory', fetchHistory, {
-    refreshInterval: 30000,
+    refreshInterval: 120000,
   })
   return (
     <>
@@ -19,8 +19,8 @@ export default function FortuneNumberSection() {
           className={`text-2xl leading-[30px] tracking-[0.24px] text-[#8E0B09] w-full text-center ${Bangkok.className} mb-4`}>
           History
         </div>
-        <div className='flex flex-col gap-2 w-[482px]'>
-          <div className='flex items-center text-[#000] text-sm leading-6 font-medium pr-6'>
+        <div className='flex flex-col gap-2 sm:w-[482px]'>
+          <div className='items-center text-[#000] text-sm leading-6 font-medium pr-6 hidden sm:flex'>
             <div className='w-[138px]'>Code</div>
             <div className='flex-1'>Used by</div>
             <div className=''>Time</div>
@@ -30,10 +30,16 @@ export default function FortuneNumberSection() {
               data?.length > 7 ? 'pr-4' : ''
             }`}>
             {data?.map((row: any, index: number) => (
-              <div key={index} className='flex p-1 rounded-md text-sm items-center'>
-                <div className='text-[#292929] text-sm leading-6 w-[138px]'>{row.code}</div>
-                <div className='text-[#B93139] flex-1'>{row?.referee?.username}</div>
-                <div className='text-[#B93139]'>{moment(row.created_at).format('DD/MM/yyyy HH:mm')}</div>
+              <div key={index} className='sm:flex p-1 rounded-md text-sm items-center'>
+                <div className='text-[#292929] text-sm leading-6 w-[138px] font-medium'>{row.code}</div>
+                <div className='text-[#B93139] flex-1'>
+                  <span className='text-[#707070] w-14 inline-block sm:hidden'>Used by</span>
+                  {row?.referee?.username}
+                </div>
+                <div className='text-[#B93139]'>
+                  <span className='text-[#707070] w-14 inline-block sm:hidden'>Time</span>
+                  {moment(row.created_at).format('DD/MM/yyyy HH:mm')}
+                </div>
               </div>
             ))}
           </div>

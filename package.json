@@ -12,6 +12,8 @@
     "@apollo/client": "^3.9.1",
     "@nextui-org/react": "^2.2.9",
     "axios": "^1.6.7",
+    "bech32": "^2.0.0",
+    "bignumber.js": "^9.1.2",
     "canvas-confetti": "^1.9.2",
     "framer-motion": "^11.0.3",
     "graphql": "^16.8.1",
