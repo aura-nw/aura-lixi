@@ -17,8 +17,9 @@ import BlueGem from '@/assets/blue-gem.svg'
 import GoldGem from '@/assets/gold-gem.svg'
 import WhiteGem from '@/assets/white-gem.svg'
 import BgMobile from '@/assets/prize_mobile.png'
-import Bg from '@/assets/prize.png'
+import Bg from '@/assets/prize_p.png'
 import Logo from 'assets/logo.svg'
+import confetti from 'canvas-confetti'
 export default function LixiStage() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const { account } = useContext(Context)
@@ -57,32 +58,6 @@ export default function LixiStage() {
           requestLoading={requestLoading}
         />
       )}
-      <Modal
-        isOpen={true}
-        onOpenChange={onOpenChange}
-        placement='center'
-        classNames={{
-          backdrop: 'bg-[#000]/85',
-          base: `bg-[transparent] rounded-[6px] p-6 text-[#000] mx-4 sm:min-w-[425px] w-[90vw] sm:max-w-none max-w-[425px] sm:w-fit`,
-          closeButton: 'hidden',
-        }}>
-        <ModalContent>
-          <div className='relative'>
-            <Image src={BgMobile} alt='' className='w-[343px]' />
-            <div className='absolute inset-0 grid place-items-center'>
-              <div className='flex flex-col items-center font-medium text-[#fff]'>
-                <div>Congratulations!</div>
-                <div className='text-[#4E8E48] mt-[6px]'>{account?.username}</div>
-                <div className='mt-6'>
-                  <div className='text-5xl leading-6'>50,000</div>
-                  <div>AURA</div>
-                </div>
-              </div>
-              <Image src={Logo} alt='' className='absolute bottom-10 left-1/2 -translate-x-1/2 w-[108px]' />
-            </div>
-          </div>
-        </ModalContent>
-      </Modal>
 
       <div className='relative flex flex-col items-center w-full xl:w-fit xl:mx-0 mx-auto mb-[9.2rem]'>
         <Image src={Lixi} alt='' className='mt-20 relative z-[2] -mb-3' />
@@ -141,21 +116,94 @@ const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, requestLoa
       setRequestLoading(false)
     }
   }, [data?.request_manager?.[0]?.response?.code])
+
+  useEffect(() => {
+    const confettiPriority =
+      prize?.nftPrize?.token_type == 'RED'
+        ? 1
+        : prize?.nftPrize?.token_type == 'GOLD'
+        ? 2
+        : prize?.nftPrize?.token_type == 'BLUE'
+        ? 3
+        : 0
+
+    if (confettiPriority == 3) {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+      })
+    }
+    if (confettiPriority == 2) {
+      let defaults = {
+        spread: 360,
+        ticks: 50,
+        gravity: 0,
+        decay: 0.94,
+        startVelocity: 30,
+        colors: ['FFE400', 'FFBD00', 'E89400', 'FFCA6C', 'FDFFB8'],
+      }
+
+      const shoot = () => {
+        confetti({
+          ...defaults,
+          particleCount: 40,
+          scalar: 1.2,
+          shapes: ['star'],
+        })
+
+        confetti({
+          ...defaults,
+          particleCount: 10,
+          scalar: 0.75,
+          shapes: ['circle'],
+        })
+      }
+
+      setTimeout(shoot, 0)
+      setTimeout(shoot, 100)
+      setTimeout(shoot, 200)
+      setTimeout(shoot, 300)
+    }
+    if (confettiPriority == 1) {
+      let end = Date.now() + 1000
+
+      // go Buckeyes!
+      let colors = ['#FFD569', '#FF697B']
+
+      ;(function frame() {
+        confetti({
+          particleCount: 2,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: colors,
+        })
+        confetti({
+          particleCount: 2,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: colors,
+        })
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame)
+        }
+      })()
+    }
+  }, [prize?.auraPrize])
+
+  if (requestLoading) {
+    return (
+      <GiftModal isOpen={true} onOpenChange={onOpenChange} isLoading>
+        <></>
+      </GiftModal>
+    )
+  }
   if (prize?.auraPrize == 0) {
     return (
-      <GiftModal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        isLoading={requestLoading}
-        confettiPriority={
-          prize?.nftPrize?.token_type == 'RED'
-            ? 1
-            : prize?.nftPrize?.token_type == 'GOLD'
-            ? 2
-            : prize?.nftPrize?.token_type == 'BLUE'
-            ? 3
-            : 0
-        }>
+      <GiftModal isOpen={isOpen} onOpenChange={onOpenChange}>
         <div className='flex flex-col items-center text-center'>
           <div className={`${Bangkok.className} text-[#8E0B09] text-sm`}>Congratulations!</div>
           <div className='text-[#4E8E48] font-medium leading-6 mt-[6px]'>{account?.username}</div>
@@ -184,15 +232,100 @@ const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, requestLoa
               <div className='text-[#000] font-bold text-sm mt-[8px]'>White Gem</div>
             </>
           )}
-
-          {!!prize?.auraPrize && (
-            <div className='text-[#4E8E48] mt-4 text-xl leading-6 font-bold'>{`+ ${formatNumber(
-              fromMicro(prize?.auraPrize, 6)
-            )} AURA`}</div>
-          )}
         </div>
       </GiftModal>
     )
   } else {
+    return (
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        placement='center'
+        classNames={{
+          backdrop: 'bg-[#000]/85',
+          base: `bg-[transparent] rounded-[6px] p-6 text-[#000] mx-4 sm:min-w-[425px] w-[90vw] sm:max-w-none max-w-[425px] sm:w-fit`,
+          closeButton: 'hidden',
+        }}>
+        <ModalContent>
+          <div className='relative'>
+            <Image src={BgMobile} alt='' className='w-[343px] md:hidden' />
+            <Image src={Bg} alt='' className='w-[657px] md:block hidden' />
+            <div className='absolute inset-0 grid place-items-center md:hidden'>
+              <div className='flex flex-col items-center font-medium text-[#fff]'>
+                <div>Congratulations!</div>
+                <div className='text-[#4E8E48] mt-[6px]'>{account?.username}</div>
+                <div className='mt-10 flex items-center'>
+                  <div className='text-5xl leading-6'>{`${formatNumber(fromMicro(prize?.auraPrize, 6))}`}</div>
+                  <div className='ml-2 leading-6'>AURA</div>
+                </div>
+                <div className='h-[1px] w-[30px] bg-[#fff] mt-8'></div>
+                <div className='flex items-center mt-5'>
+                  {prize?.nftPrize?.token_type == 'RED' ? (
+                    <>
+                      <Image src={RedGem} alt='' className='w-[47px]' />
+                      <div className='ml-2 font-bold text-sm mt-[8px]'>Red Gem</div>
+                    </>
+                  ) : prize?.nftPrize?.token_type == 'GOLD' ? (
+                    <>
+                      <Image src={GoldGem} alt='' className='w-[47px]' />
+                      <div className='ml-2 font-bold text-sm mt-[8px]'>Gold Gem</div>
+                    </>
+                  ) : prize?.nftPrize?.token_type == 'BLUE' ? (
+                    <>
+                      <Image src={BlueGem} alt='' className='w-[47px]' />
+                      <div className='ml-2 font-bold text-sm mt-[8px]'>Blue Gem</div>
+                    </>
+                  ) : (
+                    <>
+                      <Image src={WhiteGem} alt='' className='w-[47px]' />
+                      <div className='ml-2 font-bold text-sm mt-[8px]'>White Gem</div>
+                    </>
+                  )}
+                </div>
+              </div>
+              <Image src={Logo} alt='' className='absolute bottom-10 left-1/2 -translate-x-1/2 w-[108px]' />
+            </div>
+            <div className='absolute inset-0 place-items-center md:grid hidden'>
+              <div className='flex flex-col items-center font-medium text-[#fff]'>
+                <div>
+                  Congratulations! <span className='text-[#4E8E48]'>{account?.username}</span>
+                </div>
+                <div className='flex items-center gap-5 mt-8'>
+                  <div className='flex items-center'>
+                    <div className='text-5xl leading-6'>{`${formatNumber(fromMicro(prize?.auraPrize, 6))}`}</div>
+                    <div className='ml-2 leading-6'>AURA</div>
+                  </div>
+                  <div className='w-[1px] h-[30px] bg-[#fff]'></div>
+                  <div className='flex items-center'>
+                    {prize?.nftPrize?.token_type == 'RED' ? (
+                      <>
+                        <Image src={RedGem} alt='' className='w-[47px]' />
+                        <div className='ml-2 font-bold text-sm mt-[8px]'>Red Gem</div>
+                      </>
+                    ) : prize?.nftPrize?.token_type == 'GOLD' ? (
+                      <>
+                        <Image src={GoldGem} alt='' className='w-[47px]' />
+                        <div className='ml-2 font-bold text-sm mt-[8px]'>Gold Gem</div>
+                      </>
+                    ) : prize?.nftPrize?.token_type == 'BLUE' ? (
+                      <>
+                        <Image src={BlueGem} alt='' className='w-[47px]' />
+                        <div className='ml-2 font-bold text-sm mt-[8px]'>Blue Gem</div>
+                      </>
+                    ) : (
+                      <>
+                        <Image src={WhiteGem} alt='' className='w-[47px]' />
+                        <div className='ml-2 font-bold text-sm mt-[8px]'>White Gem</div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <Image src={Logo} alt='' className='absolute bottom-10 left-1/2 -translate-x-1/2 w-[108px]' />
+            </div>
+          </div>
+        </ModalContent>
+      </Modal>
+    )
   }
 }

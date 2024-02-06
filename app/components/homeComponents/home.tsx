@@ -34,11 +34,7 @@ export default function HomePage() {
   useEffect(() => {
     setErrorMsg('')
   }, [value])
-  useEffect(() => {
-    if (moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime) && !skip) {
-      disconnect()
-    }
-  }, [moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime), skip])
+  
   const submitCodeHandler = async () => {
     try {
       if (loading) return
