@@ -1,13 +1,13 @@
 import { Bangkok } from '@/context'
 import { GET_TXS_HISTORY } from '@/services'
 import { shortHash } from '@/utils'
-import { useQuery } from '@apollo/client'
+import { useQuery, useSubscription } from '@apollo/client'
 import moment from 'moment'
 import getConfig from 'next/config'
 import Link from 'next/link'
 
 export default function Txs() {
-  const { data } = useQuery(GET_TXS_HISTORY)
+  const { data } = useSubscription(GET_TXS_HISTORY)
   return (
     <div className='rounded-md border-[0.5px] border-[#FFD66B] w-[343px] md:w-[590px] md:ml-6 xl:ml-0 bg-[linear-gradient(180deg,#FDF5CB_0%,#FDF5CB_0.01%,#FFF9DB_100%)] p-4'>
       <div
@@ -21,17 +21,17 @@ export default function Txs() {
         </div>
         <div
           className={`w-full [&>div:nth-child(odd)]:bg-[#F5E3BC] [&>div:nth-child(even)]:bg-[transparent] max-h-[222px] overflow-auto custom-scrollbar ${
-            data?.txs?.length > 7 ? 'pr-4' : ''
+            data?.tx_history?.length > 7 ? 'pr-4' : ''
           }`}>
-          {data?.txs?.map((row: any, index: number) => (
+          {data?.tx_history?.map((row: any, index: number) => (
             <div key={index} className=' p-1 rounded-md grid grid-cols-2 text-sm'>
               <Link
                 target='_blank'
-                href={`${getConfig().AURASCAN_ENDPOINT}/transaction/${row?.tx_hash}`}
+                href={`${getConfig().AURASCAN_ENDPOINT}/transaction/${row?.tx_info?.tx_hash}`}
                 className='text-[#B93139] flex-1 pr-4'>
-                {shortHash(row?.tx_hash)}
+                {shortHash(row?.tx_info?.tx_hash)}
               </Link>
-              <div className='text-[#292929] text-end'>{moment(row.created_at).format('DD/MM/yyyy HH:mm')}</div>
+              <div className='text-[#292929] text-end'>{moment(row.updated_at).format('DD/MM/yyyy HH:mm')}</div>
             </div>
           ))}
         </div>

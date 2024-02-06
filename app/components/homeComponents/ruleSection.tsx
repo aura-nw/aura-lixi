@@ -48,10 +48,11 @@ export default function RuleSection() {
       }
     }
   `)
-
   useEffect(() => {
-    setIsReposted(!!tasks?.length)
-  }, [tasks?.length])
+    if (tasks) {
+      setIsReposted(!!tasks?.tasks?.length)
+    }
+  }, [tasks?.tasks?.length])
 
   const check = async () => {
     try {
@@ -149,7 +150,7 @@ export default function RuleSection() {
         </div>
         <div className='flex flex-col gap-2 text-sm leading-[18px]'>
           <div className='flex gap-[11px]'>
-            Complete missions to earn 3 types of LiXi and receive precious Dragon Gems
+            Complete missions to earn 3 types of Li Xi and receive precious Dragon Gems
           </div>
           <div className='flex gap-[11px]'>
             <span className='w-[9px] h-[9px] rounded-sm rotate-45 bg-[#F0C865] shrink-0 mt-1'></span>

@@ -19,7 +19,7 @@ export function Header() {
           <Link href='/'>
             <Image src={Logo} alt='' className='w-[77px] sm:w-[108px]' />
           </Link>
-          {account && (
+          {account?.code && (
             <div onClick={() => setOpen(!open)} className='relative flex items-center gap-2 cursor-pointer'>
               <Image src={UserIcon} alt='' className='w-[30px] h-[30px] sm:w-[38px] sm:h-[38px]' />
               <span className='text-[#F7C983] text-sm'>{account.username}</span>

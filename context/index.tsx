@@ -31,6 +31,9 @@ export const Go3 = localFont({
 export const Bangkok = localFont({
   src: '../assets/font/bangkok.ttf',
 })
+export const DN = localFont({
+  src: '../assets/font/dn.ttf',
+})
 function ContextProvider({ children }: { children: ReactNode }) {
   const [account, setAccount] = useState<Account>()
   const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>()

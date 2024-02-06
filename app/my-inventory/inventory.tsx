@@ -42,8 +42,12 @@ export default function InventorySection() {
     try {
       setLoading(true)
       const res = await claimPrize(value)
-      setIsClaimed(true)
-      setLoading(false)
+      if (res) {
+        setIsClaimed(true)
+        setLoading(false)
+      } else {
+        onClose()
+      }
     } catch (error) {
       onClose()
     }

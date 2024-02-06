@@ -87,7 +87,7 @@ export default function FortuneNumberSection() {
           ))}
         </div>
         <div className='text-[#C66722] text-sm leading-[18px]  '>
-          Both referrer and referree receives a Blue LiXi when a code being used
+          A new set of fortune numbers will be generated after all 5 current numbers used.
         </div>
       </section>
     </>

@@ -26,16 +26,19 @@ export const GET_USER_INVENTORY = gql`
 `
 export const GET_USER_REFFERAL_CODE = gql`
   query GET_USER_REFFERAL_CODE {
-    referrals {
+    referrals(order_by: { id: desc }, limit: 5) {
       code
+      id
     }
   }
 `
 export const GET_TXS_HISTORY = gql`
-  query MyQuery {
-    txs {
-      tx_hash
-      created_at
+  subscription GET_USER_REFFERAL_CODE {
+    tx_history(order_by: { updated_at: desc }) {
+      updated_at
+      tx_info {
+        tx_hash
+      }
     }
   }
 `

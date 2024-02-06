@@ -29,7 +29,7 @@ export default function LixiStage() {
         setRequestLoading(true)
         onOpen()
       } else {
-        throw new Error('Open LiXi failed. Please try again')
+        throw new Error('Open Li Xi failed. Please try again')
       }
     } catch (error: any) {
       alert(error?.message || 'Something went wrong. Please try again')

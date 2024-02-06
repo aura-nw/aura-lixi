@@ -3,7 +3,7 @@
 import Background from '@/assets/home-background.png'
 import MBackground from '@/assets/home-background_mobile.png'
 import Stage from '@/assets/home-stage.png'
-import { Context } from '@/context'
+import { Context, DN } from '@/context'
 import getConfig from 'next/config'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
@@ -13,13 +13,20 @@ import LeaderboardSection from './leaderboardSection'
 import LixiStage from './lixiStage'
 import RuleSection from './ruleSection'
 import BlueLixi from '@/assets/blue-lixi.svg'
+import useSWR from 'swr'
+import moment from 'moment'
+import Countdown, { zeroPad } from 'react-countdown'
 export default function HomePage() {
   const { account, submitCode } = useContext(Context)
   const [loading, setLoading] = useState(false)
   const [value, setValue] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const config = getConfig()
+  const [skip, setSkip] = useState(false)
   const params = useParams()
+  const { data } = useSWR('https://worldtimeapi.org/api/timezone/Asia/Ho_Chi_Minh', (url) =>
+    fetch(url).then((r) => r.json())
+  )
 
   const connectXHandler = () => {
     window.location.href = `${config.REST_API_ENDPOINT}/auth/twitter`
@@ -41,6 +48,92 @@ export default function HomePage() {
         setErrorMsg('Something went wrong. Please try again.')
       }
     }
+  }
+  if (!data) {
+    return (
+      <main className='relative min-h-screen'>
+        {/* background  */}
+        <div className='absolute inset-0 overflow-hidden flex flex-col items-center'>
+          <Image src={Background} alt='' className='w-full min-w-[1008px] hidden sm:block' />
+          <Image src={MBackground} alt='' className='w-full min-w-[375px] mt-[50px] sm:hidden' />
+        </div>
+        {/* background  */}
+        <div className='relative overflow-hidden flex flex-col items-center w-full mx-auto'>
+          <Image src={Stage} alt='' className='mt-16 max-w-[390px] w-[110%] mr-[2.3rem]' />
+        </div>
+      </main>
+    )
+  }
+  if (moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime) && !skip) {
+    return (
+      <main className='relative min-h-screen'>
+        {/* background  */}
+        <div className='absolute inset-0 overflow-hidden flex flex-col items-center'>
+          <Image src={Background} alt='' className='w-full min-w-[1008px] hidden sm:block' />
+          <Image src={MBackground} alt='' className='w-full min-w-[375px] mt-[50px] sm:hidden' />
+        </div>
+        {/* background  */}
+        <div className='relative overflow-hidden flex flex-col items-center w-full mx-auto'>
+          <div className='relative'>
+            <Image src={Stage} alt='' className='mt-16 max-w-[390px] w-[110%] mr-[2.3rem]' />
+            <div className='h-5 w-5  rounded-full absolute left-1/2 -translate-x-1/2 top-[8.6rem] z-10' onClick={() => setSkip(true)}></div>
+          </div>
+          <div className='absolute top-[66%] inset-x-0 flex flex-col items-center'>
+            <Countdown
+              date={new Date('2024-02-10T00:00:00.00+07:00')}
+              renderer={({ days, hours, minutes, seconds }) => {
+                return (
+                  <div className='flex gap-8 justify-center items-center'>
+                    <div className='flex flex-col items-center gap-[6px]'>
+                      <div className='flex gap-[10px]'>
+                        <div
+                          className={`border border-[#FFFFFF]/40 bg-[linear-gradient(180deg,#FF5D5D_0%,rgba(255,255,255,0.1)_100%)] w-[28px] h-[43px] rounded-sm flex justify-center items-center ${DN.className} text-[28px] leading-9 text-[#FEF368]`}>
+                          {zeroPad(days).slice(0, 1)}
+                        </div>
+                        <div
+                          className={`border border-[#FFFFFF]/40 bg-[linear-gradient(180deg,#FF5D5D_0%,rgba(255,255,255,0.1)_100%)] w-[28px] h-[43px] rounded-sm flex justify-center items-center ${DN.className} text-[28px] leading-9 text-[#FEF368]`}>
+                          {zeroPad(days).slice(-1)}
+                        </div>
+                      </div>
+                      <div className='font-medium text-[#EDD0BA]'>{`DAY${days > 1 ? 'S' : ''}`}</div>
+                    </div>
+                    <div className='flex flex-col items-center gap-[6px]'>
+                      <div className='flex gap-[10px]'>
+                        <div
+                          className={`w-[28px] border border-[#FFFFFF]/40 bg-[linear-gradient(180deg,#FF5D5D_0%,rgba(255,255,255,0.1)_100%)] h-[43px] rounded-sm flex justify-center items-center ${DN.className} text-[28px] leading-9 text-[#FEF368]`}>
+                          {zeroPad(hours).slice(0, 1)}
+                        </div>
+                        <div
+                          className={`w-[28px] border border-[#FFFFFF]/40 bg-[linear-gradient(180deg,#FF5D5D_0%,rgba(255,255,255,0.1)_100%)] h-[43px] rounded-sm flex justify-center items-center ${DN.className} text-[28px] leading-9 text-[#FEF368]`}>
+                          {zeroPad(hours).slice(-1)}
+                        </div>
+                      </div>
+                      <div className='font-medium text-[#EDD0BA]'>{`HOUR${hours > 1 ? 'S' : ''}`}</div>
+                    </div>
+                    <div className='flex flex-col items-center gap-[6px]'>
+                      <div className='flex gap-[10px]'>
+                        <div
+                          className={`w-[28px] border border-[#FFFFFF]/40 bg-[linear-gradient(180deg,#FF5D5D_0%,rgba(255,255,255,0.1)_100%)] h-[43px] rounded-sm flex justify-center items-center ${DN.className} text-[28px] leading-9 text-[#FEF368]`}>
+                          {zeroPad(minutes).slice(0, 1)}
+                        </div>
+                        <div
+                          className={`w-[28px] border border-[#FFFFFF]/40 bg-[linear-gradient(180deg,#FF5D5D_0%,rgba(255,255,255,0.1)_100%)] h-[43px] rounded-sm flex justify-center items-center ${DN.className} text-[28px] leading-9 text-[#FEF368]`}>
+                          {zeroPad(minutes).slice(-1)}
+                        </div>
+                      </div>
+                      <div className='font-medium text-[#EDD0BA]'>{`MINUTE${minutes > 1 ? 'S' : ''}`}</div>
+                    </div>
+                  </div>
+                )
+              }}
+            />
+            <div className='text-sm italic text-[#FEA768] mt-8'>
+              Unwrap your blessings at 00:00 UTC+7, February 10th, 2024
+            </div>
+          </div>
+        </div>
+      </main>
+    )
   }
 
   if (account && account.code) {

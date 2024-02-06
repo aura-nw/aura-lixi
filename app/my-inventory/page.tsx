@@ -6,7 +6,14 @@ import Background from '@/assets/home-background.png'
 import MBackground from '@/assets/home-background_mobile.png'
 import Image from 'next/image'
 import Txs from './txs'
+import { useContext } from 'react'
+import { Context } from '@/context'
+import { redirect } from 'next/navigation'
 export default function Page() {
+  const { account } = useContext(Context)
+  if (!account) {
+    redirect('/')
+  }
   return (
     <main className='relative min-h-screen'>
       {/* background  */}
