@@ -39,6 +39,7 @@ export const GET_TXS_HISTORY = gql`
       tx_info {
         tx_hash
       }
+      user_id
     }
   }
 `
