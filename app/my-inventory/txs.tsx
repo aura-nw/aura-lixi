@@ -29,7 +29,7 @@ export default function Txs() {
                 target='_blank'
                 href={`${getConfig().AURASCAN_ENDPOINT}/transaction/${row?.tx_info?.tx_hash}`}
                 className='text-[#B93139] flex-1 pr-4'>
-                {shortHash(row?.tx_info?.tx_hash)}
+                {row?.tx_info?.tx_hash ? shortHash(row?.tx_info?.tx_hash) : 'Error Tx Hash'}
               </Link>
               <div className='text-[#292929] text-end'>{moment(row.updated_at).format('DD/MM/yyyy HH:mm')}</div>
             </div>
