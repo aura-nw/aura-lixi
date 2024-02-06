@@ -8,7 +8,7 @@ import { Bangkok, Context, Go3 } from '@/context'
 import { GET_LIXI, GET_REQUEST_MANAGER, openLixi } from '@/services'
 import { formatNumber, fromMicro } from '@/utils'
 import { useSubscription } from '@apollo/client'
-import { useDisclosure } from '@nextui-org/react'
+import { Modal, ModalContent, useDisclosure } from '@nextui-org/react'
 import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
 import GiftModal from '../modal/giftModal'
@@ -18,9 +18,10 @@ import GoldGem from '@/assets/gold-gem.svg'
 import WhiteGem from '@/assets/white-gem.svg'
 import BgMobile from '@/assets/prize_mobile.png'
 import Bg from '@/assets/prize.png'
-import Modal from '../modal'
+import Logo from 'assets/logo.svg'
 export default function LixiStage() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
+  const { account } = useContext(Context)
   const { data, loading } = useSubscription(GET_LIXI)
   const [requestLoading, setRequestLoading] = useState(false)
   const [requestId, setRequestId] = useState(undefined)
@@ -56,11 +57,32 @@ export default function LixiStage() {
           requestLoading={requestLoading}
         />
       )}
-      {/* <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-        <div className='relative'>
-          <Image src={BgMobile} alt='' className='w-[343px]' />
-        </div>
-      </Modal> */}
+      <Modal
+        isOpen={true}
+        onOpenChange={onOpenChange}
+        placement='center'
+        classNames={{
+          backdrop: 'bg-[#000]/85',
+          base: `bg-[transparent] rounded-[6px] p-6 text-[#000] mx-4 sm:min-w-[425px] w-[90vw] sm:max-w-none max-w-[425px] sm:w-fit`,
+          closeButton: 'hidden',
+        }}>
+        <ModalContent>
+          <div className='relative'>
+            <Image src={BgMobile} alt='' className='w-[343px]' />
+            <div className='absolute inset-0 grid place-items-center'>
+              <div className='flex flex-col items-center font-medium text-[#fff]'>
+                <div>Congratulations!</div>
+                <div className='text-[#4E8E48] mt-[6px]'>{account?.username}</div>
+                <div className='mt-6'>
+                  <div className='text-5xl leading-6'>50,000</div>
+                  <div>AURA</div>
+                </div>
+              </div>
+              <Image src={Logo} alt='' className='absolute bottom-10 left-1/2 -translate-x-1/2 w-[108px]' />
+            </div>
+          </div>
+        </ModalContent>
+      </Modal>
 
       <div className='relative flex flex-col items-center w-full xl:w-fit xl:mx-0 mx-auto mb-[9.2rem]'>
         <Image src={Lixi} alt='' className='mt-20 relative z-[2] -mb-3' />

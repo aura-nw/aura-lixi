@@ -1,7 +1,5 @@
-import { Modal as NextModal, ModalContent, CircularProgress } from '@nextui-org/react'
+import { CircularProgress, ModalContent, Modal as NextModal } from '@nextui-org/react'
 import { ReactNode } from 'react'
-import LoadingImage from '@/assets/loading-ball.svg'
-import Image from 'next/image'
 export default function Modal({
   isOpen,
   onOpenChange,
