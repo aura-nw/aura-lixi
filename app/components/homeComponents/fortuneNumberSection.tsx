@@ -81,7 +81,7 @@ export default function FortuneNumberSection() {
             </span>
           </button>
         </div>
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 max-h-[152px] overflow-auto pr-2'>
           {account?.refferal_code?.map((ref) => (
             <RefCode refCode={ref} key={ref.code} />
           ))}
