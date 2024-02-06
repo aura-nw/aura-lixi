@@ -17,7 +17,7 @@ import useSWR from 'swr'
 import moment from 'moment'
 import Countdown, { zeroPad } from 'react-countdown'
 export default function HomePage() {
-  const { account, submitCode } = useContext(Context)
+  const { account, submitCode, disconnect } = useContext(Context)
   const [loading, setLoading] = useState(false)
   const [value, setValue] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
@@ -34,6 +34,15 @@ export default function HomePage() {
   useEffect(() => {
     setErrorMsg('')
   }, [value])
+  useEffect(() => {
+    if (
+      moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime) &&
+      !skip &&
+      location.origin != 'http://localhost:3000'
+    ) {
+      disconnect()
+    }
+  }, [moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime), skip])
   const submitCodeHandler = async () => {
     try {
       if (loading) return
@@ -64,7 +73,12 @@ export default function HomePage() {
       </main>
     )
   }
-  if (moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime) && !skip) {
+  if (
+    !account ||
+    (moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime) &&
+      !skip &&
+      location.origin != 'http://localhost:3000')
+  ) {
     return (
       <main className='relative min-h-screen'>
         {/* background  */}
@@ -76,7 +90,9 @@ export default function HomePage() {
         <div className='relative overflow-hidden flex flex-col items-center w-full mx-auto'>
           <div className='relative'>
             <Image src={Stage} alt='' className='mt-16 max-w-[390px] w-[110%] mr-[2.3rem]' />
-            <div className='h-5 w-5  rounded-full absolute left-1/2 -translate-x-1/2 top-[8.6rem] z-10' onClick={() => setSkip(true)}></div>
+            <div
+              className='h-5 w-5  rounded-full absolute left-1/2 -translate-x-1/2 top-[8.6rem] z-10'
+              onClick={() => setSkip(true)}></div>
           </div>
           <div className='absolute top-[66%] inset-x-0 flex flex-col items-center'>
             <Countdown

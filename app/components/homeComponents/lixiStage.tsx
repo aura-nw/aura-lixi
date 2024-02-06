@@ -16,6 +16,9 @@ import RedGem from '@/assets/red-gem.svg'
 import BlueGem from '@/assets/blue-gem.svg'
 import GoldGem from '@/assets/gold-gem.svg'
 import WhiteGem from '@/assets/white-gem.svg'
+import BgMobile from '@/assets/prize_mobile.png'
+import Bg from '@/assets/prize.png'
+import Modal from '../modal'
 export default function LixiStage() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const { data, loading } = useSubscription(GET_LIXI)
@@ -53,6 +56,11 @@ export default function LixiStage() {
           requestLoading={requestLoading}
         />
       )}
+      {/* <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <div className='relative'>
+          <Image src={BgMobile} alt='' className='w-[343px]' />
+        </div>
+      </Modal> */}
 
       <div className='relative flex flex-col items-center w-full xl:w-fit xl:mx-0 mx-auto mb-[9.2rem]'>
         <Image src={Lixi} alt='' className='mt-20 relative z-[2] -mb-3' />
@@ -111,49 +119,58 @@ const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, requestLoa
       setRequestLoading(false)
     }
   }, [data?.request_manager?.[0]?.response?.code])
-  return (
-    <GiftModal
-      isOpen={isOpen}
-      onOpenChange={onOpenChange}
-      isLoading={requestLoading}
-      confettiPriority={
-        prize?.nftPrize?.token_type == 'RED' ? 1 : prize?.nftPrize?.token_type == 'GOLD' ? 2 : prize?.nftPrize?.token_type == 'BLUE' ? 3 : 0
-      }>
-      <div className='flex flex-col items-center text-center'>
-        <div className={`${Bangkok.className} text-[#8E0B09] text-sm`}>Congratulations!</div>
-        <div className='text-[#4E8E48] font-medium leading-6 mt-[6px]'>{account?.username}</div>
-        <div className='mt-[6px] text-sm leading-5 text-center'>
-          You have received a prize.
-          <br /> Don’t forget to claim it in inventory
-        </div>
-        {prize?.nftPrize?.token_type == 'RED' ? (
-          <>
-            <Image src={RedGem} alt='' className='mt-4 w-[72px]' />
-            <div className='text-[#000] font-bold text-sm mt-[8px]'>Red Gem</div>
-          </>
-        ) : prize?.nftPrize?.token_type == 'GOLD' ? (
-          <>
-            <Image src={GoldGem} alt='' className='mt-4 w-[72px]' />
-            <div className='text-[#000] font-bold text-sm mt-[8px]'>Gold Gem</div>
-          </>
-        ) : prize?.nftPrize?.token_type == 'BLUE' ? (
-          <>
-            <Image src={BlueGem} alt='' className='mt-4 w-[72px]' />
-            <div className='text-[#000] font-bold text-sm mt-[8px]'>Blue Gem</div>
-          </>
-        ) : (
-          <>
-            <Image src={WhiteGem} alt='' className='mt-4 w-[72px]' />
-            <div className='text-[#000] font-bold text-sm mt-[8px]'>White Gem</div>
-          </>
-        )}
+  if (prize?.auraPrize == 0) {
+    return (
+      <GiftModal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        isLoading={requestLoading}
+        confettiPriority={
+          prize?.nftPrize?.token_type == 'RED'
+            ? 1
+            : prize?.nftPrize?.token_type == 'GOLD'
+            ? 2
+            : prize?.nftPrize?.token_type == 'BLUE'
+            ? 3
+            : 0
+        }>
+        <div className='flex flex-col items-center text-center'>
+          <div className={`${Bangkok.className} text-[#8E0B09] text-sm`}>Congratulations!</div>
+          <div className='text-[#4E8E48] font-medium leading-6 mt-[6px]'>{account?.username}</div>
+          <div className='mt-[6px] text-sm leading-5 text-center'>
+            You have received a prize.
+            <br /> Don’t forget to claim it in inventory
+          </div>
+          {prize?.nftPrize?.token_type == 'RED' ? (
+            <>
+              <Image src={RedGem} alt='' className='mt-4 w-[72px]' />
+              <div className='text-[#000] font-bold text-sm mt-[8px]'>Red Gem</div>
+            </>
+          ) : prize?.nftPrize?.token_type == 'GOLD' ? (
+            <>
+              <Image src={GoldGem} alt='' className='mt-4 w-[72px]' />
+              <div className='text-[#000] font-bold text-sm mt-[8px]'>Gold Gem</div>
+            </>
+          ) : prize?.nftPrize?.token_type == 'BLUE' ? (
+            <>
+              <Image src={BlueGem} alt='' className='mt-4 w-[72px]' />
+              <div className='text-[#000] font-bold text-sm mt-[8px]'>Blue Gem</div>
+            </>
+          ) : (
+            <>
+              <Image src={WhiteGem} alt='' className='mt-4 w-[72px]' />
+              <div className='text-[#000] font-bold text-sm mt-[8px]'>White Gem</div>
+            </>
+          )}
 
-        {!!prize?.auraPrize && (
-          <div className='text-[#4E8E48] mt-4 text-xl leading-6 font-bold'>{`+ ${formatNumber(
-            fromMicro(prize?.auraPrize, 6)
-          )} AURA`}</div>
-        )}
-      </div>
-    </GiftModal>
-  )
+          {!!prize?.auraPrize && (
+            <div className='text-[#4E8E48] mt-4 text-xl leading-6 font-bold'>{`+ ${formatNumber(
+              fromMicro(prize?.auraPrize, 6)
+            )} AURA`}</div>
+          )}
+        </div>
+      </GiftModal>
+    )
+  } else {
+  }
 }
