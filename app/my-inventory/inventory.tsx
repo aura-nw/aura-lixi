@@ -30,6 +30,7 @@ export default function InventorySection() {
   const claimHandler = async () => {
     try {
       if (validate(value)) {
+        setIsClaimed(false)
         onOpen()
       } else {
         setErrorMsg('Invalid address.')
@@ -46,9 +47,11 @@ export default function InventorySection() {
         setIsClaimed(true)
         setLoading(false)
       } else {
+        setLoading(false)
         onClose()
       }
     } catch (error) {
+      setLoading(false)
       onClose()
     }
   }
@@ -176,7 +179,8 @@ export default function InventorySection() {
           </div>
           <button
             onClick={claimHandler}
-            className='text-[#6D3A0A] w-[149px] cursor-pointer p-[10px] bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] rounded-2xl font-medium'>
+            disabled={!data?.lixi?.length}
+            className='text-[#6D3A0A] disabled:text-[#292929] disabled:cursor-not-allowed w-[149px] font-medium cursor-pointer p-[10px] bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] rounded-2xl disabled:bg-[linear-gradient(180deg,#EFEBE4_0%,#B3AAA0_100%)] [&_path]:disabled:stroke-[#9D9D9D]'>
             Claim
           </button>
         </div>
