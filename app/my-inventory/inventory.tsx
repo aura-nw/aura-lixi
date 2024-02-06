@@ -78,7 +78,7 @@ export default function InventorySection() {
           </div>
           {isClaimed ? (
             <>
-            <Image src={Prize} alt='' className='mb-4'/>
+              <Image src={Prize} alt='' className='mb-4' />
             </>
           ) : (
             <>
@@ -94,7 +94,7 @@ export default function InventorySection() {
           )}
         </div>
       </GiftModal>
-      <section className='w-full flex flex-col items-center relative'>
+      <section className='flex flex-col items-center relative'>
         <Image src={TopBar} alt='' className='md:hidden' />
         <Image src={TopBar2} alt='' className='hidden md:block -mb-[5.1rem]' />
         <div className='flex -mt-1 flex-col gap-4 rounded-b-md border-x border-b border-[#D52121] p-4 w-[343px] md:w-[590px] md:ml-6 backdrop-blur-[6px] bg-[linear-gradient(180deg,rgba(117,20,20,0.50)_0%,rgba(133,7,7,0.50)_0.01%,rgba(244,63,63,0.50)_100%)]'>
@@ -157,23 +157,25 @@ export default function InventorySection() {
             </>
           </div>
         </div>
-        <div className=' w-[343px] md:w-[590px] mt-4'>
-          <input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            title='Fortune Number'
-            placeholder='Enter your wallet address on Aura Network'
-            className={`text-sm leading-[24px] p-[10px] bg-[#fff] rounded-lg shadow-[0px_4px_8.8px_0px_rgba(0,0,0,0.25)_inset] w-full ${
-              errorMsg ? 'text-[#F23A3A]' : 'text-[#292929]'
-            } focus:outline-none`}
-          />
-          <div className='text-sm leading-[18px] text-[#F23A3A] mt-3 w-full min-h-[18px]'>{errorMsg}</div>
+        <div className='mt-4 flex items-center flex-col md:flex-row gap-3 md:items-start  w-[343px] md:w-[590px] md:ml-6'>
+          <div className=' w-[343px] md:w-[590px]'>
+            <input
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              title='Fortune Number'
+              placeholder='Enter your wallet address on Aura Network'
+              className={`text-sm leading-[24px] p-[10px] bg-[#fff] rounded-lg shadow-[0px_4px_8.8px_0px_rgba(0,0,0,0.25)_inset] w-full ${
+                errorMsg ? 'text-[#F23A3A]' : 'text-[#292929]'
+              } focus:outline-none`}
+            />
+            <div className='text-sm leading-[18px] text-[#F23A3A] mt-3 w-full min-h-[18px]'>{errorMsg}</div>
+          </div>
+          <button
+            onClick={claimHandler}
+            className='text-[#6D3A0A] w-[149px] cursor-pointer p-[10px] bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] rounded-2xl font-medium'>
+            Claim
+          </button>
         </div>
-        <button
-          onClick={claimHandler}
-          className='text-[#6D3A0A] mt-3 w-[149px] cursor-pointer p-[10px] bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] rounded-2xl font-medium'>
-          Claim
-        </button>
       </section>
     </>
   )

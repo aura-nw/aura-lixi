@@ -15,7 +15,7 @@ export default function Page() {
         <Image src={MBackground} alt='' className='w-full min-w-[375px] mt-[50px] sm:hidden' />
       </div>
       {/* background  */}
-      <div className='flex flex-col items-center xl:flex-row xl:items-start xl:justify-center xl:gap-12 xl:pt-7 pt-16 gap-8'>
+      <div className='relative flex flex-col items-center xl:flex-row xl:items-start xl:justify-center xl:gap-4 pt-16 sm:pt-24 gap-8'>
         <InventorySection />
         <Txs/>
       </div>

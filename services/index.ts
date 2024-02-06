@@ -31,6 +31,14 @@ export const GET_USER_REFFERAL_CODE = gql`
     }
   }
 `
+export const GET_TXS_HISTORY = gql`
+  query MyQuery {
+    txs {
+      tx_hash
+      created_at
+    }
+  }
+`
 export const GET_LIXI = gql`
   subscription MyQuery {
     lixi(order_by: { type: desc }, where: { status: { _eq: "CREATED" } }) {

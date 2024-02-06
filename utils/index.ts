@@ -22,3 +22,8 @@ export const validate = (bech32Address: string) => {
   const { prefix: decodedPrefix } = bech32.decode(bech32Address)
   return 'aura' == decodedPrefix
 }
+export const shortHash = (hash: string) => {
+  const pre = hash.slice(0,8)
+  const suf = hash.slice(-8)
+  return `${pre}...${suf}`
+}

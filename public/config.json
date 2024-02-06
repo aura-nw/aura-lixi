@@ -1,5 +1,6 @@
 {
-  "REST_API_ENDPOINT": "https://campaign-api.euphoria.aura.network",
-  "HASURA_ENDPOINT": "https://campaign-hasura.euphoria.aura.network",
-  "TWITTER_POST_ID":"1740384898689667455"
+  "REST_API_ENDPOINT": "https://campaign-api.dev.aura.network",
+  "HASURA_ENDPOINT": "https://campaign-hasura.dev.aura.network",
+  "TWITTER_POST_ID":"1740384898689667455",
+  "AURASCAN_ENDPOINT":"https://dev.aurascan.io/"
 }
