@@ -56,7 +56,7 @@ export default function InventorySection() {
         onOpenChange={onOpenChange}
         cta={
           <div
-            className='min-w-[170px] flex justify-center text-center -m-[10px] p-[10px]'
+            className='min-w-[170px] flex justify-center text-center -m-[10px] p-[10px] cursor-pointer'
             onClick={loading ? undefined : isClaimed ? onClose : claim}>
             {loading ? (
               <CircularProgress

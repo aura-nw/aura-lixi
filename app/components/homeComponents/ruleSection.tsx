@@ -55,7 +55,6 @@ export default function RuleSection() {
 
   const check = async () => {
     try {
-      
       const res = await checkRepost()
       setIsReposted(res?.data?.is_retweeted)
     } catch (error) {}
@@ -65,7 +64,8 @@ export default function RuleSection() {
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <div className='flex flex-col items-center gap-8 max-w-[425px]'>
           <div className='flex flex-col items-center gap-2'>
-            <div className={`${Bangkok.className} text-[#8E0B09] text-2xl leading-[30px] tracking-[0.24px] font-bold text-center `}>
+            <div
+              className={`${Bangkok.className} text-[#8E0B09] text-2xl leading-[30px] tracking-[0.24px] font-bold text-center `}>
               The Year of Dragon’s Li Xi
             </div>
             <div className='font-bold text-[#292929]'>Prizes & Rules</div>
@@ -117,34 +117,34 @@ export default function RuleSection() {
             The Year of Dragon’s Li Xi
           </div>
           {isReposted ? (
-            <Tooltip content='Gold Li Xi will be sent to your inventory in 2 - 3 mins.'>
-              <div className='cursor-help p-[6px] rounded-[10px] bg-[linear-gradient(180deg,#EFEBE4_0%,#B3AAA0_100%)] flex items-center gap-[2px] h-6 text-[9px] justify-center'>
-                <span className='font-medium text-[#6b6b6b] whitespace-nowrap'>Reposted to</span>
-                <span className='p-[3px]'>
-                  <svg xmlns='http://www.w3.org/2000/svg' width='11' height='10' viewBox='0 0 11 10' fill='none'>
-                    <path
-                      d='M0.808026 0.100098L4.59169 5.50536L0.78418 9.9001H1.64117L4.97471 6.05235L7.66803 9.9001H10.5842L6.58754 4.19085L10.1316 0.100098H9.27461L6.20469 3.64369L3.72418 0.100098H0.808026ZM2.06826 0.774481H3.40793L9.32378 9.22571H7.98411L2.06826 0.774481Z'
-                      fill='#6b6b6b'
-                    />
-                  </svg>
-                </span>
-              </div>
-            </Tooltip>
-          ) : (
-            <Link
-              target='_blank'
-              href={`https://twitter.com/intent/retweet?tweet_id=${getConfig().TWITTER_POST_ID}`}
-              className='p-[6px] rounded-[10px] bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] flex items-center gap-[2px] h-6 text-[9px] justify-center'>
-              <span className='font-medium text-[#6D3A0A] whitespace-nowrap'>Repost to</span>
+            <div className='p-[6px] rounded-[10px] bg-[linear-gradient(180deg,#EFEBE4_0%,#B3AAA0_100%)] flex items-center gap-[2px] h-6 text-[9px] justify-center'>
+              <span className='font-medium text-[#6b6b6b] whitespace-nowrap'>Reposted to</span>
               <span className='p-[3px]'>
                 <svg xmlns='http://www.w3.org/2000/svg' width='11' height='10' viewBox='0 0 11 10' fill='none'>
                   <path
                     d='M0.808026 0.100098L4.59169 5.50536L0.78418 9.9001H1.64117L4.97471 6.05235L7.66803 9.9001H10.5842L6.58754 4.19085L10.1316 0.100098H9.27461L6.20469 3.64369L3.72418 0.100098H0.808026ZM2.06826 0.774481H3.40793L9.32378 9.22571H7.98411L2.06826 0.774481Z'
-                    fill='#6D3A0A'
+                    fill='#6b6b6b'
                   />
                 </svg>
               </span>
-            </Link>
+            </div>
+          ) : (
+            <Tooltip content='After reposting our post, a Gold Li Xi will be sent to your inventory in a few minutes.'>
+              <Link
+                target='_blank'
+                href={`https://twitter.com/intent/retweet?tweet_id=${getConfig().TWITTER_POST_ID}`}
+                className='p-[6px] rounded-[10px] bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] flex items-center gap-[2px] h-6 text-[9px] justify-center'>
+                <span className='font-medium text-[#6D3A0A] whitespace-nowrap'>Repost to</span>
+                <span className='p-[3px]'>
+                  <svg xmlns='http://www.w3.org/2000/svg' width='11' height='10' viewBox='0 0 11 10' fill='none'>
+                    <path
+                      d='M0.808026 0.100098L4.59169 5.50536L0.78418 9.9001H1.64117L4.97471 6.05235L7.66803 9.9001H10.5842L6.58754 4.19085L10.1316 0.100098H9.27461L6.20469 3.64369L3.72418 0.100098H0.808026ZM2.06826 0.774481H3.40793L9.32378 9.22571H7.98411L2.06826 0.774481Z'
+                      fill='#6D3A0A'
+                    />
+                  </svg>
+                </span>
+              </Link>
+            </Tooltip>
           )}
         </div>
         <div className='flex flex-col gap-2 text-sm leading-[18px]'>

@@ -2,7 +2,7 @@
 
 import Background from '@/assets/home-background.png'
 import MBackground from '@/assets/home-background_mobile.png'
-import Stage from '@/assets/home-stage.svg'
+import Stage from '@/assets/home-stage.png'
 import { Context } from '@/context'
 import getConfig from 'next/config'
 import Image from 'next/image'
