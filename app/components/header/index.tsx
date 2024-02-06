@@ -1,15 +1,17 @@
 'use client'
 
-import Image from 'next/image'
-import Logo from 'assets/logo.svg'
 import UserIcon from '@/assets/user-icon.svg'
-import { useContext, useRef, useState } from 'react'
-import { useClickOutside } from '@/hooks'
-import Link from 'next/link'
 import { Context } from '@/context'
+import { useClickOutside } from '@/hooks'
+import Logo from 'assets/logo.svg'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useContext, useRef, useState } from 'react'
 export function Header() {
   const [open, setOpen] = useState(false)
   const { disconnect, account } = useContext(Context)
+  const router = useRouter()
   const ref = useRef(null)
   useClickOutside(ref, () => setOpen(false))
   return (
@@ -36,7 +38,12 @@ export function Header() {
             <span className='w-[9px] h-[9px] rounded-sm rotate-45 bg-[#F0C865] shrink-0'></span>
             My Inventory
           </Link>
-          <div className='text-sm leading-6 font-medium flex items-center gap-2 whitespace-nowrap cursor-pointer' onClick={disconnect}>
+          <div
+            className='text-sm leading-6 font-medium flex items-center gap-2 whitespace-nowrap cursor-pointer'
+            onClick={() => {
+              router.push('/')
+              disconnect()
+            }}>
             <span className='w-[9px] h-[9px] rounded-sm rotate-45 bg-[#F0C865] shrink-0'></span>
             Disconnect
           </div>
