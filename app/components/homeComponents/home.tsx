@@ -82,7 +82,7 @@ export default function HomePage() {
           <div className='relative'>
             <Image src={Stage} alt='' className='mt-16 max-w-[390px] w-[110%] mr-[2.3rem]' />
             <div
-              className='h-5 w-5  rounded-full absolute bg-[#000] left-1/2 -translate-x-1/2 top-[8.6rem] z-10'
+              className='h-5 w-5  rounded-full absolute left-1/2 -translate-x-1/2 top-[8.6rem] z-10'
               onClick={() => setSkip(true)}></div>
           </div>
           <div className='absolute top-[66%] inset-x-0 flex flex-col items-center'>
