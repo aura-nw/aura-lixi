@@ -5,6 +5,7 @@ import { NextUIProvider } from '@nextui-org/react'
 import { Roboto } from 'next/font/google'
 import { Header } from './components/header'
 import './globals.css'
+import { GoogleTagManager } from '@next/third-parties/google'
 
 const roboto = Roboto({ subsets: ['latin'], weight: ['100', '300', '400', '500', '700', '900'] })
 
@@ -32,6 +33,7 @@ export default function RootLayout({
           </ContextProvider>
         </NextUIProvider>
       </body>
+      <GoogleTagManager gtmId='GTM-K3NWXQS' />
     </html>
   )
 }

@@ -87,7 +87,7 @@ export default function FortuneNumberSection() {
           ))}
         </div>
         <div className='text-[#C66722] text-sm leading-[18px]  '>
-          A new set of fortune numbers will be generated after all 5 current numbers used.
+          A new set of fortune numbers will be generated after all 5 current numbers are used.
         </div>
       </section>
     </>
