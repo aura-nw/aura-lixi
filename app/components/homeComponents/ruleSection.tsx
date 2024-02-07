@@ -133,7 +133,7 @@ export default function RuleSection() {
             <Tooltip content='After reposting our post, a Gold Li Xi will be sent to your inventory in a few minutes.'>
               <Link
                 target='_blank'
-                href={`https://twitter.com/intent/retweet?tweet_id=${getConfig().TWITTER_POST_ID}`}
+                href={`https://x.com/AuraNetworkHQ/status/${getConfig().TWITTER_POST_ID}`}
                 className='p-[6px] rounded-[10px] bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] flex items-center gap-[2px] h-6 text-[9px] justify-center'>
                 <span className='font-medium text-[#6D3A0A] whitespace-nowrap'>Repost to</span>
                 <span className='p-[3px]'>
