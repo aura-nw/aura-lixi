@@ -34,7 +34,7 @@ export default function HomePage() {
   useEffect(() => {
     setErrorMsg('')
   }, [value])
-  
+
   const submitCodeHandler = async () => {
     try {
       if (loading) return
@@ -65,7 +65,7 @@ export default function HomePage() {
       </main>
     )
   }
-  if (moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime) && !skip) {
+  if (moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime)) {
     return (
       <main className='relative min-h-screen'>
         {/* background  */}
