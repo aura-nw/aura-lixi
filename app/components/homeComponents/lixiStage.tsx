@@ -60,7 +60,7 @@ export default function LixiStage() {
 
       <div className='relative flex flex-col items-center w-full xl:w-fit xl:mx-0 mx-auto mb-[9.2rem]'>
         <Image
-          src={data?.lixi?.[0].type == 'RED' ? RedLixi : data?.lixi?.[0].type == 'GOLD' ? GoldLixi : BlueLixi}
+          src={data?.lixi?.[0]?.type == 'RED' ? RedLixi : data?.lixi?.[0]?.type == 'GOLD' ? GoldLixi : BlueLixi}
           alt=''
           className='mt-20 relative z-[2] -mb-3 h-[200px]'
         />
