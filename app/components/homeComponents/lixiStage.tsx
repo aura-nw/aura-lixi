@@ -36,7 +36,7 @@ export default function LixiStage() {
         throw new Error('Open Li Xi failed. Please try again')
       }
     } catch (error: any) {
-      alert(error?.message || 'Something went wrong. Please try again')
+      // alert(error?.message || 'Something went wrong. Please try again')
       onClose()
     }
   }
