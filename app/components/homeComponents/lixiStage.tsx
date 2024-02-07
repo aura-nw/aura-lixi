@@ -13,7 +13,7 @@ import { Bangkok, Context, Go3 } from '@/context'
 import { GET_LIXI, GET_REQUEST_MANAGER, openLixi } from '@/services'
 import { formatNumber, fromMicro } from '@/utils'
 import { useSubscription } from '@apollo/client'
-import { Modal, ModalContent, useDisclosure } from '@nextui-org/react'
+import { CircularProgress, Modal, ModalContent, useDisclosure } from '@nextui-org/react'
 import Logo from 'assets/logo.svg'
 import confetti from 'canvas-confetti'
 import Image from 'next/image'
@@ -25,9 +25,13 @@ export default function LixiStage() {
   const { data, loading } = useSubscription(GET_LIXI)
   const [requestLoading, setRequestLoading] = useState(false)
   const [requestId, setRequestId] = useState(undefined)
+  const [processing, setProcessing] = useState(false)
   const openHandler = async () => {
     try {
+      if (processing) return
+      setProcessing(true)
       const res = await openLixi(data.lixi[0].id)
+      setProcessing(false)
       if (res?.data?.data?.requestId) {
         setRequestId(res?.data?.data?.requestId)
         setRequestLoading(true)
@@ -37,6 +41,7 @@ export default function LixiStage() {
       }
     } catch (error: any) {
       // alert(error?.message || 'Something went wrong. Please try again')
+      setProcessing(false)
       onClose()
     }
   }
@@ -74,7 +79,17 @@ export default function LixiStage() {
             onClick={openHandler}
             disabled={!data?.lixi?.length}
             className=' text-[#6D3A0A] font-semibold p-[10px] rounded-2xl bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] disabled:text-[#6b6b6b] disabled:bg-[linear-gradient(180deg,#EFEBE4_0%,#B3AAA0_100%)] flex items-center gap-2 h-10 w-[149px] justify-center'>
-            OPEN
+            {processing ? (
+              <CircularProgress
+                classNames={{
+                  label: 'text-[#FFF8D5]',
+                  indicator: 'stroke-[#8E0B09]',
+                }}
+                size='sm'
+              />
+            ) : (
+              'OPEN'
+            )}
           </button>
           <div className='mt-10 text-[#F9E2A4] text-sm leading-[18px] min-h-[18px]'>
             {!loading && !data?.lixi?.length && `You don’t have any Li Xi, refer your friends to earn more.`}
