@@ -2,7 +2,7 @@
 
 import Background from '@/assets/home-background.png'
 import MBackground from '@/assets/home-background_mobile.png'
-import Stage from '@/assets/home-stage.png'
+import Stage from '@/assets/home-stage.svg'
 import { Context, DN } from '@/context'
 import getConfig from 'next/config'
 import Image from 'next/image'
@@ -65,7 +65,7 @@ export default function HomePage() {
   }
   if (
     moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime) &&
-    location.origin == 'https://lixi.aura.network'
+    location.origin != 'https://lixi.aura.network'
   ) {
     return (
       <main className='relative min-h-screen'>
@@ -76,9 +76,7 @@ export default function HomePage() {
         </div>
         {/* background  */}
         <div className='relative overflow-hidden flex flex-col items-center w-full mx-auto'>
-          <div className='relative'>
-            <Image src={Stage} alt='' className='mt-16 max-w-[390px] w-[110%] mr-[2.3rem]' />
-          </div>
+          <Image src={Stage} alt='' className='mt-16 max-w-[390px] w-[110%] mr-[2.3rem]' />
           <div className='absolute top-[66%] inset-x-0 flex flex-col items-center'>
             <Countdown
               date={new Date('2024-02-10T00:00:00.00+07:00')}
