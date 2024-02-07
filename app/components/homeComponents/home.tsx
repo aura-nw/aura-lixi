@@ -22,8 +22,6 @@ export default function HomePage() {
   const [value, setValue] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const config = getConfig()
-  const [skip, setSkip] = useState(false)
-  const params = useParams()
   const { data } = useSWR('https://worldtimeapi.org/api/timezone/Asia/Ho_Chi_Minh', (url) =>
     fetch(url).then((r) => r.json())
   )
@@ -65,7 +63,10 @@ export default function HomePage() {
       </main>
     )
   }
-  if (moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime)) {
+  if (
+    moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime) &&
+    location.origin == 'https://lixi.aura.network'
+  ) {
     return (
       <main className='relative min-h-screen'>
         {/* background  */}
@@ -77,9 +78,6 @@ export default function HomePage() {
         <div className='relative overflow-hidden flex flex-col items-center w-full mx-auto'>
           <div className='relative'>
             <Image src={Stage} alt='' className='mt-16 max-w-[390px] w-[110%] mr-[2.3rem]' />
-            <div
-              className='h-5 w-5  rounded-full absolute left-1/2 -translate-x-1/2 top-[8.6rem] z-10'
-              onClick={() => setSkip(true)}></div>
           </div>
           <div className='absolute top-[66%] inset-x-0 flex flex-col items-center'>
             <Countdown

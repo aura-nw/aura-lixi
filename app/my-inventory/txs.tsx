@@ -12,7 +12,7 @@ export default function Txs() {
     <div className='rounded-md border-[0.5px] border-[#FFD66B] w-[343px] md:w-[590px] md:ml-6 xl:ml-0 bg-[linear-gradient(180deg,#FDF5CB_0%,#FDF5CB_0.01%,#FFF9DB_100%)] p-4'>
       <div
         className={`text-2xl leading-[30px] tracking-[0.24px] text-[#8E0B09] w-full text-center ${Bangkok.className} mb-4`}>
-        Claim transaction
+        Related transactions
       </div>
       <div className='flex flex-col gap-2 w-full'>
         <div className='grid grid-cols-2 text-[#000] text-sm leading-6 font-medium pr-6'>
