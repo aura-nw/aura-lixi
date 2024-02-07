@@ -1,25 +1,24 @@
 'use client'
+import BlueGem from '@/assets/blue-gem.svg'
 import BlueLixi from '@/assets/blue-lixi.svg'
+import GoldGem from '@/assets/gold-gem.svg'
 import GoldLixi from '@/assets/gold-lixi.svg'
 import LixiStageImg from '@/assets/lixi-stage.svg'
-import Lixi from '@/assets/lixi.svg'
+import BgMobile from '@/assets/prize_mobile.png'
+import Bg from '@/assets/prize_p.png'
+import RedGem from '@/assets/red-gem.svg'
 import RedLixi from '@/assets/red-lixi.svg'
+import WhiteGem from '@/assets/white-gem.svg'
 import { Bangkok, Context, Go3 } from '@/context'
 import { GET_LIXI, GET_REQUEST_MANAGER, openLixi } from '@/services'
 import { formatNumber, fromMicro } from '@/utils'
 import { useSubscription } from '@apollo/client'
 import { Modal, ModalContent, useDisclosure } from '@nextui-org/react'
+import Logo from 'assets/logo.svg'
+import confetti from 'canvas-confetti'
 import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
 import GiftModal from '../modal/giftModal'
-import RedGem from '@/assets/red-gem.svg'
-import BlueGem from '@/assets/blue-gem.svg'
-import GoldGem from '@/assets/gold-gem.svg'
-import WhiteGem from '@/assets/white-gem.svg'
-import BgMobile from '@/assets/prize_mobile.png'
-import Bg from '@/assets/prize_p.png'
-import Logo from 'assets/logo.svg'
-import confetti from 'canvas-confetti'
 export default function LixiStage() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const { account } = useContext(Context)
@@ -60,7 +59,11 @@ export default function LixiStage() {
       )}
 
       <div className='relative flex flex-col items-center w-full xl:w-fit xl:mx-0 mx-auto mb-[9.2rem]'>
-        <Image src={Lixi} alt='' className='mt-20 relative z-[2] -mb-3' />
+        <Image
+          src={data?.lixi?.[0].type == 'RED' ? RedLixi : data?.lixi?.[0].type == 'GOLD' ? GoldLixi : BlueLixi}
+          alt=''
+          className='mt-20 relative z-[2] -mb-3 h-[200px]'
+        />
         <Image src={LixiStageImg} alt='' className='relative z-[1]' />
         <div className='absolute z-[3] top-[19.75rem] flex flex-col items-center'>
           <button
