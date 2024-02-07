@@ -1,23 +1,22 @@
 'use client'
 
+import BlueLixi from '@/assets/blue-lixi.svg'
 import Background from '@/assets/home-background.png'
 import MBackground from '@/assets/home-background_mobile.png'
 import Stage from '@/assets/home-stage.svg'
 import { Context, DN } from '@/context'
+import moment from 'moment'
 import getConfig from 'next/config'
 import Image from 'next/image'
-import { useParams } from 'next/navigation'
 import { useContext, useEffect, useState } from 'react'
+import Countdown, { zeroPad } from 'react-countdown'
+import useSWR from 'swr'
 import FortuneNumberSection from './fortuneNumberSection'
 import LeaderboardSection from './leaderboardSection'
 import LixiStage from './lixiStage'
 import RuleSection from './ruleSection'
-import BlueLixi from '@/assets/blue-lixi.svg'
-import useSWR from 'swr'
-import moment from 'moment'
-import Countdown, { zeroPad } from 'react-countdown'
 export default function HomePage() {
-  const { account, submitCode, disconnect } = useContext(Context)
+  const { account, submitCode } = useContext(Context)
   const [loading, setLoading] = useState(false)
   const [value, setValue] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
@@ -55,10 +54,6 @@ export default function HomePage() {
         <div className='absolute inset-0 overflow-hidden flex flex-col items-center'>
           <Image src={Background} alt='' className='w-full min-w-[1008px] hidden sm:block' />
           <Image src={MBackground} alt='' className='w-full min-w-[375px] mt-[50px] sm:hidden' />
-        </div>
-        {/* background  */}
-        <div className='relative overflow-hidden flex flex-col items-center w-full mx-auto'>
-          <Image src={Stage} alt='' className='mt-16 max-w-[390px] w-[110%] mr-[2.3rem]' />
         </div>
       </main>
     )

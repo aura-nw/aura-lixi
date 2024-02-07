@@ -6,14 +6,16 @@ import Background from '@/assets/home-background.png'
 import MBackground from '@/assets/home-background_mobile.png'
 import Image from 'next/image'
 import Txs from './txs'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { Context } from '@/context'
 import { redirect } from 'next/navigation'
 export default function Page() {
   const { account } = useContext(Context)
-  if (!account) {
-    redirect('/')
-  }
+  useEffect(() => {
+    if (!account) {
+      redirect('/')
+    }
+  }, [])
   return (
     <main className='relative min-h-screen'>
       {/* background  */}
@@ -24,7 +26,7 @@ export default function Page() {
       {/* background  */}
       <div className='relative flex flex-col items-center xl:flex-row xl:items-start xl:justify-center xl:gap-4 pt-16 sm:pt-24 gap-8'>
         <InventorySection />
-        <Txs/>
+        <Txs />
       </div>
     </main>
   )
