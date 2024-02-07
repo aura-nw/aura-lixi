@@ -296,7 +296,7 @@ const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, requestLoa
                 <div className='flex items-center gap-5 mt-8'>
                   <div className='flex items-center'>
                     <div className='text-5xl leading-6'>{`${formatNumber(fromMicro(prize?.auraPrize, 6))}`}</div>
-                    <div className='ml-2 leading-6'>AURA</div>
+                    <div className='ml-2 leading-6'>$AURA</div>
                   </div>
                   <div className='w-[1px] h-[30px] bg-[#fff]'></div>
                   <div className='flex items-center'>
