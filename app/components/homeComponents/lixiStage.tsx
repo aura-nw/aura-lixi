@@ -259,7 +259,7 @@ const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, requestLoa
                 <div className='text-[#4E8E48] mt-[6px]'>{account?.username}</div>
                 <div className='mt-10 flex items-center'>
                   <div className='text-5xl leading-6'>{`${formatNumber(fromMicro(prize?.auraPrize, 6))}`}</div>
-                  <div className='ml-2 leading-6'>AURA</div>
+                  <div className='ml-2 leading-6'>$AURA</div>
                 </div>
                 <div className='h-[1px] w-[30px] bg-[#fff] mt-8'></div>
                 <div className='flex items-center mt-5'>
