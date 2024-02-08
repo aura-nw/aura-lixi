@@ -35,6 +35,25 @@ export const Bangkok = localFont({
 export const DN = localFont({
   src: '../assets/font/dn.ttf',
 })
+export const Mori = localFont({
+  src: [
+    {
+      path: '../assets/font/PPMori-Extralight.otf',
+      weight: '100',
+      style: 'normal',
+    },
+    {
+      path: '../assets/font/PPMori-Regular.otf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../assets/font/PPMori-SemiBold.otf',
+      weight: '600',
+      style: 'normal',
+    },
+  ],
+})
 function ContextProvider({ children }: { children: ReactNode }) {
   const [account, setAccount] = useState<Account>()
   const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>()
