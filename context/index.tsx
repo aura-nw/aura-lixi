@@ -1,4 +1,5 @@
 'use client'
+import Modal from '@/app/components/modal'
 import { Account } from '@/model/account'
 import { CHECK_CODE, GET_USER_CODE, GET_USER_DATA, GET_USER_REFFERAL_CODE, applyCode } from '@/services'
 import { getItem, removeItem, setItem } from '@/utils/localStorage'
@@ -9,10 +10,10 @@ import { getMainDefinition } from '@apollo/client/utilities'
 import axios from 'axios'
 import { createClient } from 'graphql-ws'
 import { setConfig } from 'next/config'
+import localFont from 'next/font/local'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { ReactNode, createContext, useEffect, useState } from 'react'
-import localFont from 'next/font/local'
-import Modal from '@/app/components/modal'
+import SubcriptionProvider from './subcriptionContext'
 
 export const Context = createContext<{
   account: Account | undefined
@@ -139,7 +140,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
       setIsInit(false)
     } catch (error: any) {
       console.log(error?.message)
-      if (error?.message.includes('JWTExpired')) {
+      if (error?.message.includes('JWT')) {
         setAccount(undefined)
         removeItem('token')
         setIsInit(false)
@@ -183,7 +184,9 @@ function ContextProvider({ children }: { children: ReactNode }) {
         disconnect,
         submitCode,
       }}>
-      <ApolloProvider client={client}>{children}</ApolloProvider>
+      <ApolloProvider client={client}>
+        <SubcriptionProvider>{children}</SubcriptionProvider>
+      </ApolloProvider>
     </Context.Provider>
   )
 }

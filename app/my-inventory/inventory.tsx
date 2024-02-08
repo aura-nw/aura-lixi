@@ -1,23 +1,25 @@
 'use client'
+import Aura from '@/assets/aura.svg'
 import TopBar from '@/assets/bar.svg'
 import TopBar2 from '@/assets/bar_2.svg'
-import { Bangkok } from '@/context'
-import Image from 'next/image'
-import RedGem from '@/assets/red-gem.svg'
 import BlueGem from '@/assets/blue-gem.svg'
 import GoldGem from '@/assets/gold-gem.svg'
-import WhiteGem from '@/assets/white-gem.svg'
 import Prize from '@/assets/prize.svg'
-import Aura from '@/assets/aura.svg'
+import RedGem from '@/assets/red-gem.svg'
+import WhiteGem from '@/assets/white-gem.svg'
+import { Bangkok, Context } from '@/context'
+import { claimPrize } from '@/services'
 import { formatNumber, fromMicro, validate } from '@/utils'
-import { useQuery, useSubscription } from '@apollo/client'
-import { GET_USER_INVENTORY, claimPrize } from '@/services'
-import { useEffect, useState } from 'react'
 import { CircularProgress, useDisclosure } from '@nextui-org/react'
+import Image from 'next/image'
+import { useContext, useEffect, useState } from 'react'
 import GiftModal from '../components/modal/giftModal'
+import { SubcriptionContext } from '@/context/subcriptionContext'
 
 export default function InventorySection() {
-  const { data } = useSubscription(GET_USER_INVENTORY)
+  const {
+    inventoryData: { data },
+  } = useContext(SubcriptionContext)
   const [value, setValue] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()

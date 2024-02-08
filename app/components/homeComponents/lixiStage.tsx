@@ -10,7 +10,7 @@ import RedGem from '@/assets/red-gem.svg'
 import RedLixi from '@/assets/red-lixi.svg'
 import WhiteGem from '@/assets/white-gem.svg'
 import { Bangkok, Context, Go3 } from '@/context'
-import { GET_LIXI, GET_REQUEST_MANAGER, openLixi } from '@/services'
+import { GET_REQUEST_MANAGER, openLixi } from '@/services'
 import { formatNumber, fromMicro } from '@/utils'
 import { useSubscription } from '@apollo/client'
 import { CircularProgress, Modal, ModalContent, useDisclosure } from '@nextui-org/react'
@@ -19,10 +19,12 @@ import confetti from 'canvas-confetti'
 import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
 import GiftModal from '../modal/giftModal'
+import { SubcriptionContext } from '@/context/subcriptionContext'
 export default function LixiStage() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
-  const { account } = useContext(Context)
-  const { data, loading } = useSubscription(GET_LIXI)
+  const {
+    lixiData: { data, loading },
+  } = useContext(SubcriptionContext)
   const [requestLoading, setRequestLoading] = useState(false)
   const [requestId, setRequestId] = useState(undefined)
   const [processing, setProcessing] = useState(false)
@@ -37,7 +39,7 @@ export default function LixiStage() {
         setRequestLoading(true)
         onOpen()
       } else {
-        throw new Error('Open Li Xi failed. Please try again')
+        alert(`Open Li xi with id ${data.lixi[0].id} failed. Please contact us via Discord or Telegram`)
       }
     } catch (error: any) {
       // alert(error?.message || 'Something went wrong. Please try again')

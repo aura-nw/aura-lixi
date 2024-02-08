@@ -1,13 +1,15 @@
-import { Bangkok } from '@/context'
-import { GET_TXS_HISTORY } from '@/services'
+import { Bangkok, Context } from '@/context'
+import { SubcriptionContext } from '@/context/subcriptionContext'
 import { shortHash } from '@/utils'
-import { useQuery, useSubscription } from '@apollo/client'
 import moment from 'moment'
 import getConfig from 'next/config'
 import Link from 'next/link'
+import { useContext } from 'react'
 
 export default function Txs() {
-  const { data } = useSubscription(GET_TXS_HISTORY)
+  const {
+    txsData: { data },
+  } = useContext(SubcriptionContext)
   return (
     <div className='rounded-md border-[0.5px] border-[#FFD66B] w-[343px] md:w-[590px] md:ml-6 xl:ml-0 bg-[linear-gradient(180deg,#FDF5CB_0%,#FDF5CB_0.01%,#FFF9DB_100%)] p-4'>
       <div
