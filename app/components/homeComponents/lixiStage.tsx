@@ -65,6 +65,7 @@ export default function LixiStage() {
           isOpen={isOpen}
           onOpenChange={onOpenChange}
           requestLoading={requestLoading}
+          onClose={onClose}
         />
       )}
 
@@ -125,7 +126,7 @@ export default function LixiStage() {
     </>
   )
 }
-const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, requestLoading }: any) => {
+const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, requestLoading, onClose }: any) => {
   const [prize, setPrize] = useState<any>()
   const { account } = useContext(Context)
   const { data } = useSubscription(GET_REQUEST_MANAGER, {
@@ -276,7 +277,7 @@ const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, requestLoa
         classNames={{
           backdrop: 'bg-[#000]/85',
           base: `bg-[transparent] rounded-[6px] text-[#000] w-fit max-w-none`,
-          closeButton: 'hidden',
+          closeButton: 'z-10',
         }}>
         <ModalContent>
           <div className='relative'>

@@ -97,7 +97,7 @@ export default function GiftModal({
       classNames={{
         backdrop: 'bg-[#000]/85',
         base: 'bg-[transparent]',
-        closeButton: 'hidden',
+        closeButton: isLoading ? 'hidden' : 'z-10',
       }}>
       <ModalContent>
         {isLoading ? (
