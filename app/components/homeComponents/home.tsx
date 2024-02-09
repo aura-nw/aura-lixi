@@ -15,6 +15,7 @@ import FortuneNumberSection from './fortuneNumberSection'
 import LeaderboardSection from './leaderboardSection'
 import LixiStage from './lixiStage'
 import RuleSection from './ruleSection'
+import { getItem } from '@/utils/localStorage'
 export default function HomePage() {
   const { account, submitCode } = useContext(Context)
   const [loading, setLoading] = useState(false)
@@ -60,7 +61,8 @@ export default function HomePage() {
   }
   if (
     moment('2024-02-10T00:00:00.00+07:00').isAfter(data?.datetime) &&
-    location.origin == 'https://lixi.aura.network'
+    location.origin == 'https://lixi.aura.network' &&
+    getItem('backdoor_code') != 'AURA100$'
   ) {
     return (
       <main className='relative min-h-screen'>

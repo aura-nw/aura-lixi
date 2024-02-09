@@ -284,7 +284,7 @@ const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, requestLoa
             <Image src={BgMobile} alt='' className='w-[370px] lg:hidden' />
             <Image src={Bg} alt='' className='w-[910px] lg:block hidden' />
             <div
-              className={`absolute inset-x-3 top-[9.4rem] lg:left-[4.7rem] lg:right-[4.4rem] lg:top-[8.9rem] lg:flex-row flex-col flex items-center justify-between text-[#fff] ${Mori.className}`}>
+              className={`absolute inset-x-3 top-[9.1rem] lg:left-[4.7rem] lg:right-[4.4rem] lg:top-[8.9rem] lg:flex-row flex-col flex items-center justify-between text-[#fff] ${Mori.className}`}>
               <div className='text-center lg:text-start'>
                 <div className='bg-[linear-gradient(326.39deg,#EDBA37_1.66%,#E8793A_50.91%,#F64C60_97.28%)] inline-block text-[transparent] bg-clip-text font-semibold text-2xl lg:text-[40px] lg:leading-[44px]'>
                   Congratulation!
