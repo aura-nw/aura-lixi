@@ -116,7 +116,11 @@ export const checkRepost = async () => {
 
 export const fetchLeaderboard = async () => {
   try {
-    const res = await axios.get(`${getConfig().REST_API_ENDPOINT}/campaigns/leader-board`)
+    const res = await axios.get(`${getConfig().REST_API_ENDPOINT}/campaigns/leader-board`, {
+      params: {
+        limit: 20,
+      },
+    })
     return res.data
   } catch (error: any) {
     // window.alert(error?.message || 'Something went wrong')
