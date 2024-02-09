@@ -7,9 +7,10 @@ import Tooltip from '../tooltip'
 import useSWR from 'swr'
 import { fetchHistory, fetchLeaderboard } from '@/services'
 export default function LeaderboardSection() {
-  const { data } = useSWR('fetchLeaderboard', fetchLeaderboard, {
-    refreshInterval: 120000,
-  })
+  // const { data } = useSWR('fetchLeaderboard', fetchLeaderboard, {
+  //   refreshInterval: 120000,
+  // })
+  const data: any = undefined
   const { data: history } = useSWR('fetchHistory', fetchHistory, {
     refreshInterval: 120000,
   })
