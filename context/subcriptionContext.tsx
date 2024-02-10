@@ -22,7 +22,7 @@ export const SubcriptionContext = createContext<{
 function SubcriptionProvider({ children }: { children: ReactNode }) {
   const { data, loading } = useSubscription(GET_LIXI)
   const { data: inventory } = useSubscription(GET_USER_INVENTORY)
-  const { data: txs } = useSubscription(GET_TXS_HISTORY)
+  //const { data: txs } = useSubscription(GET_TXS_HISTORY)
 
   return (
     <SubcriptionContext.Provider
@@ -35,7 +35,7 @@ function SubcriptionProvider({ children }: { children: ReactNode }) {
           data: inventory,
         },
         txsData: {
-          data: txs,
+          data: undefined,
         },
       }}>
       {children}
