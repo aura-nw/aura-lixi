@@ -7,12 +7,11 @@ import Tooltip from '../tooltip'
 import useSWR from 'swr'
 import { fetchHistory, fetchLeaderboard } from '@/services'
 export default function LeaderboardSection() {
-  // const { data } = useSWR('fetchLeaderboard', fetchLeaderboard, {
-  //   refreshInterval: 120000,
-  // })
-  const data: any = undefined
+  const { data } = useSWR('fetchLeaderboard', fetchLeaderboard, {
+     refreshInterval: 600000,
+  })
   const { data: history } = useSWR('fetchHistory', fetchHistory, {
-    refreshInterval: 120000,
+    refreshInterval: 600000,
   })
   return (
     <section className='relative w-[343px] md:w-[317px] mt-4 mx-auto rounded-md border-[0.5px] border-[#FFD66B] bg-[linear-gradient(180deg,#FDF5CB_0%,#FDF5CB_0.01%,#FFF9DB_100%)] p-4 flex flex-col gap-4'>
