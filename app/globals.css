@@ -4,7 +4,9 @@
 body {
   color: white;
 }
-
+:root {
+  --toastify-font-family: var(--font-roboto);
+}
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;

@@ -23,6 +23,7 @@ import confetti from 'canvas-confetti'
 import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
 import GiftModal from '../modal/giftModal'
+import { toast } from 'react-toastify'
 export default function LixiStage() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const {
@@ -42,7 +43,15 @@ export default function LixiStage() {
         setRequestLoading(true)
         onOpen()
       } else {
-        alert(`Open Li xi with id ${data.lixi[0].id} failed. Please contact us via Discord or Telegram. Respone: ${JSON.stringify(res?.data)}`)
+        toast(
+          `Open Li xi with id ${
+            data.lixi[0].id
+          } failed. Please contact us via Discord or Telegram. Respone: ${JSON.stringify(res?.data)}`,
+          {
+            type: 'error',
+          }
+        )
+        onClose()
       }
     } catch (error: any) {
       // alert(error?.message || 'Something went wrong. Please try again')
@@ -140,7 +149,10 @@ const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, requestLoa
       setRequestLoading(false)
     }
     if (data?.request_manager?.[0]?.response?.code >= 500) {
-      alert(data?.request_manager?.[0]?.response?.error?.msg?.[0]?.message || 'Something went wrong. Please try again.')
+      toast(
+        data?.request_manager?.[0]?.response?.error?.msg?.[0]?.message || 'Something went wrong. Please try again.',
+        { type: 'error' }
+      )
       setRequestLoading(false)
     }
   }, [data?.request_manager?.[0]?.response?.code])

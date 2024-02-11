@@ -25,6 +25,7 @@
     "react-copy-to-clipboard": "^5.1.0",
     "react-countdown": "^2.3.5",
     "react-dom": "^18",
+    "react-toastify": "^10.0.4",
     "swr": "^2.2.4"
   },
   "devDependencies": {

@@ -6,6 +6,7 @@ import { useContext } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import useSWR from 'swr'
 import Modal from '../modal'
+import { toast } from 'react-toastify'
 export default function FortuneNumberSection() {
   const { account } = useContext(Context)
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -56,6 +57,7 @@ export default function FortuneNumberSection() {
         </div>
         <div className='flex justify-between'>
           <CopyToClipboard
+            onCopy={() => toast('Copied all available Fortune numbers to clipboard', { type: 'success' })}
             text={
               account?.refferal_code
                 ?.filter((c) => !c.isUsed)
@@ -118,7 +120,13 @@ const RefCode = ({ refCode }: { refCode: { code: string; isUsed: boolean } }) =>
         <rect y='7' width='9' height='9' rx='2' transform='rotate(-45 0 7)' fill='#F0C865' />
       </svg>
       <div className='truncate w-full text-sm leading-6 font-medium text-[#292929]'>{refCode.code}</div>
-      <CopyToClipboard text={refCode.code}>
+      <CopyToClipboard
+        text={refCode.code}
+        onCopy={() => {
+          toast(`Copied ${refCode.code} to clipboard`, {
+            type: 'success',
+          })
+        }}>
         <svg
           xmlns='http://www.w3.org/2000/svg'
           width='16'
