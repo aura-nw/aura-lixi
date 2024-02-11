@@ -42,7 +42,7 @@ export default function LixiStage() {
         setRequestLoading(true)
         onOpen()
       } else {
-        alert(`Open Li xi with id ${data.lixi[0].id} failed. Please contact us via Discord or Telegram`)
+        alert(`Open Li xi with id ${data.lixi[0].id} failed. Please contact us via Discord or Telegram. Respone: ${JSON.stringify(res?.data)}`)
       }
     } catch (error: any) {
       // alert(error?.message || 'Something went wrong. Please try again')
