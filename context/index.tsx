@@ -159,7 +159,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
       setIsInit(false)
     } catch (error: any) {
       console.log(error?.message)
-        if (error?.message.includes('JWT')||error?.message.includes('token')||error?.message.includes('session')){
+      if (error?.message.includes('JWT') || error?.message.includes('token') || error?.message.includes('session')) {
         setAccount(undefined)
         removeItem('token')
         setIsInit(false)
