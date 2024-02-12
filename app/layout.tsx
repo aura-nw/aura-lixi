@@ -40,10 +40,10 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className='bg-[#000] '>
-        <main className='relative min-h-screen grid place-items-center'>
-          <Image src={NFImageBG} alt='' className='w-screen h-screen object-cover' />
+        <main className='relative min-h-[100dvh] grid place-items-center'>
+          <Image src={NFImageBG} alt='' className='w-screen h-[100dvh] object-cover' />
           <div className='absolute inset-0 grid place-items-center'>
-            <Image src={NFImageGem} alt='' className='w-screen h-screen object-contain max-w-[1200px]' />
+            <Image src={NFImageGem} alt='' className='w-screen h-[100dvh] object-contain max-w-[1200px]' />
           </div>
           <div className='absolute inset-10'>
             <div className='w-full h-full flex flex-col justify-between items-center'>
