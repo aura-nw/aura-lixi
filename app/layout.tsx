@@ -10,6 +10,13 @@ import { Header } from './components/header'
 import './globals.css'
 import Image from 'next/image'
 import NFImage from '@/assets/404.png'
+import NFImageBG from '@/assets/404_bg.png'
+import NFImageGem from '@/assets/404_gem.png'
+import NFImageCt from '@/assets/404_content.svg'
+import NFImageCt1 from '@/assets/404_content_1.svg'
+import NFImageCt2 from '@/assets/404_content_2.svg'
+import NFImageCt3 from '@/assets/404_content_3.svg'
+
 const roboto = Roboto({
   subsets: ['latin'],
   weight: ['100', '300', '400', '500', '700', '900'],
@@ -34,7 +41,17 @@ export default function RootLayout({
     <html lang='en'>
       <body className='bg-[#000] '>
         <main className='relative min-h-screen grid place-items-center'>
-          <Image src={NFImage} alt='' className='w-screen h-screen object-contain' />
+          <Image src={NFImageBG} alt='' className='w-screen h-screen object-cover' />
+          <div className='absolute inset-0 grid place-items-center'>
+            <Image src={NFImageGem} alt='' className='w-screen h-screen object-contain max-w-[1200px]' />
+          </div>
+          <div className='absolute inset-10'>
+            <div className='w-full h-full flex flex-col justify-between items-center'>
+              <Image src={NFImageCt1} alt='' className='w-[200px]' />
+              <Image src={NFImageCt2} alt='' className='w-full max-w-[550px]' />
+              <Image src={NFImageCt3} alt='' className='w-[140px]' />
+            </div>
+          </div>
         </main>
       </body>
     </html>
