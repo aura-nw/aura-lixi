@@ -16,6 +16,7 @@ import LeaderboardSection from './leaderboardSection'
 import LixiStage from './lixiStage'
 import RuleSection from './ruleSection'
 import { getItem } from '@/utils/localStorage'
+import NFImage from '@/assets/404.png'
 export default function HomePage() {
   const { account, submitCode } = useContext(Context)
   const [loading, setLoading] = useState(false)
