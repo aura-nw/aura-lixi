@@ -37,52 +37,52 @@ export default function RootLayout({
     )
   }
 
-  return (
-    <html lang='en'>
-      <body className='bg-[#000] '>
-        <main className='relative min-h-[100dvh] grid place-items-center'>
-          <Image src={NFImageBG} alt='' className='w-screen h-[100dvh] object-cover' />
-          <div className='absolute inset-0 grid place-items-center'>
-            <Image src={NFImageGem} alt='' className='w-screen h-[100dvh] object-contain max-w-[1200px]' />
-          </div>
-          <div className='absolute inset-10'>
-            <div className='w-full h-full flex flex-col justify-between items-center'>
-              <Image src={NFImageCt1} alt='' className='w-[200px]' />
-              <Image src={NFImageCt2} alt='' className='w-full max-w-[550px]' />
-              <Image src={NFImageCt3} alt='' className='w-[140px]' />
-            </div>
-          </div>
-        </main>
-      </body>
-    </html>
-  )
-
   // return (
   //   <html lang='en'>
-  //     <body className={`${roboto.variable} bg-[#860204] overflow-x-hidden w-[100vw] min-h-[100dvh] min-w-[375px]`}>
-  //       <NextUIProvider>
-  //         <ContextProvider>
-  //           <Header />
-  //           <main className='relative pb-20 md:pb-0'>{children}</main>
-  //         </ContextProvider>
-  //       </NextUIProvider>
-  //       <ToastContainer
-  //         position='top-center'
-  //         autoClose={3000}
-  //         hideProgressBar
-  //         newestOnTop={false}
-  //         closeOnClick={false}
-  //         rtl={false}
-  //         closeButton={() => <></>}
-  //         pauseOnFocusLoss
-  //         draggable={false}
-  //         pauseOnHover={false}
-  //         theme='dark'
-  //         transition={Bounce}
-  //         limit={3}
-  //       />
+  //     <body className='bg-[#000] '>
+  //       <main className='relative min-h-[100dvh] grid place-items-center'>
+  //         <Image src={NFImageBG} alt='' className='w-screen h-[100dvh] object-cover' />
+  //         <div className='absolute inset-0 grid place-items-center'>
+  //           <Image src={NFImageGem} alt='' className='w-screen h-[100dvh] object-contain max-w-[1200px]' />
+  //         </div>
+  //         <div className='absolute inset-10'>
+  //           <div className='w-full h-full flex flex-col justify-between items-center'>
+  //             <Image src={NFImageCt1} alt='' className='w-[200px]' />
+  //             <Image src={NFImageCt2} alt='' className='w-full max-w-[550px]' />
+  //             <Image src={NFImageCt3} alt='' className='w-[140px]' />
+  //           </div>
+  //         </div>
+  //       </main>
   //     </body>
-  //     <GoogleTagManager gtmId='GTM-K3NWXQS' />
   //   </html>
   // )
+
+  return (
+    <html lang='en'>
+      <body className={`${roboto.variable} bg-[#860204] overflow-x-hidden w-[100vw] min-h-[100dvh] min-w-[375px]`}>
+        <NextUIProvider>
+          <ContextProvider>
+            <Header />
+            <main className='relative pb-20 md:pb-0'>{children}</main>
+          </ContextProvider>
+        </NextUIProvider>
+        <ToastContainer
+          position='top-center'
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          closeButton={() => <></>}
+          pauseOnFocusLoss
+          draggable={false}
+          pauseOnHover={false}
+          theme='dark'
+          transition={Bounce}
+          limit={3}
+        />
+      </body>
+      <GoogleTagManager gtmId='GTM-K3NWXQS' />
+    </html>
+  )
 }

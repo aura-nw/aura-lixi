@@ -1,7 +1,7 @@
 'use client'
 import Modal from '@/app/components/modal'
 import { Account } from '@/model/account'
-import { CHECK_CODE, GET_USER_CODE, GET_USER_DATA, GET_USER_REFFERAL_CODE, applyCode } from '@/services'
+import { CHECK_CODE, GET_USER_CODE, GET_USER_DATA, GET_USER_REFFERAL_CODE, applyCode, checkFollow } from '@/services'
 import { getItem, removeItem, setItem } from '@/utils/localStorage'
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheObject, split } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
@@ -142,9 +142,12 @@ function ContextProvider({ children }: { children: ReactNode }) {
           const refferalCode = await client.query({
             query: CHECK_CODE(refferalCodeData?.data?.referrals.map((c: any) => c.code)),
           })
+          const res = await checkFollow()
           setAccount({
             ...userData.data.users?.[0],
             code: codeData.data.task_referrals.length ? codeData.data.task_referrals[0].code : undefined,
+            isFollowed: res?.data?.is_followed,
+            specialRequestId: res?.data?.request_id,
             refferal_code: refferalCodeData?.data?.referrals.map((code: any) => {
               const refCode = code.code
               return {

@@ -113,6 +113,14 @@ export const checkRepost = async () => {
     // window.alert(error?.message || 'Something went wrong')
   }
 }
+export const checkFollow = async () => {
+  try {
+    const res = await privateAxios.get(`${getConfig().REST_API_ENDPOINT}/campaigns/check-follow`)
+    return res
+  } catch (error: any) {
+    // window.alert(error?.message || 'Something went wrong')
+  }
+}
 
 export const fetchLeaderboard = async () => {
   try {
