@@ -56,16 +56,7 @@ export default function FortuneNumberSection() {
           Fortune numbers
         </div>
         <div className='flex justify-between'>
-          <CopyToClipboard
-            onCopy={() => toast('Copied all available Fortune numbers to clipboard', { type: 'success' })}
-            text={
-              account?.refferal_code
-                ?.filter((c) => !c.isUsed)
-                .map((c) => c.code)
-                .join(', ') || ''
-            }>
-            <span className='text-[#C66722] text-sm leading-6 font-medium cursor-pointer'>Copy all</span>
-          </CopyToClipboard>
+          <span className='text-[#C66722] text-sm leading-6 font-medium cursor-pointer'></span>
           <button
             onClick={() => {
               onOpen()
@@ -83,14 +74,10 @@ export default function FortuneNumberSection() {
             </span>
           </button>
         </div>
-        <div className='flex flex-col gap-2 max-h-[152px] overflow-auto pr-2'>
-          {account?.refferal_code?.map((ref) => (
-            <RefCode refCode={ref} key={ref.code} />
-          ))}
+        <div className='flex flex-col gap-2 h-[152px] overflow-auto pr-2 justify-center items-center'>
+          <div className='text-[#C66722] text-sm text-center'>The Dragon takes all your Fortune numbers far away.</div>
         </div>
-        <div className='text-[#C66722] text-sm leading-[18px]  '>
-          A new set of fortune numbers will be generated after all 5 current numbers are used.
-        </div>
+        <div className='text-[#C66722] text-sm h-[54px]  '></div>
       </section>
     </>
   )

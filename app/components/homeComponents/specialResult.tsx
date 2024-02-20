@@ -1,143 +1,29 @@
 'use client'
 import BlueGemPrize from '@/assets/blue-gem.png'
 import BlueGem from '@/assets/blue-gem.svg'
-import BlueLixi from '@/assets/blue-lixi.svg'
 import GoldGemPrize from '@/assets/gold-gem.png'
 import GoldGem from '@/assets/gold-gem.svg'
-import GoldLixi from '@/assets/gold-lixi.svg'
-import LixiStageImg from '@/assets/lixi-stage.svg'
 import BgMobile from '@/assets/prize_mobile.png'
 import Bg from '@/assets/prize_p.png'
 import RedGemPrize from '@/assets/red-gem.png'
 import RedGem from '@/assets/red-gem.svg'
-import RedLixi from '@/assets/red-lixi.svg'
 import WhiteGemPrize from '@/assets/white-gem.png'
 import WhiteGem from '@/assets/white-gem.svg'
-import { Bangkok, Context, Go3, Mori } from '@/context'
-import { SubcriptionContext } from '@/context/subcriptionContext'
-import { GET_REQUEST_MANAGER, openLixi } from '@/services'
+import { Bangkok, Context, Mori } from '@/context'
+import { GET_REQUEST_MANAGER } from '@/services'
 import { formatNumber, fromMicro } from '@/utils'
+import { getItem, setItem } from '@/utils/localStorage'
 import { useSubscription } from '@apollo/client'
-import { CircularProgress, Modal, ModalContent, useDisclosure } from '@nextui-org/react'
+import { Modal, ModalContent, useDisclosure } from '@nextui-org/react'
 import confetti from 'canvas-confetti'
 import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
 import GiftModal from '../modal/giftModal'
-import { toast } from 'react-toastify'
-export default function LixiStage() {
+export const SpecialResult = ({ requestId }: { requestId: number }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
-  const {
-    lixiData: { data, loading },
-  } = useContext(SubcriptionContext)
-  const [requestLoading, setRequestLoading] = useState(false)
-  const [requestId, setRequestId] = useState(undefined)
-  const [processing, setProcessing] = useState(false)
-  const openHandler = async () => {
-    try {
-      if (processing) return
-      setProcessing(true)
-      const res = await openLixi(data.lixi[0].id)
-      setProcessing(false)
-      if (res?.data?.data?.requestId) {
-        setRequestId(res?.data?.data?.requestId)
-        setRequestLoading(true)
-        onOpen()
-      } else {
-        toast(
-          `Open Li xi with id ${
-            data.lixi[0].id
-          } failed. Please contact us via Discord or Telegram. Respone: ${JSON.stringify(res?.data)}`,
-          {
-            type: 'error',
-          }
-        )
-        onClose()
-      }
-    } catch (error: any) {
-      // alert(error?.message || 'Something went wrong. Please try again')
-      setProcessing(false)
-      onClose()
-    }
-  }
-
-  useEffect(() => {
-    if (!isOpen) {
-      setRequestId(undefined)
-    }
-  }, [isOpen])
-  return (
-    <>
-      {requestId && (
-        <Result
-          requestId={requestId}
-          setRequestLoading={setRequestLoading}
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          requestLoading={requestLoading}
-          onClose={onClose}
-        />
-      )}
-
-      <div className='relative flex flex-col items-center w-full xl:w-fit xl:mx-0 mx-auto mb-[9.2rem]'>
-        {data?.lixi?.[0] ? (
-          <Image
-            src={data?.lixi?.[0]?.type == 'RED' ? RedLixi : data?.lixi?.[0]?.type == 'GOLD' ? GoldLixi : BlueLixi}
-            alt=''
-            className='mt-20 relative z-[2] -mb-3 h-[200px]'
-          />
-        ) : (
-          <div className='h-[200px] w-1 mt-20 relative z-[2] -mb-3'></div>
-        )}
-        <Image src={LixiStageImg} alt='' className='relative z-[1]' />
-        <div className='absolute z-[3] top-[19.75rem] flex flex-col items-center'>
-          <button
-            onClick={openHandler}
-            disabled={!data?.lixi?.length}
-            className=' text-[#6D3A0A] font-semibold p-[10px] rounded-2xl bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] disabled:text-[#6b6b6b] disabled:bg-[linear-gradient(180deg,#EFEBE4_0%,#B3AAA0_100%)] flex items-center gap-2 h-10 w-[149px] justify-center'>
-            {processing ? (
-              <CircularProgress
-                classNames={{
-                  label: 'text-[#FFF8D5]',
-                  indicator: 'stroke-[#8E0B09]',
-                }}
-                size='sm'
-              />
-            ) : (
-              'OPEN'
-            )}
-          </button>
-          <div className='mt-10 text-[#F9E2A4] text-sm leading-[18px] min-h-[18px]'>
-            {!loading && !data?.lixi?.length && `You don’t have any Li Xi, refer your friends to earn more.`}
-          </div>
-          <div className='flex mt-4 relative z-[2] gap-1'>
-            <Image src={RedLixi} alt='' className='w-[105px] h-[108px]' />
-            <Image src={GoldLixi} alt='' className='w-[105px] h-[108px]' />
-            <Image src={BlueLixi} alt='' className='w-[105px] h-[108px]' />
-          </div>
-          <div className='relative grid place-items-center w-[347px] h-[83px] -mt-8 z-[1] rounded-md border-[5px] border-[#EDB48D] bg-[#B43325] shadow-[0px_4px_9.9px_0px_rgba(0,0,0,0.10),0px_4px_4px_0px_rgba(0,0,0,0.25)] '>
-            <div className='flex w-[286px] justify-between absolute bottom-[11px]'>
-              <div
-                className={`${Go3.className} h-[22px] rounded-2xl px-[10px] text-center min-w-[54px] bg-[#860204] shadow-[0px_2px_3.5px_0px_rgba(0,0,0,0.10)_inset] `}>
-                {data?.lixi?.filter((d: any) => d.type == 'RED').length || 0}
-              </div>
-              <div
-                className={`${Go3.className} h-[22px] rounded-2xl px-[10px] text-center min-w-[54px] bg-[#860204] shadow-[0px_2px_3.5px_0px_rgba(0,0,0,0.10)_inset] `}>
-                {data?.lixi?.filter((d: any) => d.type == 'GOLD').length || 0}
-              </div>
-              <div
-                className={`${Go3.className} h-[22px] rounded-2xl px-[10px] text-center min-w-[54px] bg-[#860204] shadow-[0px_2px_3.5px_0px_rgba(0,0,0,0.10)_inset] `}>
-                {data?.lixi?.filter((d: any) => d.type == 'BLUE').length || 0}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  )
-}
-export const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, requestLoading, onClose }: any) => {
   const [prize, setPrize] = useState<any>()
   const { account } = useContext(Context)
+  const [requestLoading, setRequestLoading] = useState(true)
   const { data } = useSubscription(GET_REQUEST_MANAGER, {
     variables: {
       id: requestId,
@@ -147,13 +33,8 @@ export const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, req
     if (data?.request_manager?.[0]?.response?.code == 200) {
       setPrize(data.request_manager[0].response.data)
       setRequestLoading(false)
-    }
-    if (data?.request_manager?.[0]?.response?.code >= 500) {
-      toast(
-        data?.request_manager?.[0]?.response?.error?.msg?.[0]?.message || 'Something went wrong. Please try again.',
-        { type: 'error' }
-      )
-      setRequestLoading(false)
+      onOpen()
+      setItem('request_id', requestId.toString())
     }
   }, [data?.request_manager?.[0]?.response?.code])
 
