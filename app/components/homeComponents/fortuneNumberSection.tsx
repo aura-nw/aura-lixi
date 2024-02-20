@@ -75,9 +75,7 @@ export default function FortuneNumberSection() {
           </button>
         </div>
         <div className='flex flex-col gap-2 h-[152px] overflow-auto pr-2 justify-center items-center'>
-          <div className='text-[#C66722] text-sm text-center'>
-            The Dragon takes all your Fortune numbers far away
-          </div>
+          <div className='text-[#C66722] text-sm text-center'>No fortune codes will be generated this time.</div>
         </div>
         <div className='text-[#C66722] text-sm h-[54px]  '></div>
       </section>
