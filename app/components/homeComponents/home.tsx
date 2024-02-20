@@ -52,17 +52,6 @@ export default function HomePage() {
       }
     }
   }
-  if (!data) {
-    return (
-      <main className='relative min-h-screen'>
-        {/* background  */}
-        <div className='absolute inset-0 overflow-hidden flex flex-col items-center'>
-          <Image src={Background} alt='' className='w-full min-w-[1008px] hidden sm:block' />
-          <Image src={MBackground} alt='' className='w-full min-w-[375px] mt-[50px] sm:hidden' />
-        </div>
-      </main>
-    )
-  }
 
   if (account && !account.code) {
     return (
