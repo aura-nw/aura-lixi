@@ -134,7 +134,7 @@ export const SpecialResult = ({ requestId }: { requestId: number }) => {
           <div className={`${Bangkok.className} text-[#8E0B09] text-sm`}>Congratulations!</div>
           <div className='text-[#4E8E48] font-medium leading-6 mt-[6px]'>{account?.username}</div>
           <div className='mt-[6px] text-sm leading-5 text-center'>
-            You have received a prize.
+            You have received a prize by following us on X.
             <br /> Don’t forget to claim it in inventory
           </div>
           {prize?.nftPrize?.token_type == 'RED' ? (
