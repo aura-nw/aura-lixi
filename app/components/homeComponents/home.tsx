@@ -52,7 +52,7 @@ export default function HomePage() {
       }
     }
   }
-  if (!data) {
+  if (!data || !account?.refferal_code) {
     return (
       <main className='relative min-h-screen'>
         {/* background  */}
@@ -64,7 +64,7 @@ export default function HomePage() {
     )
   }
 
-  if (account && !account.code) {
+  if (account && !account.code && account.refferal_code?.length > 1) {
     return (
       <main className='relative min-h-screen'>
         {/* background  */}
