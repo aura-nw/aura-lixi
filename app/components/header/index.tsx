@@ -31,7 +31,7 @@ export function Header() {
       </div>
       {open && account && (
         <div className='absolute top-full right-[max(16px,calc(50%-545px))] p-4 rounded-b-md flex flex-col gap-4 border-x border-b border-[#D52121] bg-[linear-gradient(180deg,rgba(117,20,20,0.50)_0%,rgba(133,7,7,0.50)_0.01%,rgba(244,63,63,0.50)_100%)] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] backdrop-blur-[6px]'>
-          {account?.code && account.isFollowed && (
+          {(account?.code || account.refferal_code?.length == 1) && account.isFollowed && (
             <Link
               onClick={() => setOpen(false)}
               href='/my-inventory'
