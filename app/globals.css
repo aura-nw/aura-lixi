@@ -14,16 +14,20 @@ body {
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #F3DBA9 0%, #FFA031 100%);
+  background: linear-gradient(180deg, #f3dba9 0%, #ffa031 100%);
   border-radius: 999px;
 }
 .custom-scrollbar::-webkit-scrollbar {
   width: 7.5px;
   height: 7.5px;
-  background: #E1C8AB;
+  background: #e1c8ab;
   border-radius: 999px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: linear-gradient(90deg, #AE2525 0%, #EE3838 50%, #B80000 100%);
+  background: linear-gradient(90deg, #ae2525 0%, #ee3838 50%, #b80000 100%);
   border-radius: 999px;
+}
+.text-stroke {
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #f9c174;
 }

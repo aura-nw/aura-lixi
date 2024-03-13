@@ -1,6 +1,10 @@
 {
-  "REST_API_ENDPOINT": "https://campaign-api.dev.aura.network",
-  "HASURA_ENDPOINT": "https://campaign-hasura.dev.aura.network",
-  "TWITTER_POST_ID":"1740384898689667455",
-  "AURASCAN_ENDPOINT":"https://explorer.dev.aura.network"
+  "REST_API_ENDPOINT": "https://campaign-api.euphoria.aura.network",
+  "HASURA_ENDPOINT": "https://campaign-hasura.euphoria.aura.network",
+  "TWITTER_POST_ID": "1740384898689667455",
+  "AURASCAN_ENDPOINT": "https://euphoria.aurascan.io",
+  "HOROSCOPE_ENDPOINT": "https://indexer-v2.staging.aurascan.io",
+  "HOROSCOPE_CHAINKEY":"euphoria",
+  "COSMOSKIT_CHAINKEY": "auratestnet",
+  "DRAGON_GEM_COLLECTION_CONTRACT_ADDRESS": "aura14rrxnmkpnvcmeknjzma0myeepdxaa86wh5837959ek37dmrl2lxqfg66z0"
 }

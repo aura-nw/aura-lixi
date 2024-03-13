@@ -1,4 +1,4 @@
-import { privateAxios } from '@/context'
+import { privateAxios } from '@/provider'
 import { gql } from '@apollo/client'
 import axios from 'axios'
 import getConfig from 'next/config'
@@ -8,6 +8,7 @@ export const GET_USER_DATA = gql`
       avatar_url
       username
       id
+      wallet_address
     }
   }
 `
@@ -66,6 +67,30 @@ export const GET_USER_CODE = (id: string) => gql`
   query GET_USER_CODE {
     task_referrals(where: { referee_id: { _eq: ${id} } }) {
       code
+    }
+  }
+`
+export const GET_ASSETS =(chainKey: string)=> gql`
+  query queryAssetCW721(
+    $contract_address: String
+    $owner: String = null
+  ) {
+    ${chainKey} {
+      cw721_token(
+        where: {
+          cw721_contract: {
+            smart_contract: { address: { _eq: $contract_address }, name: { _neq: "crates.io:cw4973" } }
+          }
+          owner: { _eq: $owner }
+          burned: { _eq: false }
+        }
+        order_by: [{ last_updated_height: desc }, { id: desc }]
+      ) {
+        id
+        token_id
+        owner
+        media_info
+      }
     }
   }
 `
@@ -156,6 +181,17 @@ export const claimPrize = async (walletAddress: string) => {
   try {
     const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/lixi/claim`, {
       walletAddress,
+    })
+    return res
+  } catch (error: any) {
+    window.alert(error?.message || 'Something went wrong')
+  }
+}
+export const linkWallet = async (signedDoc: any, signature: any) => {
+  try {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/users/wallets/link`, {
+      signed_doc: signedDoc,
+      signature,
     })
     return res
   } catch (error: any) {

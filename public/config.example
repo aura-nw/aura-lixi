@@ -1,0 +1,11 @@
+//dev
+{
+  "REST_API_ENDPOINT": "https://campaign-api.dev.aura.network",
+  "HASURA_ENDPOINT": "https://campaign-hasura.dev.aura.network",
+  "TWITTER_POST_ID":"1740384898689667455",
+  "AURASCAN_ENDPOINT":"https://explorer.dev.aura.network",
+  "HOROSCOPE_ENDPOINT": "https://indexer-v2.dev.aurascan.io",
+  "COSMOSKIT_CHAINKEY":"auradevnet",
+  "DRAGON_GEM_COLLECTION_CONTRACT_ADDRESS":"aura189xmlzrj8ah96ww4700kp33va2uttzs7lgm0y8vx4hcw2clk4vsszgyu53"
+}
+

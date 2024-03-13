@@ -1,0 +1,357 @@
+'use client'
+import IconClose from '@/assets/ic_close.svg'
+import ShieldItem from '@/assets/mat khien.png'
+import FilledButton from '@/components/button/filled'
+import Checkbox from '@/components/checkbox'
+import Gem from '@/components/gem'
+import GemWithFrame from '@/components/gem/gemWithFrame'
+import { Bangkok, Context } from '@/provider'
+import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
+import { Map } from 'immutable'
+import Image from 'next/image'
+import { useContext, useEffect, useMemo, useState } from 'react'
+import ForceBg from './assets/force-bg.svg'
+import GemSlot from './assets/gem-slot.svg'
+import Shield from './assets/shield.svg'
+import TopBar2 from './assets/top-bar-2.svg'
+import TopBar from './assets/top-bar.svg'
+import TopBarMobile from './assets/top-bar_mobile.svg'
+const initList = {
+  w1: 0,
+  w2: 0,
+  w3: 0,
+  w4: 0,
+  w5: 0,
+  w6: 0,
+  w7: 0,
+  b1: 0,
+  b2: 0,
+  b3: 0,
+  b4: 0,
+  b5: 0,
+  b6: 0,
+  b7: 0,
+  g1: 0,
+  g2: 0,
+  g3: 0,
+  g4: 0,
+  g5: 0,
+  g6: 0,
+  g7: 0,
+  r1: 0,
+  r2: 0,
+  r3: 0,
+  r4: 0,
+  r5: 0,
+  r6: 0,
+  r7: 0,
+}
+export default function Home() {
+  const { inventory } = useContext(Context)
+  const [useShield, setUseShield] = useState(false)
+  const [selectedColorKey, setSelectedColorKey] = useState(new Set(['all_colors']))
+  const selectedColorValue = useMemo(
+    () => Array.from(selectedColorKey).join(', ').replaceAll('_', ' '),
+    [selectedColorKey]
+  )
+  const [selectedRankKey, setSelectedRankKey] = useState(new Set(['all_rank']))
+  const selectedRankValue = useMemo(
+    () => Array.from(selectedRankKey).join(', ').replaceAll('_', ' '),
+    [selectedRankKey]
+  )
+
+  const [mainGem, setMainGem] = useState<string | undefined>()
+  const [materialGems, setMaterialGems] = useState<(string | undefined)[]>([
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+  ])
+  const [gems, setGems] = useState<any>(Map(initList))
+
+  useEffect(() => {
+    const gemList = inventory.reduce((total, current) => {
+      const color = current.media_info.onchain.metadata.attributes.find((attr) => attr.trait_type == 'Color')?.value
+      if (color == 'WHITE') {
+        total['w1']++
+      }
+      if (color == 'BLUE') {
+        total['b1']++
+      }
+      if (color == 'GOLD') {
+        total['g1']++
+      }
+      if (color == 'RED') {
+        total['r1']++
+      }
+      return total
+    }, initList)
+    setGems(Map(gemList))
+  }, [inventory?.length])
+
+  const addGemHandler = (type: string) => {
+    if (!mainGem) {
+      setMainGem(type)
+    } else {
+      for (let i = 0; i < 5; i++) {
+        if (materialGems[i] == undefined) {
+          materialGems[i] = type
+          break
+        }
+      }
+      setMaterialGems([...materialGems])
+    }
+  }
+
+  return (
+    <div className='flex flex-wrap gap-5 md:gap-2 justify-center'>
+      <div className='relative'>
+        <Image src={TopBar} alt='' className='w-[595px] relative z-10 hidden md:block' />
+        <Image src={TopBarMobile} alt='' className='w-[372px] relative z-10 md:hidden' />
+        <div className='relative w-[342px] md:w-[544px] mx-auto -mt-2 rounded-b-[4px] border border-[#ECCB83] p-8 bg-[linear-gradient(180deg,rgba(76,50,36,0.50)_0%,rgba(80,49,38,0.50)_0.01%,rgba(166,123,81,0.50)_100%)] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] backdrop-blur-[6px]'>
+          <div className='absolute inset-x-0 top-10 grid place-items-center'>
+            <Image src={ForceBg} alt='' className='w-[282px] h-[290px] md:w-[443px] md:h-[457px]' />
+          </div>
+          <div className='relative mt-5 '>
+            <div className='w-[263px] md:w-[415px] h-[246px] md:h-[388px] relative mx-auto'>
+              <div className='absolute top-0 left-1/2 -translate-x-1/2'>
+                <Image src={GemSlot} alt='' className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]' />
+                {materialGems[0] && (
+                  <div
+                    className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
+                    onClick={() =>
+                      setMaterialGems([undefined, materialGems[1], materialGems[2], materialGems[3], materialGems[4]])
+                    }>
+                    <div className='absolute inset-0 grid place-items-center invisible'>
+                      <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
+                        <Image src={IconClose} alt='' className='w-5 h-5' />
+                      </div>
+                    </div>
+                    <Gem type={materialGems[0]} className='h-7 md:h-10 w-7 md:w-10' />
+                  </div>
+                )}
+              </div>
+              <div className='absolute left-0 top-[40%] -translate-y-1/2'>
+                <Image src={GemSlot} alt='' className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]' />
+                {materialGems[1] && (
+                  <div
+                    className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
+                    onClick={() =>
+                      setMaterialGems([materialGems[0], undefined, materialGems[2], materialGems[3], materialGems[4]])
+                    }>
+                    <div className='absolute inset-0 grid place-items-center invisible'>
+                      <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
+                        <Image src={IconClose} alt='' className='w-5 h-5' />
+                      </div>
+                    </div>
+                    <Gem type={materialGems[1]} className='h-7 md:h-10 w-7 md:w-10' />
+                  </div>
+                )}
+              </div>
+              <div className='absolute right-0 top-[40%] -translate-y-1/2'>
+                <Image src={GemSlot} alt='' className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]' />
+                {materialGems[2] && (
+                  <div
+                    className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
+                    onClick={() =>
+                      setMaterialGems([materialGems[0], materialGems[1], undefined, materialGems[3], materialGems[4]])
+                    }>
+                    <div className='absolute inset-0 grid place-items-center invisible'>
+                      <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
+                        <Image src={IconClose} alt='' className='w-5 h-5' />
+                      </div>
+                    </div>
+                    <Gem type={materialGems[2]} className='h-7 md:h-10 w-7 md:w-10' />
+                  </div>
+                )}
+              </div>
+
+              <div className='absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2'>
+                <Image src={GemSlot} alt='' className='w-[157px] md:w-[100px] md:h-[168px] h-[107px]' />
+                {mainGem && (
+                  <div
+                    className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
+                    onClick={() => setMainGem(undefined)}>
+                    <div className='absolute inset-0 grid place-items-center invisible'>
+                      <div className='bg-[#000]/50 h-10 w-10 md:h-14 md:w-14 rounded-full grid place-items-center'>
+                        <Image src={IconClose} alt='' className='w-5 h-5 md:w-10 md:h-10' />
+                      </div>
+                    </div>
+                    <Gem type={mainGem} className='h-10 w-10 md:h-14 md:w-14' />
+                  </div>
+                )}
+              </div>
+
+              <div className='absolute left-[10%] bottom-0'>
+                <Image src={GemSlot} alt='' className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]' />
+                {materialGems[3] && (
+                  <div
+                    className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
+                    onClick={() =>
+                      setMaterialGems([materialGems[0], materialGems[1], materialGems[2], undefined, materialGems[4]])
+                    }>
+                    <div className='absolute inset-0 grid place-items-center invisible'>
+                      <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
+                        <Image src={IconClose} alt='' className='w-5 h-5' />
+                      </div>
+                    </div>
+                    <Gem type={materialGems[3]} className='h-7 md:h-10 w-7 md:w-10' />
+                  </div>
+                )}
+              </div>
+              <div className='absolute right-[10%] bottom-0'>
+                <Image src={GemSlot} alt='' className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]' />
+                {materialGems[4] && (
+                  <div
+                    className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
+                    onClick={() =>
+                      setMaterialGems([materialGems[0], materialGems[1], materialGems[2], materialGems[3], undefined])
+                    }>
+                    <div className='absolute inset-0 grid place-items-center invisible'>
+                      <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
+                        <Image src={IconClose} alt='' className='w-5 h-5' />
+                      </div>
+                    </div>
+                    <Gem type={materialGems[4]} className='h-7 md:h-10 w-7 md:w-10' />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div
+              className='mx-auto w-fit flex items-center mt-10 md:mt-20 gap-3 cursor-pointer'
+              onClick={() => setUseShield(!useShield)}>
+              <Checkbox checked={useShield} />
+              <div className='text-sm'>Use Shield</div>
+              <Image src={Shield} alt='' className='w-[45px] h-[41px]' />
+            </div>
+            <div className='mt-4 w-fit mx-auto'>
+              <FilledButton>Force</FilledButton>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className='relative'>
+        <Image src={TopBar2} alt='' className='w-[352px] relative z-10' />
+        <div className='relative bg-[#E6D8B9] rounded-b-[4px] p-4 -top-2 w-[338px] mx-auto text-[#292929]'>
+          <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>Your Gems</div>
+          <div className='mt-2 text-sm'>Select gems here to forge</div>
+          <div className='my-4 flex gap-4'>
+            <div className='flex-1'>
+              <Dropdown>
+                <DropdownTrigger>
+                  <div className='capitalize bg-[#fff] rounded-md shadow-[0px_1px_4px_0px_rgba(0,0,0,0.15)_inset] px-2 py-1 text-[#7A7A7A] text-sm leading-4 flex items-center'>
+                    <span className='w-full inline-block'>{selectedColorValue}</span>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='24'
+                      height='24'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      className='inline-block'>
+                      <path
+                        d='M6 9L12 15L18 9'
+                        stroke='#7A7A7A'
+                        strokeWidth='1.5'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                      />
+                    </svg>
+                  </div>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label='Single selection example'
+                  variant='flat'
+                  disallowEmptySelection
+                  selectionMode='single'
+                  selectedKeys={selectedColorKey}
+                  classNames={{
+                    base: 'text-[#7a7a7a]',
+                  }}
+                  onSelectionChange={setSelectedColorKey as any}>
+                  <DropdownItem key='all_colors'>All colors</DropdownItem>
+                  <DropdownItem key='white'>White</DropdownItem>
+                  <DropdownItem key='blue'>Blue</DropdownItem>
+                  <DropdownItem key='gold'>Gold</DropdownItem>
+                  <DropdownItem key='red'>Red</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+            <div className='flex-1'>
+              <Dropdown>
+                <DropdownTrigger>
+                  <div className='capitalize bg-[#fff] rounded-md shadow-[0px_1px_4px_0px_rgba(0,0,0,0.15)_inset] px-2 py-1 text-[#7A7A7A] text-sm leading-4 flex items-center'>
+                    <span className='w-full inline-block'>{selectedRankValue}</span>
+                    <svg
+                      xmlns='http://www.w3.org/2000/svg'
+                      width='24'
+                      height='24'
+                      viewBox='0 0 24 24'
+                      fill='none'
+                      className='inline-block'>
+                      <path
+                        d='M6 9L12 15L18 9'
+                        stroke='#7A7A7A'
+                        strokeWidth='1.5'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                      />
+                    </svg>
+                  </div>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label='Single selection example'
+                  variant='flat'
+                  disallowEmptySelection
+                  selectionMode='single'
+                  selectedKeys={selectedRankKey}
+                  classNames={{
+                    base: 'text-[#7a7a7a]',
+                  }}
+                  onSelectionChange={setSelectedRankKey as any}>
+                  <DropdownItem key='all_rank'>All rank</DropdownItem>
+                  <DropdownItem key='1-Star'>1-Star</DropdownItem>
+                  <DropdownItem key='2-Star'>2-Star</DropdownItem>
+                  <DropdownItem key='3-Star'>3-Star</DropdownItem>
+                  <DropdownItem key='4-Star'>4-Star</DropdownItem>
+                  <DropdownItem key='5-Star'>5-Star</DropdownItem>
+                  <DropdownItem key='6-Star'>6-Star</DropdownItem>
+                  <DropdownItem key='7-Star'>7-Star</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+          </div>
+          <div className='overflow-auto h-[278px] pr-4 grid grid-cols-4 text-sm font-semibold'>
+            {['w', 'b', 'g', 'r'].map((color: string) => {
+              return ['1', '2', '3', '4', '5', '6', '7'].map((star: string) => {
+                if (gems.get(color + star) != 0) {
+                  return (
+                    <div
+                      key={color + star}
+                      className='flex flex-col items-center gap-[6px] cursor-pointer'
+                      onClick={() => addGemHandler(color + star)}>
+                      <div>
+                        <GemWithFrame type={(color + star) as any} />
+                      </div>
+                      <div className=''>{gems.get(color + star)}</div>
+                    </div>
+                  )
+                }
+              })
+            })}
+          </div>
+          <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>Your Shields</div>
+          <div className='mt-2 text-sm'>Shields are used to protect your base gem from downgrade</div>
+          <div className='flex mt-4'>
+            <div className='flex flex-col items-center gap-[6px] cursor-pointer'>
+              <div>
+                <Image src={ShieldItem} alt='' />
+              </div>
+              <div className=''>15</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

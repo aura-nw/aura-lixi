@@ -23,7 +23,12 @@ export const validate = (bech32Address: string) => {
   return 'aura' == decodedPrefix
 }
 export const shortHash = (hash: string) => {
-  const pre = hash.slice(0,8)
+  const pre = hash.slice(0, 8)
   const suf = hash.slice(-8)
+  return `${pre}...${suf}`
+}
+export const shorten = (string: string, preCh?: number, sufCh?: number) => {
+  const pre = string.slice(0, preCh || 5)
+  const suf = string.slice(-(sufCh || 5))
   return `${pre}...${suf}`
 }
