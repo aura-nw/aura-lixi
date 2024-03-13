@@ -21,7 +21,7 @@ export function Header() {
   return (
     <header ref={ref} className='fixed top-0 w-full z-50 '>
       <div className='border-b border-[#550E0E] bg-[linear-gradient(126deg,rgba(85,5,5,0.30)_13.84%,rgba(40,3,3,0.00)_74.14%)] shadow-[0px_4px_20px_1px_rgba(0,0,0,0.20)] backdrop-blur-[20px]'>
-        <div className='flex justify-between items-center w-full max-w-6xl mx-auto px-4 py-3'>
+        <div className='flex justify-between items-center w-full max-w-7xl mx-auto px-4 py-3'>
           <Link href='/'>
             <Image src={Logo} alt='' className='w-[77px] sm:w-[108px]' />
           </Link>

@@ -100,7 +100,7 @@ export default function Page() {
             <div>
               <Image src={Machine} alt='' className='w-[236px] h-[252px]' />
             </div>
-            <div className='text-sm text-[#FFFFFF] mt-8'>
+            <div className='text-xs text-[#FFFFFF] mt-8'>
               The Dragon will appear and fulfill your wish at at 2 pm, 24th Mar 2024 (UTC +7)
             </div>
             <div className='mt-4 flex gap-4'>

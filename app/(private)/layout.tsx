@@ -1,11 +1,11 @@
 'use client'
 
-import ForceActive from '@/app/(private)/assets/force-active.svg'
-import ForceInactive from '@/app/(private)/assets/force-inactive.svg'
-import JackpotActive from '@/app/(private)/assets/jackpot-active.svg'
-import JackpotInactive from '@/app/(private)/assets/jackpot-inactive.svg'
-import QuestActive from '@/app/(private)/assets/quest-active.svg'
-import QuestInactive from '@/app/(private)/assets/quest-inactive.svg'
+import ForceActive from '@/app/(private)/assets/force-active.png'
+import ForceInactive from '@/app/(private)/assets/force-inactive.png'
+import JackpotActive from '@/app/(private)/assets/jackpot-active.png'
+import JackpotInactive from '@/app/(private)/assets/jackpot-inactive.png'
+import QuestActive from '@/app/(private)/assets/quest-active.png'
+import QuestInactive from '@/app/(private)/assets/quest-inactive.png'
 import Active from '@/app/(private)/assets/active-tab.png'
 import Inactive from '@/app/(private)/assets/inactive-tab.png'
 import { Bangkok, Context } from '@/provider'
@@ -33,7 +33,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     }
   }, [account?.wallet_address, status, address])
   return (
-    <div className='flex max-w-6xl mx-auto pt-20 md:pt-24 px-1 md:px-4 flex-col md:flex-row gap-4 md:gap-2'>
+    <div className='flex max-w-7xl mx-auto pt-20 md:pt-24 px-1 md:px-4 flex-col md:flex-row gap-4 md:gap-2'>
       <div className='flex md:flex-col gap-4 items-center justify-center md:justify-normal'>
         <div
           className='cursor-pointer'
@@ -99,7 +99,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           />
         </div>
       </div>
-      <div>{children}</div>
+      <div className='flex-1'>{children}</div>
     </div>
   )
 }
