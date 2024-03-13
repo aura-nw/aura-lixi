@@ -12,6 +12,7 @@ import Image from 'next/image'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import ForceBg from './assets/force-bg.svg'
 import GemSlot from './assets/gem-slot.svg'
+import GemSlotActive from './assets/gem-slot_active.svg'
 import Shield from './assets/shield.svg'
 import TopBar2 from './assets/top-bar-2.svg'
 import TopBar from './assets/top-bar.svg'
@@ -49,6 +50,7 @@ const initList = {
 export default function Home() {
   const { inventory } = useContext(Context)
   const [useShield, setUseShield] = useState(false)
+  const [activeSlot, setActiveSlot] = useState(0)
   const [selectedColorKey, setSelectedColorKey] = useState(new Set(['all_colors']))
   const selectedColorValue = useMemo(
     () => Array.from(selectedColorKey).join(', ').replaceAll('_', ' '),
@@ -90,6 +92,19 @@ export default function Home() {
     setGems(Map(gemList))
   }, [inventory?.length])
 
+  useEffect(() => {
+    if (!mainGem) {
+      setActiveSlot(0)
+    } else {
+      for (let i = 0; i < 5; i++) {
+        if (materialGems[i] == undefined) {
+          setActiveSlot(i + 1)
+          break
+        }
+      }
+    }
+  }, [mainGem, materialGems])
+
   const addGemHandler = (type: string) => {
     if (!mainGem) {
       setMainGem(type)
@@ -116,7 +131,11 @@ export default function Home() {
           <div className='relative mt-5 '>
             <div className='w-[263px] md:w-[415px] h-[246px] md:h-[388px] relative mx-auto'>
               <div className='absolute top-0 left-1/2 -translate-x-1/2'>
-                <Image src={GemSlot} alt='' className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]' />
+                <Image
+                  src={activeSlot == 1 ? GemSlotActive : GemSlot}
+                  alt=''
+                  className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]'
+                />
                 {materialGems[0] && (
                   <div
                     className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
@@ -132,8 +151,35 @@ export default function Home() {
                   </div>
                 )}
               </div>
+
               <div className='absolute left-0 top-[40%] -translate-y-1/2'>
-                <Image src={GemSlot} alt='' className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]' />
+                <Image
+                  src={activeSlot == 5 ? GemSlotActive : GemSlot}
+                  alt=''
+                  className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]'
+                />
+                {materialGems[4] && (
+                  <div
+                    className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
+                    onClick={() =>
+                      setMaterialGems([materialGems[0], materialGems[1], materialGems[2], materialGems[3], undefined])
+                    }>
+                    <div className='absolute inset-0 grid place-items-center invisible'>
+                      <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
+                        <Image src={IconClose} alt='' className='w-5 h-5' />
+                      </div>
+                    </div>
+                    <Gem type={materialGems[4]} className='h-7 md:h-10 w-7 md:w-10' />
+                  </div>
+                )}
+              </div>
+              
+              <div className='absolute right-0 top-[40%] -translate-y-1/2'>
+                <Image
+                  src={activeSlot == 2 ? GemSlotActive : GemSlot}
+                  alt=''
+                  className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]'
+                />
                 {materialGems[1] && (
                   <div
                     className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
@@ -149,42 +195,33 @@ export default function Home() {
                   </div>
                 )}
               </div>
-              <div className='absolute right-0 top-[40%] -translate-y-1/2'>
-                <Image src={GemSlot} alt='' className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]' />
-                {materialGems[2] && (
-                  <div
-                    className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
-                    onClick={() =>
-                      setMaterialGems([materialGems[0], materialGems[1], undefined, materialGems[3], materialGems[4]])
-                    }>
-                    <div className='absolute inset-0 grid place-items-center invisible'>
-                      <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
-                        <Image src={IconClose} alt='' className='w-5 h-5' />
-                      </div>
-                    </div>
-                    <Gem type={materialGems[2]} className='h-7 md:h-10 w-7 md:w-10' />
-                  </div>
-                )}
-              </div>
 
               <div className='absolute top-[55%] left-1/2 -translate-x-1/2 -translate-y-1/2'>
-                <Image src={GemSlot} alt='' className='w-[157px] md:w-[100px] md:h-[168px] h-[107px]' />
+                <Image
+                  src={activeSlot == 0 ? GemSlotActive : GemSlot}
+                  alt=''
+                  className='md:w-[157px] w-[100px] md:h-[168px] h-[107px]'
+                />
                 {mainGem && (
                   <div
                     className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
                     onClick={() => setMainGem(undefined)}>
                     <div className='absolute inset-0 grid place-items-center invisible'>
-                      <div className='bg-[#000]/50 h-10 w-10 md:h-14 md:w-14 rounded-full grid place-items-center'>
+                      <div className='bg-[#000]/50 h-10 w-10 md:h-20 md:w-20 rounded-full grid place-items-center'>
                         <Image src={IconClose} alt='' className='w-5 h-5 md:w-10 md:h-10' />
                       </div>
                     </div>
-                    <Gem type={mainGem} className='h-10 w-10 md:h-14 md:w-14' />
+                    <Gem type={mainGem} className='h-10 w-10 md:h-20 md:w-20' />
                   </div>
                 )}
               </div>
 
               <div className='absolute left-[10%] bottom-0'>
-                <Image src={GemSlot} alt='' className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]' />
+                <Image
+                  src={activeSlot == 4 ? GemSlotActive : GemSlot}
+                  alt=''
+                  className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]'
+                />
                 {materialGems[3] && (
                   <div
                     className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
@@ -201,19 +238,23 @@ export default function Home() {
                 )}
               </div>
               <div className='absolute right-[10%] bottom-0'>
-                <Image src={GemSlot} alt='' className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]' />
-                {materialGems[4] && (
+                <Image
+                  src={activeSlot == 3 ? GemSlotActive : GemSlot}
+                  alt=''
+                  className='w-[60px] md:w-[87px] h-[64px] md:h-[93px]'
+                />
+                {materialGems[2] && (
                   <div
                     className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
                     onClick={() =>
-                      setMaterialGems([materialGems[0], materialGems[1], materialGems[2], materialGems[3], undefined])
+                      setMaterialGems([materialGems[0], materialGems[1], undefined, materialGems[3], materialGems[4]])
                     }>
                     <div className='absolute inset-0 grid place-items-center invisible'>
                       <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
                         <Image src={IconClose} alt='' className='w-5 h-5' />
                       </div>
                     </div>
-                    <Gem type={materialGems[4]} className='h-7 md:h-10 w-7 md:w-10' />
+                    <Gem type={materialGems[2]} className='h-7 md:h-10 w-7 md:w-10' />
                   </div>
                 )}
               </div>
@@ -222,7 +263,7 @@ export default function Home() {
               className='mx-auto w-fit flex items-center mt-10 md:mt-20 gap-3 cursor-pointer'
               onClick={() => setUseShield(!useShield)}>
               <Checkbox checked={useShield} />
-              <div className='text-sm'>Use Shield</div>
+              <div className='text-sm'>Activate the Eternal Shield</div>
               <Image src={Shield} alt='' className='w-[45px] h-[41px]' />
             </div>
             <div className='mt-4 w-fit mx-auto'>
@@ -234,122 +275,134 @@ export default function Home() {
       <div className='relative'>
         <Image src={TopBar2} alt='' className='w-[352px] relative z-10' />
         <div className='relative bg-[#E6D8B9] rounded-b-[4px] p-4 -top-2 w-[338px] mx-auto text-[#292929]'>
-          <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>Your Gems</div>
-          <div className='mt-2 text-sm'>Select gems here to forge</div>
-          <div className='my-4 flex gap-4'>
-            <div className='flex-1'>
-              <Dropdown>
-                <DropdownTrigger>
-                  <div className='capitalize bg-[#fff] rounded-md shadow-[0px_1px_4px_0px_rgba(0,0,0,0.15)_inset] px-2 py-1 text-[#7A7A7A] text-sm leading-4 flex items-center'>
-                    <span className='w-full inline-block'>{selectedColorValue}</span>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='24'
-                      height='24'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      className='inline-block'>
-                      <path
-                        d='M6 9L12 15L18 9'
-                        stroke='#7A7A7A'
-                        strokeWidth='1.5'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                      />
-                    </svg>
-                  </div>
-                </DropdownTrigger>
-                <DropdownMenu
-                  aria-label='Single selection example'
-                  variant='flat'
-                  disallowEmptySelection
-                  selectionMode='single'
-                  selectedKeys={selectedColorKey}
-                  classNames={{
-                    base: 'text-[#7a7a7a]',
-                  }}
-                  onSelectionChange={setSelectedColorKey as any}>
-                  <DropdownItem key='all_colors'>All colors</DropdownItem>
-                  <DropdownItem key='white'>White</DropdownItem>
-                  <DropdownItem key='blue'>Blue</DropdownItem>
-                  <DropdownItem key='gold'>Gold</DropdownItem>
-                  <DropdownItem key='red'>Red</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-            <div className='flex-1'>
-              <Dropdown>
-                <DropdownTrigger>
-                  <div className='capitalize bg-[#fff] rounded-md shadow-[0px_1px_4px_0px_rgba(0,0,0,0.15)_inset] px-2 py-1 text-[#7A7A7A] text-sm leading-4 flex items-center'>
-                    <span className='w-full inline-block'>{selectedRankValue}</span>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='24'
-                      height='24'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      className='inline-block'>
-                      <path
-                        d='M6 9L12 15L18 9'
-                        stroke='#7A7A7A'
-                        strokeWidth='1.5'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                      />
-                    </svg>
-                  </div>
-                </DropdownTrigger>
-                <DropdownMenu
-                  aria-label='Single selection example'
-                  variant='flat'
-                  disallowEmptySelection
-                  selectionMode='single'
-                  selectedKeys={selectedRankKey}
-                  classNames={{
-                    base: 'text-[#7a7a7a]',
-                  }}
-                  onSelectionChange={setSelectedRankKey as any}>
-                  <DropdownItem key='all_rank'>All rank</DropdownItem>
-                  <DropdownItem key='1-Star'>1-Star</DropdownItem>
-                  <DropdownItem key='2-Star'>2-Star</DropdownItem>
-                  <DropdownItem key='3-Star'>3-Star</DropdownItem>
-                  <DropdownItem key='4-Star'>4-Star</DropdownItem>
-                  <DropdownItem key='5-Star'>5-Star</DropdownItem>
-                  <DropdownItem key='6-Star'>6-Star</DropdownItem>
-                  <DropdownItem key='7-Star'>7-Star</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-          </div>
-          <div className='overflow-auto h-[278px] pr-4 grid grid-cols-4 text-sm font-semibold'>
-            {['w', 'b', 'g', 'r'].map((color: string) => {
-              return ['1', '2', '3', '4', '5', '6', '7'].map((star: string) => {
-                if (gems.get(color + star) != 0) {
-                  return (
-                    <div
-                      key={color + star}
-                      className='flex flex-col items-center gap-[6px] cursor-pointer'
-                      onClick={() => addGemHandler(color + star)}>
-                      <div>
-                        <GemWithFrame type={(color + star) as any} />
+          {inventory.length ? (
+            <div className='min-h-[622px]'>
+              <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>Your Gems</div>
+              <div className='mt-2 text-sm'>Select gems here to forge</div>
+              <div className='my-4 flex gap-4'>
+                <div className='flex-1'>
+                  <Dropdown>
+                    <DropdownTrigger>
+                      <div className='capitalize bg-[#fff] rounded-md shadow-[0px_1px_4px_0px_rgba(0,0,0,0.15)_inset] px-2 py-1 text-[#7A7A7A] text-sm leading-4 flex items-center'>
+                        <span className='w-full inline-block'>{selectedColorValue}</span>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          width='24'
+                          height='24'
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          className='inline-block'>
+                          <path
+                            d='M6 9L12 15L18 9'
+                            stroke='#7A7A7A'
+                            strokeWidth='1.5'
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                          />
+                        </svg>
                       </div>
-                      <div className=''>{gems.get(color + star)}</div>
-                    </div>
-                  )
-                }
-              })
-            })}
-          </div>
-          <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>Your Shields</div>
-          <div className='mt-2 text-sm'>Shields are used to protect your base gem from downgrade</div>
-          <div className='flex mt-4'>
-            <div className='flex flex-col items-center gap-[6px] cursor-pointer'>
-              <div>
-                <Image src={ShieldItem} alt='' />
+                    </DropdownTrigger>
+                    <DropdownMenu
+                      aria-label='Single selection example'
+                      variant='flat'
+                      disallowEmptySelection
+                      selectionMode='single'
+                      selectedKeys={selectedColorKey}
+                      classNames={{
+                        base: 'text-[#7a7a7a]',
+                      }}
+                      onSelectionChange={setSelectedColorKey as any}>
+                      <DropdownItem key='all_colors'>All colors</DropdownItem>
+                      <DropdownItem key='white'>White</DropdownItem>
+                      <DropdownItem key='blue'>Blue</DropdownItem>
+                      <DropdownItem key='gold'>Gold</DropdownItem>
+                      <DropdownItem key='red'>Red</DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
+                <div className='flex-1'>
+                  <Dropdown>
+                    <DropdownTrigger>
+                      <div className='capitalize bg-[#fff] rounded-md shadow-[0px_1px_4px_0px_rgba(0,0,0,0.15)_inset] px-2 py-1 text-[#7A7A7A] text-sm leading-4 flex items-center'>
+                        <span className='w-full inline-block'>{selectedRankValue}</span>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          width='24'
+                          height='24'
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          className='inline-block'>
+                          <path
+                            d='M6 9L12 15L18 9'
+                            stroke='#7A7A7A'
+                            strokeWidth='1.5'
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                          />
+                        </svg>
+                      </div>
+                    </DropdownTrigger>
+                    <DropdownMenu
+                      aria-label='Single selection example'
+                      variant='flat'
+                      disallowEmptySelection
+                      selectionMode='single'
+                      selectedKeys={selectedRankKey}
+                      classNames={{
+                        base: 'text-[#7a7a7a]',
+                      }}
+                      onSelectionChange={setSelectedRankKey as any}>
+                      <DropdownItem key='all_rank'>All rank</DropdownItem>
+                      <DropdownItem key='1-Star'>1-Star</DropdownItem>
+                      <DropdownItem key='2-Star'>2-Star</DropdownItem>
+                      <DropdownItem key='3-Star'>3-Star</DropdownItem>
+                      <DropdownItem key='4-Star'>4-Star</DropdownItem>
+                      <DropdownItem key='5-Star'>5-Star</DropdownItem>
+                      <DropdownItem key='6-Star'>6-Star</DropdownItem>
+                      <DropdownItem key='7-Star'>7-Star</DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                </div>
               </div>
-              <div className=''>15</div>
+              <div className='overflow-auto h-[278px] pr-4 grid grid-cols-4 text-sm font-semibold'>
+                {['w', 'b', 'g', 'r'].map((color: string) => {
+                  return ['1', '2', '3', '4', '5', '6', '7'].map((star: string) => {
+                    if (gems.get(color + star) != 0 && !(activeSlot == 0 && star == '7')) {
+                      return (
+                        <div
+                          key={color + star}
+                          className='flex flex-col items-center gap-[6px] cursor-pointer'
+                          onClick={() => addGemHandler(color + star)}>
+                          <div>
+                            <GemWithFrame type={(color + star) as any} />
+                          </div>
+                          <div className=''>{gems.get(color + star)}</div>
+                        </div>
+                      )
+                    }
+                  })
+                })}
+              </div>
+              <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl mt-5`}>Your Eternal Shields</div>
+              <div className='mt-2 text-sm'>
+                Eternal Shields are used to Protect Dragon Gem from dropping levels if the forging fails
+              </div>
+              <div className='flex mt-4'>
+                <div className='flex flex-col items-center gap-[6px] cursor-pointer'>
+                  <div>
+                    <Image src={ShieldItem} alt='' />
+                  </div>
+                  <div className=''>15</div>
+                </div>
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className='flex flex-col items-center text-center min-h-[622px]'>
+              <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>No Gems Found</div>
+              <div className='mt-2 mb-4 text-sm'>Let's find some Gems on SeekHYPE marketplace!</div>
+              <FilledButton href='https://beta.seekhype.io'>Go to SeekHype</FilledButton>
+            </div>
+          )}
         </div>
       </div>
     </div>

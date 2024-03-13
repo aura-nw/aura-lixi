@@ -5,7 +5,19 @@
   "TWITTER_POST_ID":"1740384898689667455",
   "AURASCAN_ENDPOINT":"https://explorer.dev.aura.network",
   "HOROSCOPE_ENDPOINT": "https://indexer-v2.dev.aurascan.io",
+  "HOROSCOPE_CHAINKEY":"auratestnet",
   "COSMOSKIT_CHAINKEY":"auradevnet",
   "DRAGON_GEM_COLLECTION_CONTRACT_ADDRESS":"aura189xmlzrj8ah96ww4700kp33va2uttzs7lgm0y8vx4hcw2clk4vsszgyu53"
+}
+//eupho
+{
+  "REST_API_ENDPOINT": "https://campaign-api.euphoria.aura.network",
+  "HASURA_ENDPOINT": "https://campaign-hasura.euphoria.aura.network",
+  "TWITTER_POST_ID": "1740384898689667455",
+  "AURASCAN_ENDPOINT": "https://euphoria.aurascan.io",
+  "HOROSCOPE_ENDPOINT": "https://indexer-v2.staging.aurascan.io",
+  "HOROSCOPE_CHAINKEY":"euphoria",
+  "COSMOSKIT_CHAINKEY": "auratestnet",
+  "DRAGON_GEM_COLLECTION_CONTRACT_ADDRESS": "aura14rrxnmkpnvcmeknjzma0myeepdxaa86wh5837959ek37dmrl2lxqfg66z0"
 }
 

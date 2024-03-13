@@ -100,7 +100,9 @@ export default function Page() {
             <div>
               <Image src={Machine} alt='' className='w-[236px] h-[252px]' />
             </div>
-            <div className='text-sm text-[#FFFFFF] mt-8'>Jackpot will be revealed at 2 pm, 24th Mar 2024 (UTC +7) </div>
+            <div className='text-sm text-[#FFFFFF] mt-8'>
+              The Dragon will appear and fulfill your wish at at 2 pm, 24th Mar 2024 (UTC +7)
+            </div>
             <div className='mt-4 flex gap-4'>
               <div className='relative'>
                 <Image src={GemSlot} alt='' className='w-[87px] h-[93px]' />
@@ -148,7 +150,7 @@ export default function Page() {
                 )}
               </div>
             </div>
-            <FilledButton className='mt-8'>Submit</FilledButton>
+            <FilledButton className='mt-8'>Wish</FilledButton>
           </div>
         </div>
       </div>
