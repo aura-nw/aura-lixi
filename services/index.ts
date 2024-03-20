@@ -34,13 +34,35 @@ export const GET_USER_REFFERAL_CODE = gql`
   }
 `
 export const GET_TXS_HISTORY = gql`
-  subscription GET_USER_REFFERAL_CODE {
+  subscription GET_TXS_HISTORY {
     tx_history(order_by: { updated_at: desc }) {
       updated_at
       tx_info {
         tx_hash
       }
       user_id
+    }
+  }
+`
+export const GET_CAMPAIGN = gql`
+  query campaigns {
+    items: campaigns {
+      description
+      id
+      title
+      code
+      campaign_social_actions(where: { campaign: { status: { _eq: "active" } } }) {
+        id
+        target
+        social_action {
+          id
+          name
+          social
+          __typename
+        }
+        __typename
+      }
+      __typename
     }
   }
 `
@@ -194,6 +216,14 @@ export const linkWallet = async (signedDoc: any, signature: any) => {
       signature,
     })
     return res
+  } catch (error: any) {
+    window.alert(error?.message || 'Something went wrong')
+  }
+}
+export const validateQuest = async (id: string) => {
+  try {
+    const res = await privateAxios.get(`${getConfig().REST_API_ENDPOINT}/campaigns/${id}/validate`)
+    return res.data
   } catch (error: any) {
     window.alert(error?.message || 'Something went wrong')
   }
