@@ -5,7 +5,7 @@ import Duoi from '@/assets/duoi.svg'
 import Image from 'next/image'
 import confetti from 'canvas-confetti'
 import Link from 'next/link'
-export default function GiftModal({
+export default function NoBackgroundModal({
   isOpen,
   onOpenChange,
   children,
@@ -108,7 +108,7 @@ export default function GiftModal({
                 indicator: 'stroke-[#8E0B09]',
               }}
               size='lg'
-              label='Opening...'
+              label='Processing...'
             />
           </div>
         ) : (

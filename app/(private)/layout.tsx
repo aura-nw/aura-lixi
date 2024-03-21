@@ -1,7 +1,7 @@
 'use client'
 
-import ForceActive from '@/app/(private)/assets/force-active.png'
-import ForceInactive from '@/app/(private)/assets/force-inactive.png'
+import ForgeActive from '@/app/(private)/assets/force-active.png'
+import ForgeInactive from '@/app/(private)/assets/force-inactive.png'
 import JackpotActive from '@/app/(private)/assets/jackpot-active.png'
 import JackpotInactive from '@/app/(private)/assets/jackpot-inactive.png'
 import QuestActive from '@/app/(private)/assets/quest-active.png'
@@ -46,11 +46,11 @@ export default function Layout({ children }: { children: ReactNode }) {
               className={`${Bangkok.className} absolute inset-0 grid place-items-center ${
                 pathname == '/' ? 'text-[#FFB438]' : 'text-[#828282]'
               }`}>
-              <div className=''>Force</div>
+              <div className=''>Forge</div>
             </div>
           </div>
-          <Image src={ForceActive} alt='' className={`hidden w-[157px] ${pathname == '/' ? 'md:block' : ''}`} />
-          <Image src={ForceInactive} alt='' className={` hidden w-[112px] ${pathname != '/' ? 'md:block' : ''}`} />
+          <Image src={ForgeActive} alt='' className={`hidden w-[157px] ${pathname == '/' ? 'md:block' : ''}`} />
+          <Image src={ForgeInactive} alt='' className={` hidden w-[112px] ${pathname != '/' ? 'md:block' : ''}`} />
         </div>
         <div
           className='cursor-pointer'

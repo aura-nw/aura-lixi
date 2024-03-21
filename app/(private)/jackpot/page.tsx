@@ -42,9 +42,10 @@ const initList = {
   r5: 0,
   r6: 0,
   r7: 0,
+  shield: 0,
 }
 export default function Page() {
-  const { inventory } = useContext(Context)
+  const { assets } = useContext(Context)
   const [selectedColorKey, setSelectedColorKey] = useState(new Set(['all_colors']))
   const selectedColorValue = useMemo(
     () => Array.from(selectedColorKey).join(', ').replaceAll('_', ' '),
@@ -59,24 +60,32 @@ export default function Page() {
   const [gems, setGems] = useState<any>(Map(initList))
 
   useEffect(() => {
-    const gemList = inventory.reduce((total, current) => {
-      const color = current.media_info.onchain.metadata.attributes.find((attr) => attr.trait_type == 'Color')?.value
-      if (color == 'WHITE') {
-        total['w1']++
+    const gemList = assets.reduce(
+      (total, current) => {
+        const color = current.media_info.onchain.metadata.attributes.find((attr) => attr.trait_type == 'Color')?.value
+        if (color == 'WHITE') {
+          total['w1']++
+        }
+        if (color == 'BLUE') {
+          total['b1']++
+        }
+        if (color == 'GOLD') {
+          total['g1']++
+        }
+        if (color == 'RED') {
+          total['r1']++
+        }
+        return total
+      },
+      { ...initList }
+    )
+    for (let i = 0; i < 3; i++) {
+      if (selectedGems[i] != undefined) {
+        ;(gemList as any)[selectedGems[i] as string]--
       }
-      if (color == 'BLUE') {
-        total['b1']++
-      }
-      if (color == 'GOLD') {
-        total['g1']++
-      }
-      if (color == 'RED') {
-        total['r1']++
-      }
-      return total
-    }, initList)
+    }
     setGems(Map(gemList))
-  }, [inventory?.length])
+  }, [selectedGems.filter((g) => !g).length, assets?.length])
 
   const addGemHandler = (type: string) => {
     for (let i = 0; i < 3; i++) {
@@ -251,7 +260,7 @@ export default function Page() {
                   return (
                     <div
                       key={color + star}
-                      className='flex flex-col items-center gap-[6px] cursor-pointer'
+                      className='flex flex-col items-center gap-[6px] cursor-pointer h-fit'
                       onClick={() => addGemHandler(color + star)}>
                       <div>
                         <GemWithFrame type={(color + star) as any} />

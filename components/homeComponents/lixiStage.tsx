@@ -22,7 +22,7 @@ import { CircularProgress, Modal, ModalContent, useDisclosure } from '@nextui-or
 import confetti from 'canvas-confetti'
 import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
-import GiftModal from '../modal/giftModal'
+import NoBackgroundModal from '../modal/giftModal'
 import { toast } from 'react-toastify'
 export default function LixiStage() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
@@ -241,14 +241,14 @@ export const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, req
 
   if (requestLoading) {
     return (
-      <GiftModal isOpen={true} onOpenChange={onOpenChange} isLoading>
+      <NoBackgroundModal isOpen={true} onOpenChange={onOpenChange} isLoading>
         <></>
-      </GiftModal>
+      </NoBackgroundModal>
     )
   }
   if (prize?.auraPrize == 0) {
     return (
-      <GiftModal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <NoBackgroundModal isOpen={isOpen} onOpenChange={onOpenChange}>
         <div className='flex flex-col items-center text-center'>
           <div className={`${Bangkok.className} text-[#8E0B09] text-sm`}>Congratulations!</div>
           <div className='text-[#4E8E48] font-medium leading-6 mt-[6px]'>{account?.username}</div>
@@ -278,7 +278,7 @@ export const Result = ({ requestId, setRequestLoading, isOpen, onOpenChange, req
             </>
           )}
         </div>
-      </GiftModal>
+      </NoBackgroundModal>
     )
   } else {
     return (

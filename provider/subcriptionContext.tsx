@@ -1,18 +1,18 @@
 'use client'
-import { GET_LIXI, GET_TXS_HISTORY, GET_USER_INVENTORY } from '@/services'
+import { GET_LIXI, GET_TXS_HISTORY, GET_USER_ASSETS } from '@/services'
 import { useSubscription } from '@apollo/client'
 import { ReactNode, createContext } from 'react'
 
 export const SubcriptionContext = createContext<{
   lixiData: { data?: any; loading: boolean }
-  inventoryData: { data?: any }
+  assetsData: { data?: any }
   txsData: { data?: any }
 }>({
   lixiData: {
     data: undefined,
     loading: true,
   },
-  inventoryData: {
+  assetsData: {
     data: undefined,
   },
   txsData: {
@@ -21,7 +21,7 @@ export const SubcriptionContext = createContext<{
 })
 function SubcriptionProvider({ children }: { children: ReactNode }) {
   const { data, loading } = useSubscription(GET_LIXI)
-  const { data: inventory } = useSubscription(GET_USER_INVENTORY)
+  const { data: assets } = useSubscription(GET_USER_ASSETS)
   const { data: txs } = useSubscription(GET_TXS_HISTORY)
 
   return (
@@ -31,8 +31,8 @@ function SubcriptionProvider({ children }: { children: ReactNode }) {
           data,
           loading,
         },
-        inventoryData: {
-          data: inventory,
+        assetsData: {
+          data: assets,
         },
         txsData: {
           data: txs,

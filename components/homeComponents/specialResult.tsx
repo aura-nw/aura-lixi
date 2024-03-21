@@ -18,7 +18,7 @@ import { Modal, ModalContent, useDisclosure } from '@nextui-org/react'
 import confetti from 'canvas-confetti'
 import Image from 'next/image'
 import { useContext, useEffect, useState } from 'react'
-import GiftModal from '../modal/giftModal'
+import NoBackgroundModal from '../modal/giftModal'
 export const SpecialResult = ({ requestId }: { requestId: number }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const [prize, setPrize] = useState<any>()
@@ -122,14 +122,14 @@ export const SpecialResult = ({ requestId }: { requestId: number }) => {
 
   if (requestLoading) {
     return (
-      <GiftModal isOpen={true} onOpenChange={onOpenChange} isLoading>
+      <NoBackgroundModal isOpen={true} onOpenChange={onOpenChange} isLoading>
         <></>
-      </GiftModal>
+      </NoBackgroundModal>
     )
   }
   if (prize?.auraPrize == 0) {
     return (
-      <GiftModal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <NoBackgroundModal isOpen={isOpen} onOpenChange={onOpenChange}>
         <div className='flex flex-col items-center text-center'>
           <div className={`${Bangkok.className} text-[#8E0B09] text-sm`}>Congratulations!</div>
           <div className='text-[#4E8E48] font-medium leading-6 mt-[6px]'>{account?.username}</div>
@@ -159,7 +159,7 @@ export const SpecialResult = ({ requestId }: { requestId: number }) => {
             </>
           )}
         </div>
-      </GiftModal>
+      </NoBackgroundModal>
     )
   } else {
     return (

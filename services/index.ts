@@ -12,7 +12,7 @@ export const GET_USER_DATA = gql`
     }
   }
 `
-export const GET_USER_INVENTORY = gql`
+export const GET_USER_ASSETS = gql`
   subscription MyQuery {
     lixi(where: { status: { _eq: "OPENED" } }) {
       created_at
@@ -58,11 +58,8 @@ export const GET_CAMPAIGN = gql`
           id
           name
           social
-          __typename
         }
-        __typename
       }
-      __typename
     }
   }
 `
@@ -92,7 +89,7 @@ export const GET_USER_CODE = (id: string) => gql`
     }
   }
 `
-export const GET_ASSETS =(chainKey: string)=> gql`
+export const GET_ASSETS = (chainKey: string) => gql`
   query queryAssetCW721(
     $contract_address: String
     $owner: String = null
@@ -112,6 +109,14 @@ export const GET_ASSETS =(chainKey: string)=> gql`
         token_id
         owner
         media_info
+        cw721_contract {
+            name
+            symbol
+            smart_contract {
+              name
+              address
+            }
+          }
       }
     }
   }
@@ -224,6 +229,31 @@ export const validateQuest = async (id: string) => {
   try {
     const res = await privateAxios.get(`${getConfig().REST_API_ENDPOINT}/campaigns/${id}/validate`)
     return res.data
+  } catch (error: any) {
+    window.alert(error?.message || 'Something went wrong')
+  }
+}
+export const forgeGem = async (
+  base: {
+    contractAddress: string
+    tokenId: string
+  },
+  materials: {
+    contractAddress: string
+    tokenId: string
+  }[],
+  shield?: {
+    contractAddress: string
+    tokenId: string
+  }
+) => {
+  try {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/nft-forge/forge`, {
+      materials,
+      base,
+      shield,
+    })
+    return res
   } catch (error: any) {
     window.alert(error?.message || 'Something went wrong')
   }

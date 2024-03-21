@@ -27,7 +27,7 @@ import { useClient } from '@/hooks'
 import { GoogleTagManager } from '@next/third-parties/google'
 import { Bounce, ToastContainer } from 'react-toastify'
 import { ChainProvider } from '@cosmos-kit/react'
-import { assets, chains } from 'chain-registry'
+import { assets as networkAssets, chains } from 'chain-registry'
 import { isMobile } from 'react-device-detect'
 import { wallets as c98Mobile } from '@/services/c98MobileWallet'
 import { wallets as c98Extension } from '@cosmos-kit/coin98-extension'
@@ -41,10 +41,11 @@ import { getSigningCosmosClientOptions } from 'osmojs'
 import { GasPrice } from '@cosmjs/stargate'
 import ConnectWalletModal from '@/components/modal/connectWalletModal'
 import { Token } from '@/model/token'
+import { getGasPriceByChain } from '@/utils'
 
 export const Context = createContext<{
   account: Account | undefined
-  inventory: Token[]
+  assets: Token[]
   fetchAssets: () => void
   setAccount: (account: Account) => void
   horoscopeClient: ApolloClient<NormalizedCacheObject> | undefined
@@ -52,7 +53,7 @@ export const Context = createContext<{
   submitCode: (value: string) => Promise<void>
 }>({
   account: undefined,
-  inventory: [],
+  assets: [],
   fetchAssets: () => {},
   horoscopeClient: undefined,
   setAccount: () => {},
@@ -122,32 +123,18 @@ const signerOptions = {
   preferredSignType: (chain: Chain) => {
     return 'direct'
   },
-  signingStargate: (_chain: Chain) => {
-    return getSigningCosmosClientOptions()
-  },
-  signingCosmwasm: (chain: Chain) => {
-    switch (chain.chain_name) {
-      case 'auradevnet':
-        return {
-          gasPrice: GasPrice.fromString('0.0025utaura'),
-        }
-      case 'aura euphoria':
-        return {
-          gasPrice: GasPrice.fromString('0.0025ueaura'),
-        }
-    }
-  },
+  signingStargate: (chain: Chain) => ({ gasPrice: getGasPriceByChain(chain) }),
+  signingCosmwasm: (chain: Chain) => ({ gasPrice: getGasPriceByChain(chain) }),
 }
 function ContextProvider({ children }: { children: ReactNode }) {
   const [account, setAccount] = useState<Account>()
   const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>()
   const [horoscopeClient, setHoroscopeClient] = useState<ApolloClient<NormalizedCacheObject>>()
-  const [inventory, setInventory] = useState<Token[]>([])
+  const [assets, setAssets] = useState<Token[]>([])
   const [isInit, setIsInit] = useState(true)
   const searchParams = useSearchParams()
   const router = useRouter()
   const isClient = useClient()
-
   const init = async () => {
     try {
       //set up config
@@ -254,16 +241,91 @@ function ContextProvider({ children }: { children: ReactNode }) {
 
   const fetchAssets = async () => {
     const chainKey = getConfig().HOROSCOPE_CHAINKEY
-    const cw721Assets = await horoscopeClient?.query({
+    let list: Token[] = []
+    const v1DragonGems = await horoscopeClient?.query({
       query: GET_ASSETS(chainKey),
       variables: {
         contract_address: getConfig().DRAGON_GEM_COLLECTION_CONTRACT_ADDRESS,
         owner: account?.wallet_address,
       },
     })
-    if (cw721Assets?.data?.[chainKey]?.cw721_token?.length) {
-      setInventory(cw721Assets?.data?.[chainKey]?.cw721_token)
+    if (v1DragonGems?.data?.[chainKey]?.cw721_token?.length) {
+      let v1List = v1DragonGems?.data?.[chainKey]?.cw721_token.map((token: Token) => {
+        const color = token.media_info.onchain.metadata.attributes.find((attr) => attr.trait_type == 'Color')?.value
+        let type
+        switch (color) {
+          case 'WHITE':
+            type = 'w1'
+            break
+          case 'BLUE':
+            type = 'b1'
+            break
+          case 'GOLD':
+            type = 'g1'
+            break
+          case 'RED':
+            type = 'r1'
+            break
+        }
+        return {
+          ...token,
+          type,
+        }
+      })
+      list = [...v1List]
     }
+    const v2DragonGems = await horoscopeClient?.query({
+      query: GET_ASSETS(chainKey),
+      variables: {
+        contract_address: getConfig().V2_DRAGON_GEM_COLLECTION_CONTRACT_ADDRESS,
+        owner: account?.wallet_address,
+      },
+    })
+    if (v2DragonGems?.data?.[chainKey]?.cw721_token?.length) {
+      let v2List = v2DragonGems?.data?.[chainKey]?.cw721_token.map((token: Token) => {
+        const color = token.media_info.onchain.metadata.attributes.find((attr) => attr.trait_type == 'Color')?.value
+        const star = token.media_info.onchain.metadata.attributes
+          .find((attr) => attr.trait_type == 'Star')
+          ?.value.split('-')[0]
+        let type
+        switch (color) {
+          case 'White':
+            type = 'w'
+            break
+          case 'Blue':
+            type = 'b'
+            break
+          case 'Gold':
+            type = 'g'
+            break
+          case 'Red':
+            type = 'r'
+            break
+        }
+        return {
+          ...token,
+          type: type + star,
+        }
+      })
+      list = [...list, ...v2List]
+    }
+    const shieldCollection = await horoscopeClient?.query({
+      query: GET_ASSETS(chainKey),
+      variables: {
+        contract_address: getConfig().SHIELD_COLLECTION_CONTRACT_ADDRESS,
+        owner: account?.wallet_address,
+      },
+    })
+    if (shieldCollection?.data?.[chainKey]?.cw721_token?.length) {
+      let shieldList = shieldCollection?.data?.[chainKey]?.cw721_token.map((token: Token) => {
+        return {
+          ...token,
+          type: 'shield',
+        }
+      })
+      list = [...list, ...shieldList]
+    }
+    setAssets(list)
   }
 
   const disconnect = () => {
@@ -293,8 +355,14 @@ function ContextProvider({ children }: { children: ReactNode }) {
     )
   return (
     <ChainProvider
-      chains={[...testnetChains, ...chains.filter((chain) => chain.bech32_prefix == 'aura')]}
-      assetLists={[...testnetAssets, ...assets]}
+      chains={[
+        ...testnetChains,
+        ...chains.filter((chain) => chain.chain_name == 'aura' || chain.chain_name == 'auratestnet'),
+      ]}
+      assetLists={[
+        ...testnetAssets,
+        ...networkAssets.filter((chain) => chain.chain_name == 'aura' || chain.chain_name == 'auratestnet'),
+      ]}
       signerOptions={signerOptions as any}
       endpointOptions={{
         endpoints: {
@@ -332,13 +400,11 @@ function ContextProvider({ children }: { children: ReactNode }) {
           disconnect,
           submitCode,
           horoscopeClient,
-          inventory,
-          fetchAssets
+          assets,
+          fetchAssets,
         }}>
         <NextUIProvider>
-          <ApolloProvider client={client}>
-            <SubcriptionProvider>{children}</SubcriptionProvider>
-          </ApolloProvider>
+          <ApolloProvider client={client}>{children}</ApolloProvider>
         </NextUIProvider>
         <GoogleTagManager gtmId='GTM-K3NWXQS' />
         <ToastContainer
