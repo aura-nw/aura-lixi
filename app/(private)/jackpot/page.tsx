@@ -11,8 +11,10 @@ import GemWithFrame from '@/components/gem/gemWithFrame'
 import { Bangkok, Context } from '@/provider'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import { Map } from 'immutable'
+import moment from 'moment'
 import Image from 'next/image'
 import { useContext, useEffect, useMemo, useState } from 'react'
+import Countdown from 'react-countdown'
 const initList = {
   w1: 0,
   w2: 0,
@@ -45,7 +47,7 @@ const initList = {
   shield: 0,
 }
 export default function Page() {
-  const { assets } = useContext(Context)
+  const { assets, lastAssetsUpdate, fetchAssets } = useContext(Context)
   const [selectedColorKey, setSelectedColorKey] = useState(new Set(['all_colors']))
   const selectedColorValue = useMemo(
     () => Array.from(selectedColorKey).join(', ').replaceAll('_', ' '),
@@ -62,19 +64,7 @@ export default function Page() {
   useEffect(() => {
     const gemList = assets.reduce(
       (total, current) => {
-        const color = current.media_info.onchain.metadata.attributes.find((attr) => attr.trait_type == 'Color')?.value
-        if (color == 'WHITE') {
-          total['w1']++
-        }
-        if (color == 'BLUE') {
-          total['b1']++
-        }
-        if (color == 'GOLD') {
-          total['g1']++
-        }
-        if (color == 'RED') {
-          total['r1']++
-        }
+        total[current.type]++
         return total
       },
       { ...initList }
@@ -253,24 +243,48 @@ export default function Page() {
               </Dropdown>
             </div>
           </div>
-          <div className='overflow-auto h-[278px] pr-4 grid grid-cols-4 text-sm font-semibold'>
-            {['w', 'b', 'g', 'r'].map((color: string) => {
-              return ['1', '2', '3', '4', '5', '6', '7'].map((star: string) => {
-                if (gems.get(color + star) != 0) {
-                  return (
-                    <div
-                      key={color + star}
-                      className='flex flex-col items-center gap-[6px] cursor-pointer h-fit'
-                      onClick={() => addGemHandler(color + star)}>
-                      <div>
-                        <GemWithFrame type={(color + star) as any} />
-                      </div>
-                      <div className=''>{gems.get(color + star)}</div>
-                    </div>
-                  )
-                }
-              })
-            })}
+          <div className='overflow-auto h-[394px] pr-4 grid grid-cols-4 text-sm font-semibold'>
+            {['w', 'b', 'g', 'r']
+              .filter((c) => Array.from(selectedColorKey)[0] == 'all_colors' || Array.from(selectedColorKey)[0][0] == c)
+              .map((color: string) => {
+                return ['1', '2', '3', '4', '5', '6', '7']
+                  .filter((s) => Array.from(selectedRankKey)[0] == 'all_rank' || Array.from(selectedRankKey)[0][0] == s)
+                  .map((star: string) => {
+                    if (gems.get(color + star) != 0) {
+                      return (
+                        <div
+                          key={color + star}
+                          className={`flex flex-col items-center gap-[6px] h-fit ${'cursor-pointer'}`}
+                          onClick={() => addGemHandler(color + star)}>
+                          <div>
+                            <GemWithFrame type={(color + star) as any} />
+                          </div>
+                          <div className=''>{gems.get(color + star)}</div>
+                        </div>
+                      )
+                    }
+                  })
+              })}
+          </div>
+          <div className='text-xs italic mt-1 ml-2'>
+            {lastAssetsUpdate ? `Last update: ${moment(lastAssetsUpdate).format('HH:mm DD/MM/yyyy')}.` : ''}
+            <span className='ml-1'>
+              <Countdown
+                key={lastAssetsUpdate}
+                date={(lastAssetsUpdate || Date.now()) + 300000}
+                renderer={({ hours, minutes, seconds, completed }) => {
+                  if (completed) {
+                    return (
+                      <strong className='cursor-pointer' onClick={fetchAssets}>
+                        Refresh ⟳
+                      </strong>
+                    )
+                  } else {
+                    return <span>{`Refresh after ${minutes * 60 + seconds}s`}</span>
+                  }
+                }}
+              />
+            </span>
           </div>
         </div>
       </div>

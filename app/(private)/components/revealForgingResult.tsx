@@ -20,24 +20,25 @@ export const RevealForgingResult = ({
 }: any) => {
   const [prize, setPrize] = useState<any>()
   const [result, setResult] = useState()
-  const { account } = useContext(Context)
+  const { account, fetchAssets } = useContext(Context)
   const { data } = useSubscription(GET_REQUEST_MANAGER, {
     variables: {
       id: requestId,
     },
   })
-  console.log(data)
   useEffect(() => {
     if (data?.request_manager?.[0]?.response?.code == 200) {
       setResult(data.request_manager[0].response.data.result)
       setPrize(data.request_manager[0].response.data.nftReward.class.toLowerCase())
       setRequestLoading(false)
+      fetchAssets()
     }
     if (data?.request_manager?.[0]?.response?.code >= 500) {
       toast(
         data?.request_manager?.[0]?.response?.error?.msg?.[0]?.message || 'Something went wrong. Please try again.',
         { type: 'error' }
       )
+      fetchAssets()
       setRequestLoading(false)
     }
   }, [data?.request_manager?.[0]?.response?.code])
@@ -60,7 +61,7 @@ export const RevealForgingResult = ({
           <div className='relative mt-8'>
             <Image src={SilverRing} alt='' className='w-[158px] h-[168px]' />
             <div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'>
-              <Gem type={prize} />
+              <Gem type={prize} className='w-20 h-20' />
             </div>
           </div>
           <div onClick={onClose} className='mt-4'>
@@ -77,13 +78,13 @@ export const RevealForgingResult = ({
             Congratulation!
             <br /> Your Dragon Gem has been upgraded successfully
           </div>
-          <div className='text-sm'>
-            Congratulation <span className='#FCE57C'>{account?.username}</span>,<br /> your gem has been uprank
+          <div className='text-sm mt-4'>
+            Congratulation <span className='text-[#FCE57C]'>{account?.username}</span>,<br /> your gem has been uprank
           </div>
           <div className='relative mt-8'>
             <Image src={GoldRing} alt='' className='w-[158px] h-[168px]' />
             <div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'>
-              <Gem type={prize} />
+              <Gem type={prize} className='w-20 h-20' />
             </div>
           </div>
           <div onClick={onClose} className='mt-4'>

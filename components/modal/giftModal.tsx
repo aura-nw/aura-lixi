@@ -96,8 +96,8 @@ export default function NoBackgroundModal({
       placement='center'
       classNames={{
         backdrop: 'bg-[#000]/85',
-        base: 'bg-[transparent]',
-        closeButton: isLoading ? 'hidden' : 'z-10',
+        base: 'bg-[transparent] max-w-2xl',
+        closeButton: 'hidden',
       }}>
       <ModalContent>
         {isLoading ? (
@@ -112,22 +112,7 @@ export default function NoBackgroundModal({
             />
           </div>
         ) : (
-          <div className='relative flex flex-col items-center'>
-            <Image src={Nap} alt='' />
-            <div className='bg-[#FEF7D0] p-8 text-[#000] -mb-28 w-[269px] flex flex-col items-center'>{children}</div>
-            <Image src={Duoi} alt='' />
-            {cta ? (
-              <div className=' absolute bottom-5 text-[#6D3A0A] font-semibold p-[10px] rounded-2xl bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] disabled:text-[#6b6b6b] disabled:bg-[linear-gradient(180deg,#EFEBE4_0%,#B3AAA0_100%)] flex items-center gap-2 h-10 justify-center'>
-                {cta}
-              </div>
-            ) : (
-              <Link
-                href='/my-inventory'
-                className=' absolute bottom-5 text-[#6D3A0A] font-semibold p-[10px] rounded-2xl bg-[linear-gradient(180deg,#F3DBA9_0%,#FFA031_100%)] disabled:text-[#6b6b6b] disabled:bg-[linear-gradient(180deg,#EFEBE4_0%,#B3AAA0_100%)] flex items-center gap-2 h-10 justify-center'>
-                Go to My inventory
-              </Link>
-            )}
-          </div>
+          <div className='flex justify-center'>{children}</div>
         )}
       </ModalContent>
     </Modal>

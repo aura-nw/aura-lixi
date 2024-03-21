@@ -51,6 +51,7 @@ export const Context = createContext<{
   horoscopeClient: ApolloClient<NormalizedCacheObject> | undefined
   disconnect: () => void
   submitCode: (value: string) => Promise<void>
+  lastAssetsUpdate?: number
 }>({
   account: undefined,
   assets: [],
@@ -58,7 +59,7 @@ export const Context = createContext<{
   horoscopeClient: undefined,
   setAccount: () => {},
   disconnect: () => {},
-  submitCode: async () => {},
+  submitCode: async () => { },
 })
 export const privateAxios = axios.create()
 
@@ -132,6 +133,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
   const [horoscopeClient, setHoroscopeClient] = useState<ApolloClient<NormalizedCacheObject>>()
   const [assets, setAssets] = useState<Token[]>([])
   const [isInit, setIsInit] = useState(true)
+  const [lastAssetsUpdate, setLastAssetsUpdate] = useState<number>()
   const searchParams = useSearchParams()
   const router = useRouter()
   const isClient = useClient()
@@ -326,6 +328,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
       list = [...list, ...shieldList]
     }
     setAssets(list)
+    setLastAssetsUpdate(Date.now())
   }
 
   const disconnect = () => {
@@ -402,6 +405,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
           horoscopeClient,
           assets,
           fetchAssets,
+          lastAssetsUpdate
         }}>
         <NextUIProvider>
           <ApolloProvider client={client}>{children}</ApolloProvider>

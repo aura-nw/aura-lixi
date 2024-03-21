@@ -24,6 +24,8 @@ import { toUtf8, toBase64 } from '@cosmjs/encoding'
 import { makeSignDoc, makeAuthInfoBytes } from '@cosmjs/proto-signing'
 import { RevealForgingResult } from './components/revealForgingResult'
 import { forgeGem } from '@/services'
+import moment from 'moment'
+import Countdown from 'react-countdown'
 const initList = {
   w1: 0,
   w2: 0,
@@ -57,7 +59,7 @@ const initList = {
 }
 export default function Home() {
   const config = getConfig()
-  const { assets } = useContext(Context)
+  const { assets, lastAssetsUpdate, fetchAssets } = useContext(Context)
   const { address, chain, getSigningCosmWasmClient } = useChain(config.COSMOSKIT_CHAINKEY)
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const [requestId, setRequestId] = useState()
@@ -204,6 +206,9 @@ export default function Home() {
       if (result?.data?.data?.requestId) {
         setRequestId(result?.data?.data?.requestId)
         setRequestLoading(true)
+        setMainGem(undefined)
+        setMaterialGems([undefined, undefined, undefined, undefined, undefined])
+        setUseShield(false)
         onOpen()
       } else {
         toast(
@@ -524,7 +529,27 @@ export default function Home() {
                         })
                     })}
                 </div>
-                <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl mt-5`}>
+                <div className='text-xs italic mt-1 ml-2'>
+                  {lastAssetsUpdate ? `Last update: ${moment(lastAssetsUpdate).format('HH:mm DD/MM/yyyy')}.` : ''}
+                  <span className='ml-1'>
+                    <Countdown
+                      key={lastAssetsUpdate}
+                      date={(lastAssetsUpdate || Date.now()) + 300000}
+                      renderer={({ hours, minutes, seconds, completed }) => {
+                        if (completed) {
+                          return (
+                            <strong className='cursor-pointer' onClick={fetchAssets}>
+                              Refresh ⟳
+                            </strong>
+                          )
+                        } else {
+                          return <span>{`Refresh after ${minutes * 60 + seconds}s`}</span>
+                        }
+                      }}
+                    />
+                  </span>
+                </div>
+                <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl mt-2`}>
                   Your Eternal Shields
                 </div>
                 <div className='mt-2 text-sm'>
