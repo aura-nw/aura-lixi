@@ -553,7 +553,7 @@ export default function Home() {
               <div className='flex flex-col items-center text-center min-h-[622px]'>
                 <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>No Gems Found</div>
                 <div className='mt-2 mb-4 text-sm'>Let's find some Gems on SeekHYPE marketplace!</div>
-                <FilledButton href={config.SEEKHYPE_DRAGON_COLLECTION_ENDPOINT}>Go to SeekHype</FilledButton>
+                <FilledButton href={config.SEEKHYPE_DRAGON_COLLECTION_ENDPOINT} target='_blank'>Go to SeekHype</FilledButton>
               </div>
             )}
           </div>
