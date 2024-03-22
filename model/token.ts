@@ -31,7 +31,7 @@ export type Token = {
     | 'r5'
     | 'r6'
     | 'r7'
-    | 'shield'
+  | 'shield'
   media_info: {
     onchain: {
       metadata: {

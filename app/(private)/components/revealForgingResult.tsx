@@ -42,9 +42,12 @@ export const RevealForgingResult = ({
     if (data?.request_manager?.[0]?.response?.code >= 500) {
       setTimeout(() => {
         toast(
-          data?.request_manager?.[0]?.response?.error?.msg?.[0]?.message || 'Something went wrong. Please try again.',
+          data?.request_manager?.[0]?.response?.error?.msg?.[0]?.message ||
+            data?.request_manager?.[0]?.response?.error?.errorMap?.Message ||
+            'Something went wrong. Please try again.',
           { type: 'error' }
         )
+        onClose()
         setRequestLoading(false)
         revealSuccessCallBack()
       }, 15000)
