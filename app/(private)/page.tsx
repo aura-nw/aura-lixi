@@ -519,11 +519,14 @@ export default function Home() {
                           if (gems.get(color + star) != 0) {
                             return (
                               <div
+                                title={
+                                  activeSlot == 0 && star == '7'
+                                    ? '7-Star is highest level. You can not select it for main slot'
+                                    : ''
+                                }
                                 key={color + star}
                                 className={`flex flex-col items-center gap-[6px] h-fit ${
-                                  activeSlot == 0 && star == '7'
-                                    ? 'opacity-50 pointer-events-none cursor-not-allowed'
-                                    : 'cursor-pointer'
+                                  activeSlot == 0 && star == '7' ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
                                 }`}
                                 onClick={() =>
                                   activeSlot == 0 && star == '7' ? undefined : addGemHandler(color + star)
