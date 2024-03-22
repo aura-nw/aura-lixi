@@ -117,7 +117,7 @@ export default function Page() {
       const msgs = []
       for (let i = 0; i < jackpotData?.jackpots?.[0]?.slot; i++) {
         const asset = assets.find(
-          (asset) => asset.type == selectedGems[i] && !tokens.find((g) => g.token_id == asset.token_id)
+          (a) => a.type == selectedGems[i] && !tokens.find((g) => g.token_id == a.token_id)
         )
         tokens.push({
           token_id: asset?.token_id as string,
