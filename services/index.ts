@@ -99,6 +99,7 @@ export const GET_USER_JACKPOT = gql`
       jackpot_id
       purchased_line
       id
+      updated_at
     }
   }
 `
