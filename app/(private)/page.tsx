@@ -397,7 +397,7 @@ export default function Home() {
                   assets.filter((asset) => asset.type == 'shield').length ? '' : 'opacity-50 pointer-events-none'
                 }`}
                 onClick={() =>
-                  assets.filter((asset) => asset.type == 'shield').length ? setUseShield(!useShield) : undefined
+                  assets.filter((asset) => asset.type == 'shield').length && !loading ? setUseShield(!useShield) : undefined
                 }>
                 <Checkbox checked={useShield} />
                 <div className='text-sm'>Activate the Eternal Shield</div>
