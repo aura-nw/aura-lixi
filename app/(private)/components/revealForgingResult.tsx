@@ -82,9 +82,15 @@ export const RevealForgingResult = ({
           <div className='relative mt-8'>
             <Image src={isUsedShield ? GoldRing : SilverRing} alt='' className='w-[158px] h-[168px]' />
             <div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'>
-              <Gem type={prize} className='w-20 h-20' />
+              <Gem type={prize.class.toLowerCase()} className='w-20 h-20' />
             </div>
           </div>
+          <Link
+            target='_blank'
+            href={`${getConfig().SEEKHYPE_V2_DRAGON_COLLECTION_ENDPOINT}/${prize.tokenId}`}
+            className='text-xs mt-2'>
+            ID: <span>{prize.tokenId}</span>
+          </Link>
           <div onClick={onClose} className='mt-4'>
             <Image src={IconClose} alt='' className='w-8 h-8 cursor-pointer' />
           </div>

@@ -82,6 +82,17 @@ export const GET_REQUEST_MANAGER = gql`
     }
   }
 `
+export const GET_JACKPOT = gql`
+  query GET_JACKPOT {
+    jackpots(limit: 1, where: { status: { _eq: "active" } }) {
+      id
+      max_star
+      winner_id
+      winning_numbers
+      slot
+    }
+  }
+`
 export const GET_USER_CODE = (id: string) => gql`
   query GET_USER_CODE {
     task_referrals(where: { referee_id: { _eq: ${id} } }) {
@@ -201,7 +212,7 @@ export const openLixi = async (id: string) => {
     })
     return res
   } catch (error: any) {
-    window.alert(error?.message || 'Something went wrong')
+    return error
   }
 }
 export const claimPrize = async (walletAddress: string) => {
@@ -211,7 +222,7 @@ export const claimPrize = async (walletAddress: string) => {
     })
     return res
   } catch (error: any) {
-    window.alert(error?.message || 'Something went wrong')
+    return error
   }
 }
 export const linkWallet = async (signedDoc: any, signature: any) => {
@@ -222,7 +233,7 @@ export const linkWallet = async (signedDoc: any, signature: any) => {
     })
     return res
   } catch (error: any) {
-    window.alert(error?.message || 'Something went wrong')
+    return error
   }
 }
 export const validateQuest = async (id: string) => {
@@ -230,7 +241,7 @@ export const validateQuest = async (id: string) => {
     const res = await privateAxios.get(`${getConfig().REST_API_ENDPOINT}/campaigns/${id}/validate`)
     return res.data
   } catch (error: any) {
-    window.alert(error?.message || 'Something went wrong')
+    return error
   }
 }
 export const forgeGem = async (
@@ -255,12 +266,27 @@ export const forgeGem = async (
     })
     return res
   } catch (error: any) {
-    window.alert(error?.message || 'Something went wrong')
+    return error
+  }
+}
+export const wish = async (
+  gems: {
+    contract_address: string
+    token_id: string
+  }[]
+) => {
+  try {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/jackpots/1/purchase`, {
+      tokens: gems
+    })
+    return res
+  } catch (error: any) {
+    return error
   }
 }
 export const sample = async () => {
   try {
   } catch (error: any) {
-    window.alert(error?.message || 'Something went wrong')
+    return error
   }
 }

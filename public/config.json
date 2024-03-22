@@ -8,7 +8,7 @@
   "HOROSCOPE_CHAINKEY":"euphoria",
   "COSMOSKIT_CHAINKEY": "auratestnet",
   "SEEKHYPE_DRAGON_COLLECTION_ENDPOINT": "https://staging.seekhype.io/collection/cw721-long-371",
-  "SEEKHYPE_V2_DRAGON_COLLECTION_ENDPOINT": "https://staging.seekhype.io/collection/cw721-long-371",
+  "SEEKHYPE_V2_DRAGON_COLLECTION_ENDPOINT": "https://staging.seekhype.io/nft/dragon-gem-v2-438",
   "DRAGON_GEM_COLLECTION_CONTRACT_ADDRESS": "aura14rrxnmkpnvcmeknjzma0myeepdxaa86wh5837959ek37dmrl2lxqfg66z0",
   "V2_DRAGON_GEM_COLLECTION_CONTRACT_ADDRESS": "aura1m8thl7lrkka8993c4cxky5st3ewetuv5kkelzya7drdeqrgl5qcs2lqhgs",
   "SHIELD_COLLECTION_CONTRACT_ADDRESS": "aura12urfchczsz972jvzawyf38dm87vzhsnymrf4y0shzf4dpdnq0s2sq3pakh",

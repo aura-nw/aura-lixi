@@ -9,12 +9,15 @@ import FilledButton from '@/components/button/filled'
 import Gem from '@/components/gem'
 import GemWithFrame from '@/components/gem/gemWithFrame'
 import { Bangkok, Context } from '@/provider'
+import { GET_JACKPOT, wish } from '@/services'
+import { useQuery } from '@apollo/client'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react'
 import { Map } from 'immutable'
 import moment from 'moment'
 import Image from 'next/image'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import Countdown from 'react-countdown'
+import { toast } from 'react-toastify'
 const initList = {
   w1: 0,
   w2: 0,
@@ -58,8 +61,10 @@ export default function Page() {
     () => Array.from(selectedRankKey).join(', ').replaceAll('_', ' '),
     [selectedRankKey]
   )
-  const [selectedGems, setSelectedGems] = useState<(string | undefined)[]>([undefined, undefined, undefined])
+  const [selectedGems, setSelectedGems] = useState<(string | undefined)[]>([])
   const [gems, setGems] = useState<any>(Map(initList))
+  const { data: jackpotData } = useQuery(GET_JACKPOT)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const gemList = assets.reduce(
@@ -69,7 +74,7 @@ export default function Page() {
       },
       { ...initList }
     )
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < jackpotData?.jackpots?.[0]?.slot; i++) {
       if (selectedGems[i] != undefined) {
         ;(gemList as any)[selectedGems[i] as string]--
       }
@@ -77,14 +82,42 @@ export default function Page() {
     setGems(Map(gemList))
   }, [selectedGems.filter((g) => !g).length, assets?.length])
 
+  useEffect(() => {
+    if (jackpotData?.jackpots?.[0]?.slot) {
+      setSelectedGems(new Array(jackpotData?.jackpots?.[0]?.slot).fill(undefined))
+    }
+  }, [jackpotData?.jackpots])
+
   const addGemHandler = (type: string) => {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < jackpotData?.jackpots?.[0]?.slot; i++) {
       if (selectedGems[i] == undefined) {
         selectedGems[i] = type
         break
       }
     }
     setSelectedGems([...selectedGems])
+  }
+
+  const wishHandler = async () => {
+    try {
+      setLoading(true)
+      const tokens = []
+      for (let i = 0; i < jackpotData?.jackpots?.[0]?.slot; i++) {
+        const asset = assets.find((asset) => asset.type == selectedGems[i])
+        tokens.push({
+          token_id: asset?.token_id as string,
+          contract_address: asset?.cw721_contract.smart_contract.address as string,
+        })
+      }
+      const res = await wish(tokens)
+      setLoading(false)
+    } catch (error: any) {
+      setLoading(false)
+      console.log(error.message)
+      toast(error.message || 'Failed to forge gem', {
+        type: 'error',
+      })
+    }
   }
 
   return (
@@ -100,56 +133,42 @@ export default function Page() {
               <Image src={Machine} alt='' className='w-[236px] h-[252px]' />
             </div>
             <div className='text-xs text-[#FFFFFF] mt-8'>
-              The Dragon will appear and fulfill your wish at at 2 pm, 24th Mar 2024 (UTC +7)
+              {`The Dragon will appear and fulfill your wish at ${moment()
+                .add(14, 'd')
+                .format('h a, Do MMM YYYY')} (UTC +7)`}
             </div>
-            <div className='mt-4 flex gap-4'>
-              <div className='relative'>
-                <Image src={GemSlot} alt='' className='w-[87px] h-[93px]' />
-                {selectedGems[0] && (
-                  <div
-                    className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
-                    onClick={() => setSelectedGems([undefined, selectedGems[1], selectedGems[2]])}>
-                    <div className='absolute inset-0 grid place-items-center invisible'>
-                      <div className='bg-[#000]/50 h-10 w-10 rounded-full grid place-items-center'>
-                        <Image src={IconClose} alt='' className='w-5 h-5' />
+            {!!jackpotData?.jackpots?.[0] && (
+              <div className='mt-4 flex gap-4'>
+                {[...(Array(jackpotData.jackpots?.[0]?.slot).keys() as any)].map((index) => (
+                  <div className='relative'>
+                    <Image src={GemSlot} alt='' className='w-[87px] h-[93px]' />
+                    {selectedGems[index] && (
+                      <div
+                        className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
+                        onClick={() => {
+                          const newData = [...selectedGems]
+                          newData[index] = undefined
+                          setSelectedGems(newData)
+                        }}>
+                        <div className='absolute inset-0 grid place-items-center invisible'>
+                          <div className='bg-[#000]/50 h-10 w-10 rounded-full grid place-items-center'>
+                            <Image src={IconClose} alt='' className='w-5 h-5' />
+                          </div>
+                        </div>
+                        <Gem type={selectedGems[index] as string} className='h-10 w-10' />
                       </div>
-                    </div>
-                    <Gem type={selectedGems[0]} className='h-10 w-10' />
+                    )}
                   </div>
-                )}
+                ))}
               </div>
-              <div className='relative'>
-                <Image src={GemSlot} alt='' className='w-[87px] h-[93px]' />
-                {selectedGems[1] && (
-                  <div
-                    className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
-                    onClick={() => setSelectedGems([selectedGems[0], undefined, selectedGems[2]])}>
-                    <div className='absolute inset-0 grid place-items-center invisible'>
-                      <div className='bg-[#000]/50 h-10 w-10 rounded-full grid place-items-center'>
-                        <Image src={IconClose} alt='' className='w-5 h-5' />
-                      </div>
-                    </div>
-                    <Gem type={selectedGems[1]} className='h-10 w-10' />
-                  </div>
-                )}
-              </div>
-              <div className='relative'>
-                <Image src={GemSlot} alt='' className='w-[87px] h-[93px]' />
-                {selectedGems[2] && (
-                  <div
-                    className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
-                    onClick={() => setSelectedGems([selectedGems[0], selectedGems[1], undefined])}>
-                    <div className='absolute inset-0 grid place-items-center invisible'>
-                      <div className='bg-[#000]/50 h-10 w-10 rounded-full grid place-items-center'>
-                        <Image src={IconClose} alt='' className='w-5 h-5' />
-                      </div>
-                    </div>
-                    <Gem type={selectedGems[2]} className='h-10 w-10' />
-                  </div>
-                )}
-              </div>
-            </div>
-            <FilledButton className='mt-8'>Wish</FilledButton>
+            )}
+            <FilledButton
+              className='mt-8'
+              disabled={selectedGems.filter((g) => g).length != jackpotData.jackpots?.[0]?.slot}
+              onClick={wishHandler}
+              isLoading={loading}>
+              Wish
+            </FilledButton>
           </div>
         </div>
       </div>
@@ -157,7 +176,7 @@ export default function Page() {
         <Image src={TopBar2} alt='' className='w-[352px] relative z-10' />
         <div className='relative bg-[#E6D8B9] rounded-b-[4px] p-4 -top-2 w-[338px] mx-auto text-[#292929]'>
           <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>Your Gems</div>
-          <div className='mt-2 text-sm'>Select gems here to forge</div>
+          <div className='mt-2 text-sm'>Select gems here to wish</div>
           <div className='my-4 flex gap-4'>
             <div className='flex-1'>
               <Dropdown>
@@ -243,7 +262,7 @@ export default function Page() {
               </Dropdown>
             </div>
           </div>
-          <div className='overflow-auto h-[394px] pr-4 grid grid-cols-4 text-sm font-semibold'>
+          <div className='overflow-auto h-[394px] pr-4 grid grid-cols-4 text-sm font-semibold auto-rows-min gap-4'>
             {['w', 'b', 'g', 'r']
               .filter((c) => Array.from(selectedColorKey)[0] == 'all_colors' || Array.from(selectedColorKey)[0][0] == c)
               .map((color: string) => {
