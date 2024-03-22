@@ -148,7 +148,10 @@ export default function Home() {
       for (let i = 0; i < 5; i++) {
         if (materialGems[i] != undefined) {
           const asset = assets.find(
-            (a) => a.type == materialGems[i] && !material.find((g) => g.tokenId == a.token_id)
+            (a) =>
+              a.type == materialGems[i] &&
+              !material.find((g) => g.tokenId == a.token_id) &&
+              main?.token_id != a.token_id
           )
           material.push({
             contractAddress: asset?.cw721_contract.smart_contract.address as string,
