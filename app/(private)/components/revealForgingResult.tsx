@@ -10,16 +10,20 @@ import { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 import GoldRing from '../assets/gold-ring.png'
 import SilverRing from '../assets/silver-ring.png'
+import ShieldItem from '../assets/shield.png'
+
 export const RevealForgingResult = ({
   requestId,
-  setRequestLoading,
   isOpen,
   onOpenChange,
-  requestLoading,
   onClose,
+  usedShield,
+  revealSuccessCallBack,
 }: any) => {
   const [prize, setPrize] = useState<any>()
   const [result, setResult] = useState()
+  const [requestLoading, setRequestLoading] = useState(true)
+  const [isUsedShield, setIsUsedShield] = useState(usedShield)
   const { account, fetchAssets } = useContext(Context)
   const { data } = useSubscription(GET_REQUEST_MANAGER, {
     variables: {
@@ -30,16 +34,20 @@ export const RevealForgingResult = ({
     if (data?.request_manager?.[0]?.response?.code == 200) {
       setResult(data.request_manager[0].response.data.result)
       setPrize(data.request_manager[0].response.data.nftReward.class.toLowerCase())
-      setRequestLoading(false)
-      fetchAssets()
+      setTimeout(() => {
+        revealSuccessCallBack()
+        setRequestLoading(false)
+      }, 15000)
     }
     if (data?.request_manager?.[0]?.response?.code >= 500) {
-      toast(
-        data?.request_manager?.[0]?.response?.error?.msg?.[0]?.message || 'Something went wrong. Please try again.',
-        { type: 'error' }
-      )
-      fetchAssets()
-      setRequestLoading(false)
+      setTimeout(() => {
+        toast(
+          data?.request_manager?.[0]?.response?.error?.msg?.[0]?.message || 'Something went wrong. Please try again.',
+          { type: 'error' }
+        )
+        setRequestLoading(false)
+        revealSuccessCallBack()
+      }, 15000)
     }
   }, [data?.request_manager?.[0]?.response?.code])
 
@@ -58,8 +66,16 @@ export const RevealForgingResult = ({
             Sorry!
             <br /> Dragon Gems upgrade failed. Maybe you'll be luckier next time
           </div>
+          {isUsedShield && (
+            <div className='flex items-center gap-4 mt-4'>
+              <Image src={ShieldItem} alt='' className='w-[45px] h-10' />
+              <div className='max-w-[238px] text-sm'>
+                Phew! The Eternal Shield save your day! Your Dragon Gem is safeguarded
+              </div>
+            </div>
+          )}
           <div className='relative mt-8'>
-            <Image src={SilverRing} alt='' className='w-[158px] h-[168px]' />
+            <Image src={isUsedShield ? GoldRing : SilverRing} alt='' className='w-[158px] h-[168px]' />
             <div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'>
               <Gem type={prize} className='w-20 h-20' />
             </div>

@@ -269,21 +269,9 @@ export default function Page() {
           <div className='text-xs italic mt-1 ml-2'>
             {lastAssetsUpdate ? `Last update: ${moment(lastAssetsUpdate).format('HH:mm DD/MM/yyyy')}.` : ''}
             <span className='ml-1'>
-              <Countdown
-                key={lastAssetsUpdate}
-                date={(lastAssetsUpdate || Date.now()) + 300000}
-                renderer={({ hours, minutes, seconds, completed }) => {
-                  if (completed) {
-                    return (
-                      <strong className='cursor-pointer' onClick={fetchAssets}>
-                        Refresh ⟳
-                      </strong>
-                    )
-                  } else {
-                    return <span>{`Refresh after ${minutes * 60 + seconds}s`}</span>
-                  }
-                }}
-              />
+              <strong className='cursor-pointer' onClick={fetchAssets}>
+                Refresh ⟳
+              </strong>
             </span>
           </div>
         </div>

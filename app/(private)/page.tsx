@@ -6,10 +6,15 @@ import Checkbox from '@/components/checkbox'
 import Gem from '@/components/gem'
 import GemWithFrame from '@/components/gem/gemWithFrame'
 import { Bangkok, Context } from '@/provider'
+import { forgeGem } from '@/services'
+import { useChain } from '@cosmos-kit/react'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react'
 import Immutable, { Map } from 'immutable'
+import moment from 'moment'
+import getConfig from 'next/config'
 import Image from 'next/image'
 import { useContext, useEffect, useMemo, useState } from 'react'
+import { toast } from 'react-toastify'
 import ForgeBg from './assets/force-bg.svg'
 import GemSlot from './assets/gem-slot.svg'
 import GemSlotActive from './assets/gem-slot_active.svg'
@@ -17,15 +22,7 @@ import Shield from './assets/shield.svg'
 import TopBar2 from './assets/top-bar-2.svg'
 import TopBar from './assets/top-bar.svg'
 import TopBarMobile from './assets/top-bar_mobile.svg'
-import getConfig from 'next/config'
-import { useChain, useWallet } from '@cosmos-kit/react'
-import { toast } from 'react-toastify'
-import { toUtf8, toBase64 } from '@cosmjs/encoding'
-import { makeSignDoc, makeAuthInfoBytes } from '@cosmjs/proto-signing'
 import { RevealForgingResult } from './components/revealForgingResult'
-import { forgeGem } from '@/services'
-import moment from 'moment'
-import Countdown from 'react-countdown'
 const initList = {
   w1: 0,
   w2: 0,
@@ -66,7 +63,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false)
   const [useShield, setUseShield] = useState(false)
   const [activeSlot, setActiveSlot] = useState(0)
-  const [requestLoading, setRequestLoading] = useState(false)
   const [selectedColorKey, setSelectedColorKey] = useState(new Set(['all_colors']))
   const selectedColorValue = useMemo(
     () => Array.from(selectedColorKey).join(', ').replaceAll('_', ' '),
@@ -205,10 +201,6 @@ export default function Home() {
 
       if (result?.data?.data?.requestId) {
         setRequestId(result?.data?.data?.requestId)
-        setRequestLoading(true)
-        setMainGem(undefined)
-        setMaterialGems([undefined, undefined, undefined, undefined, undefined])
-        setUseShield(false)
         onOpen()
       } else {
         toast(
@@ -236,11 +228,16 @@ export default function Home() {
       {requestId && (
         <RevealForgingResult
           requestId={requestId}
-          setRequestLoading={setRequestLoading}
+          usedShield={useShield}
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          requestLoading={requestLoading}
           onClose={onClose}
+          revealSuccessCallBack={() => {
+            setMainGem(undefined)
+            setMaterialGems([undefined, undefined, undefined, undefined, undefined])
+            setUseShield(false)
+            fetchAssets()
+          }}
         />
       )}
       <div className='flex flex-wrap gap-5 md:gap-2 justify-center'>
@@ -532,21 +529,9 @@ export default function Home() {
                 <div className='text-xs italic mt-1 ml-2'>
                   {lastAssetsUpdate ? `Last update: ${moment(lastAssetsUpdate).format('HH:mm DD/MM/yyyy')}.` : ''}
                   <span className='ml-1'>
-                    <Countdown
-                      key={lastAssetsUpdate}
-                      date={(lastAssetsUpdate || Date.now()) + 300000}
-                      renderer={({ hours, minutes, seconds, completed }) => {
-                        if (completed) {
-                          return (
-                            <strong className='cursor-pointer' onClick={fetchAssets}>
-                              Refresh ⟳
-                            </strong>
-                          )
-                        } else {
-                          return <span>{`Refresh after ${minutes * 60 + seconds}s`}</span>
-                        }
-                      }}
-                    />
+                    <strong className='cursor-pointer' onClick={fetchAssets}>
+                      Refresh ⟳
+                    </strong>
                   </span>
                 </div>
                 <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl mt-2`}>
