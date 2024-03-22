@@ -232,13 +232,15 @@ export default function Home() {
           usedShield={useShield}
           isOpen={isOpen}
           onOpenChange={onOpenChange}
-          onClose={onClose}
+          onClose={() => {
+            onClose()
+            setTimeout(() => setRequestId(undefined), 500)
+          }}
           revealSuccessCallBack={() => {
             setMainGem(undefined)
             setMaterialGems([undefined, undefined, undefined, undefined, undefined])
             setUseShield(false)
             fetchAssets()
-            setTimeout(() => setRequestId(undefined),1000)
           }}
         />
       )}
