@@ -113,10 +113,12 @@ export default function Page() {
   const wishHandler = async () => {
     try {
       setLoading(true)
-      const tokens = []
+      const tokens: any[] = []
       const msgs = []
       for (let i = 0; i < jackpotData?.jackpots?.[0]?.slot; i++) {
-        const asset = assets.find((asset) => asset.type == selectedGems[i])
+        const asset = assets.find(
+          (asset) => asset.type == selectedGems[i] && !tokens.find((g) => g.token_id == asset.token_id)
+        )
         tokens.push({
           token_id: asset?.token_id as string,
           contract_address: asset?.cw721_contract.smart_contract.address as string,
@@ -185,13 +187,13 @@ export default function Page() {
           <div className={`${Bangkok.className} text-xl font-bold`}>Submission history</div>
           <div className='max-h-[60vh] overflow-auto'>
             {userJackpotData?.jackpot_users.map((d: any) => (
-              <div className='py-3 flex gap-10 border-b border-[#404040]'>
+              <div className='py-3 flex gap-10 border-b border-[#404040]' key={d.updated_at}>
                 <div className='p-[10px] text-sm text-[#FFF7C4] w-[150px] whitespace-nowrap'>
                   {moment(d.updated_at).format('h a, Do MMM YYYY')}
                 </div>
                 <div className='flex gap-5'>
-                  {d.purchased_line.split('-').map((d: any) => (
-                    <Gem type={d.toLowerCase() as string} className='w-8 h-8' />
+                  {d.purchased_line.split('-').map((d: any, index: number) => (
+                    <Gem type={d.toLowerCase() as string} className='w-8 h-8' key={index} />
                   ))}
                 </div>
               </div>
@@ -223,7 +225,7 @@ export default function Page() {
 
                   <div className='mt-4 flex gap-4'>
                     {[...(Array(jackpotData.jackpots?.[0]?.slot).keys() as any)].map((index) => (
-                      <div className='relative'>
+                      <div className='relative' key={index}>
                         <Image src={GemSlot} alt='' className='w-[87px] h-[93px]' />
                         {selectedGems[index] && (
                           <div

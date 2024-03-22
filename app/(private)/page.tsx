@@ -144,11 +144,16 @@ export default function Home() {
         },
       ]
 
-      const material = []
+      const material: any[] = []
       for (let i = 0; i < 5; i++) {
         if (materialGems[i] != undefined) {
-          const asset = assets.find((asset) => asset.type == materialGems[i])
-          material.push(asset)
+          const asset = assets.find(
+            (asset) => asset.type == materialGems[i] && !material.find((g) => g.tokenId == asset.token_id)
+          )
+          material.push({
+            contractAddress: asset?.cw721_contract.smart_contract.address as string,
+            tokenId: asset?.token_id as string,
+          })
           msgs.push({
             contract: asset?.cw721_contract.smart_contract.address,
             msg: {
@@ -188,10 +193,7 @@ export default function Home() {
           contractAddress: main?.cw721_contract.smart_contract.address as string,
           tokenId: main?.token_id as string,
         },
-        material.map((gem) => ({
-          contractAddress: gem?.cw721_contract.smart_contract.address as string,
-          tokenId: gem?.token_id as string,
-        })),
+        material,
         useShield
           ? {
               contractAddress: shield?.cw721_contract.smart_contract.address as string,
@@ -218,7 +220,7 @@ export default function Home() {
       setLoading(false)
     } catch (error: any) {
       setLoading(false)
-      console.log(error.message)
+      console.log(error)
       toast(error.message || 'Failed to forge gem', {
         type: 'error',
       })
@@ -397,7 +399,9 @@ export default function Home() {
                   assets.filter((asset) => asset.type == 'shield').length ? '' : 'opacity-50 pointer-events-none'
                 }`}
                 onClick={() =>
-                  assets.filter((asset) => asset.type == 'shield').length && !loading ? setUseShield(!useShield) : undefined
+                  assets.filter((asset) => asset.type == 'shield').length && !loading
+                    ? setUseShield(!useShield)
+                    : undefined
                 }>
                 <Checkbox checked={useShield} />
                 <div className='text-sm'>Activate the Eternal Shield</div>
