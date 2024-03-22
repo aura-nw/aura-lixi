@@ -204,10 +204,10 @@ export default function Page() {
           </div>
         </div>
       </NoBackgroundModal>
-      <div className='ml-2 flex flex-wrap gap-5 justify-center min-h-[571px]'>
+      <div className='md:ml-2 flex flex-wrap gap-5 justify-center min-h-[571px]'>
         <div className='relative'>
           <Image src={TopBar} alt='' className='w-[595px] relative z-10' />
-          <div className='relative w-[544px] mx-auto -mt-2 rounded-b-[4px] border border-[#ECCB83] p-8 bg-[linear-gradient(180deg,rgba(76,50,36,0.50)_0%,rgba(80,49,38,0.50)_0.01%,rgba(166,123,81,0.50)_100%)] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] backdrop-blur-[6px]'>
+          <div className='relative max-w-[544px] mx-3 md:mx-auto -mt-2 rounded-b-[4px] border border-[#ECCB83] p-5 md:p-8 bg-[linear-gradient(180deg,rgba(76,50,36,0.50)_0%,rgba(80,49,38,0.50)_0.01%,rgba(166,123,81,0.50)_100%)] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] backdrop-blur-[6px]'>
             {!!jackpotData?.jackpots && !!userJackpotData?.jackpot_users && (
               <>
                 <div className='absolute inset-x-0 top-28 grid place-items-center'>
@@ -217,13 +217,13 @@ export default function Page() {
                   <div>
                     <Image src={Machine} alt='' className='w-[236px] h-[252px]' />
                   </div>
-                  <div className='text-xs text-[#FFFFFF] mt-8'>
+                  <div className='text-xs text-[#FFFFFF] mt-8 text-center'>
                     {`The Dragon will appear and fulfill your wish at ${moment()
                       .add(14, 'd')
                       .format('h a, Do MMM YYYY')} (UTC +7)`}
                   </div>
 
-                  <div className='mt-4 flex gap-4'>
+                  <div className='mt-4 flex gap-4 flex-wrap max-w-[90vw] items-center justify-center'>
                     {[...(Array(jackpotData.jackpots?.[0]?.slot).keys() as any)].map((index) => (
                       <div className='relative' key={index}>
                         <Image src={GemSlot} alt='' className='w-[87px] h-[93px]' />
@@ -361,11 +361,11 @@ export default function Page() {
                     <DropdownItem key='all_rank'>All rank</DropdownItem>
                     <DropdownItem key='1-Star'>1-Star</DropdownItem>
                     <DropdownItem key='2-Star'>2-Star</DropdownItem>
-                    <DropdownItem key='3-Star'>3-Star</DropdownItem>
+                    {/* <DropdownItem key='3-Star'>3-Star</DropdownItem>
                     <DropdownItem key='4-Star'>4-Star</DropdownItem>
                     <DropdownItem key='5-Star'>5-Star</DropdownItem>
                     <DropdownItem key='6-Star'>6-Star</DropdownItem>
-                    <DropdownItem key='7-Star'>7-Star</DropdownItem>
+                    <DropdownItem key='7-Star'>7-Star</DropdownItem> */}
                   </DropdownMenu>
                 </Dropdown>
               </div>
@@ -376,7 +376,7 @@ export default function Page() {
                   (c) => Array.from(selectedColorKey)[0] == 'all_colors' || Array.from(selectedColorKey)[0][0] == c
                 )
                 .map((color: string) => {
-                  return ['1', '2', '3', '4', '5', '6', '7']
+                  return ['1', '2']
                     .filter(
                       (s) => Array.from(selectedRankKey)[0] == 'all_rank' || Array.from(selectedRankKey)[0][0] == s
                     )
