@@ -202,6 +202,7 @@ export default function Home() {
 
       if (result?.data?.data?.requestId) {
         setRequestId(result?.data?.data?.requestId)
+        console.log('revealing request id:', result?.data?.data?.requestId)
         onOpen()
       } else {
         toast(
