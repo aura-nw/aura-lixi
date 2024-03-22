@@ -297,7 +297,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
           case 'Blue':
             type = 'b'
             break
-          case 'Gold':
+          case 'Golden':
             type = 'g'
             break
           case 'Red':
