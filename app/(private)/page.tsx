@@ -505,7 +505,7 @@ export default function Home() {
                     </Dropdown>
                   </div>
                 </div>
-                <div className='overflow-auto h-[278px] pr-4 grid grid-cols-4 auto-rows-min text-sm font-semibold'>
+                <div className='overflow-auto h-[278px] pr-4 grid gap-4 grid-cols-4 auto-rows-min text-sm font-semibold'>
                   {['w', 'b', 'g', 'r']
                     .filter(
                       (c) => Array.from(selectedColorKey)[0] == 'all_colors' || Array.from(selectedColorKey)[0][0] == c
@@ -521,7 +521,7 @@ export default function Home() {
                               <div
                                 title={
                                   activeSlot == 0 && star == '7'
-                                    ? '7-Star is highest level. You can not select it for main slot'
+                                    ? 'The gem has reached the max power level and cannot be upgraded.'
                                     : ''
                                 }
                                 key={color + star}

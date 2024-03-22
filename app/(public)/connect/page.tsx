@@ -69,7 +69,7 @@ ${Date.now()}`
             gas: '0',
             amount: [],
           },
-          chain.chain_id,
+          '',
           undefined,
           '0',
           '0'
