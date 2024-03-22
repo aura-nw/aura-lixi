@@ -23,28 +23,28 @@ export default function ConnectWalletModal({ isOpen, setOpen, walletRepo }: Wall
           <div className='font-bold text-center pb-5'>Connect your wallet</div>
           <div className='text-sm'>Select a provider to connect or create a wallet</div>
           <div className='my-3 flex flex-col gap-1'>
-            {walletRepo?.wallets.map(({ walletName, connect }, index) =>
-              walletName.includes('keplr') ? (
+            {walletRepo?.wallets.map((wallet, index) => {
+              return wallet.walletName.includes('keplr') ? (
                 <div
                   key={index}
                   className={`p-2 rounded-[8px] flex gap-3 items-center bg-[#fff] ${
-                    isMobile || (!isMobile && !window.keplr)
+                    wallet.walletStatus == 'NotExist'
                       ? 'cursor-not-allowed opacity-60 pointer-events-none'
                       : 'cursor-pointer'
                   }`}
-                  onClick={() => connect(true)}>
+                  onClick={() => wallet.connect(true)}>
                   <Image src={keplr} alt='' />
                   <div className='text-sm font-semibold text-[#161618]'>Keplr</div>
                 </div>
-              ) : walletName.includes('leap') ? (
+              ) : wallet.walletName.includes('leap') ? (
                 <div
                   key={index}
                   className={`p-2 rounded-[8px] flex gap-3 items-center bg-[#fff] ${
-                    !isMobile && !window.coin98?.keplr
+                    wallet.walletStatus == 'NotExist'
                       ? 'cursor-not-allowed opacity-60 pointer-events-none'
                       : 'cursor-pointer'
                   }`}
-                  onClick={() => connect(true)}>
+                  onClick={() => wallet.connect(true)}>
                   <Image src={leap} alt='' />
                   <div className='text-sm font-semibold text-[#161618]'>Leap</div>
                 </div>
@@ -52,16 +52,16 @@ export default function ConnectWalletModal({ isOpen, setOpen, walletRepo }: Wall
                 <div
                   key={index}
                   className={`p-2 rounded-[8px] flex gap-3 items-center bg-[#fff] ${
-                    !isMobile && !window.coin98?.keplr
+                    wallet.walletStatus == 'NotExist'
                       ? 'cursor-not-allowed opacity-60 pointer-events-none'
                       : 'cursor-pointer'
                   }`}
-                  onClick={() => connect(true)}>
+                  onClick={() => wallet.connect(true)}>
                   <Image src={c98} alt='' />
                   <div className='text-sm font-semibold text-[#161618]'>Coin98</div>
                 </div>
               )
-            )}
+            })}
           </div>
           <div className='text-sm'>
             By connecting your wallet, you agree to our <strong>Terms of Service</strong> and{' '}

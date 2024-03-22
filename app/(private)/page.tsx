@@ -114,6 +114,7 @@ export default function Home() {
   }, [mainGem, materialGems, assets?.length])
 
   const addGemHandler = (type: string) => {
+    if (loading) return
     if (!mainGem) {
       setMainGem(type)
     } else {
@@ -237,6 +238,7 @@ export default function Home() {
             setMaterialGems([undefined, undefined, undefined, undefined, undefined])
             setUseShield(false)
             fetchAssets()
+            setTimeout(() => setRequestId(undefined),1000)
           }}
         />
       )}
@@ -259,9 +261,10 @@ export default function Home() {
                   {materialGems[0] && (
                     <div
                       className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
-                      onClick={() =>
+                      onClick={() => {
+                        if (loading) return
                         setMaterialGems([undefined, materialGems[1], materialGems[2], materialGems[3], materialGems[4]])
-                      }>
+                      }}>
                       <div className='absolute inset-0 grid place-items-center invisible'>
                         <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
                           <Image src={IconClose} alt='' className='w-5 h-5' />
@@ -281,9 +284,10 @@ export default function Home() {
                   {materialGems[4] && (
                     <div
                       className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
-                      onClick={() =>
+                      onClick={() => {
+                        if (loading) return
                         setMaterialGems([materialGems[0], materialGems[1], materialGems[2], materialGems[3], undefined])
-                      }>
+                      }}>
                       <div className='absolute inset-0 grid place-items-center invisible'>
                         <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
                           <Image src={IconClose} alt='' className='w-5 h-5' />
@@ -303,9 +307,10 @@ export default function Home() {
                   {materialGems[1] && (
                     <div
                       className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
-                      onClick={() =>
+                      onClick={() => {
+                        if (loading) return
                         setMaterialGems([materialGems[0], undefined, materialGems[2], materialGems[3], materialGems[4]])
-                      }>
+                      }}>
                       <div className='absolute inset-0 grid place-items-center invisible'>
                         <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
                           <Image src={IconClose} alt='' className='w-5 h-5' />
@@ -325,7 +330,10 @@ export default function Home() {
                   {mainGem && (
                     <div
                       className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
-                      onClick={() => setMainGem(undefined)}>
+                      onClick={() => {
+                        if (loading) return
+                        setMainGem(undefined)
+                      }}>
                       <div className='absolute inset-0 grid place-items-center invisible'>
                         <div className='bg-[#000]/50 h-10 w-10 md:h-20 md:w-20 rounded-full grid place-items-center'>
                           <Image src={IconClose} alt='' className='w-5 h-5 md:w-10 md:h-10' />
@@ -345,9 +353,10 @@ export default function Home() {
                   {materialGems[3] && (
                     <div
                       className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
-                      onClick={() =>
+                      onClick={() => {
+                        if (loading) return
                         setMaterialGems([materialGems[0], materialGems[1], materialGems[2], undefined, materialGems[4]])
-                      }>
+                      }}>
                       <div className='absolute inset-0 grid place-items-center invisible'>
                         <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
                           <Image src={IconClose} alt='' className='w-5 h-5' />
@@ -366,9 +375,10 @@ export default function Home() {
                   {materialGems[2] && (
                     <div
                       className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
-                      onClick={() =>
+                      onClick={() => {
+                        if (loading) return
                         setMaterialGems([materialGems[0], materialGems[1], undefined, materialGems[3], materialGems[4]])
-                      }>
+                      }}>
                       <div className='absolute inset-0 grid place-items-center invisible'>
                         <div className='bg-[#000]/50 h-7 md:h-10 w-7 md:w-10 rounded-full grid place-items-center'>
                           <Image src={IconClose} alt='' className='w-5 h-5' />
@@ -553,7 +563,9 @@ export default function Home() {
               <div className='flex flex-col items-center text-center min-h-[622px]'>
                 <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>No Gems Found</div>
                 <div className='mt-2 mb-4 text-sm'>Let's find some Gems on SeekHYPE marketplace!</div>
-                <FilledButton href={config.SEEKHYPE_DRAGON_COLLECTION_ENDPOINT} target='_blank'>Go to SeekHype</FilledButton>
+                <FilledButton href={config.SEEKHYPE_DRAGON_COLLECTION_ENDPOINT} target='_blank'>
+                  Go to SeekHype
+                </FilledButton>
               </div>
             )}
           </div>
