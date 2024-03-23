@@ -5,12 +5,12 @@ import TopBarSide from './assets/top-bar-side.svg'
 import { Bangkok } from '@/provider'
 import DragonSide from './assets/dragon-side.svg'
 import { useQuery } from '@apollo/client'
-import { GET_CAMPAIGN } from '@/services'
+import { GET_QUESTS } from '@/services'
 import QuestItem from './items'
 import { Quest } from '@/model/quest'
 export default function Page() {
-  const { data } = useQuery(GET_CAMPAIGN)
-  
+  const { data } = useQuery(GET_QUESTS)
+
   return (
     <div className='relative w-full px-5 mt-5 md:px-0 md:mt-0'>
       <div className='w-full relative h-3 bg-[conic-gradient(from_180deg_at_50%_50%,#EF6608_60.48818528652191deg,#F8BD25_183.23987245559692deg,#AF3006_338.95015239715576deg)] rounded-[3px]'>

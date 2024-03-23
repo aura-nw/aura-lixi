@@ -248,8 +248,20 @@ export default function Page() {
                     ))}
                   </div>
 
+                  <div className='italic text-xs text-[#FFF7C4] text-center mt-1'>
+                    {(function () {
+                      switch (jackpotData?.jackpots?.[0]?.max_star) {
+                        case 2:
+                          return 'At this phase, you can only submit 1-star & 2-star gems.'
+
+                        default:
+                          return ''
+                      }
+                    })()}
+                  </div>
+
                   <FilledButton
-                    className='mt-8'
+                    className='mt-5'
                     disabled={selectedGems.filter((g) => g).length != jackpotData?.jackpots?.[0]?.slot}
                     onClick={wishHandler}
                     isLoading={loading}>

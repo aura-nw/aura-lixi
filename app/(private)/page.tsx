@@ -211,9 +211,13 @@ export default function Home() {
         onOpen()
       } else {
         toast(
-          `Reveal gem with request ${
-            result?.data?.data?.requestId
-          } failed. Please contact us via Discord or Telegram. Respone: ${JSON.stringify(result?.data)}`,
+          result?.data?.data?.requestId
+            ? `Reveal gem with request ${
+                result?.data?.data?.requestId
+              } failed. Please contact us via Discord or Telegram. Respone: ${JSON.stringify(result?.data)}`
+            : `Can not fetch your request ID. Please contact us via Discord or Telegram. Respone: ${JSON.stringify(
+                result?.data
+              )}`,
           {
             type: 'error',
           }

@@ -44,22 +44,25 @@ export const GET_TXS_HISTORY = gql`
     }
   }
 `
-export const GET_CAMPAIGN = gql`
+export const GET_QUESTS = gql`
   query campaigns {
-    items: campaigns {
+    items: campaigns(where: { status: { _eq: "active" } }) {
       description
       id
       title
       code
-      campaign_social_actions(where: { campaign: { status: { _eq: "active" } } }) {
+      campaign_social_actions {
         id
         target
         social_action {
           id
           name
           social
+          __typename
         }
+        __typename
       }
+      __typename
     }
   }
 `
