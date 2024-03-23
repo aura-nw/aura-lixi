@@ -124,6 +124,7 @@ export const GET_ASSETS = (chainKey: string) => gql`
           owner: { _eq: $owner }
           burned: { _eq: false }
         }
+        limit: 10000,
         order_by: [{ last_updated_height: desc }, { id: desc }]
       ) {
         id

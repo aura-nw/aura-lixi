@@ -365,15 +365,19 @@ export default function Page() {
                     classNames={{
                       base: 'text-[#7a7a7a]',
                     }}
-                    onSelectionChange={setSelectedRankKey as any}>
-                    <DropdownItem key='all_rank'>All rank</DropdownItem>
-                    <DropdownItem key='1-Star'>1-Star</DropdownItem>
-                    <DropdownItem key='2-Star'>2-Star</DropdownItem>
-                    {/* <DropdownItem key='3-Star'>3-Star</DropdownItem>
-                    <DropdownItem key='4-Star'>4-Star</DropdownItem>
-                    <DropdownItem key='5-Star'>5-Star</DropdownItem>
-                    <DropdownItem key='6-Star'>6-Star</DropdownItem>
-                    <DropdownItem key='7-Star'>7-Star</DropdownItem> */}
+                    onSelectionChange={setSelectedRankKey as any}
+                    items={[...(Array(jackpotData?.jackpots?.[0]?.max_star + 1 || 8).keys() as any)].map((star) =>
+                      star == 0
+                        ? {
+                            key: 'all_rank',
+                            label: 'All Rank',
+                          }
+                        : {
+                            key: star + '-Star',
+                            label: star + '-Star',
+                          }
+                    )}>
+                    {(item) => <DropdownItem key={item.key}>{item.label}</DropdownItem>}
                   </DropdownMenu>
                 </Dropdown>
               </div>
@@ -384,7 +388,8 @@ export default function Page() {
                   (c) => Array.from(selectedColorKey)[0] == 'all_colors' || Array.from(selectedColorKey)[0][0] == c
                 )
                 .map((color: string) => {
-                  return ['1', '2']
+                  return [...(Array(jackpotData?.jackpots?.[0]?.max_star || 7).keys() as any)]
+                    .map((v) => v + 1)
                     .filter(
                       (s) => Array.from(selectedRankKey)[0] == 'all_rank' || Array.from(selectedRankKey)[0][0] == s
                     )

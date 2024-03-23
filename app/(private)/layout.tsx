@@ -55,26 +55,22 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div
           className='cursor-pointer'
           onClick={() => {
-            router.push('/jackpot')
+            router.push('/wish')
           }}>
           <div className='relative md:hidden cursor-pointer'>
-            <Image src={pathname == '/jackpot' ? Active : Inactive} alt='' className={`w-[106px]`} />
+            <Image src={pathname == '/wish' ? Active : Inactive} alt='' className={`w-[106px]`} />
             <div
               className={`${Bangkok.className} absolute inset-0 grid place-items-center ${
-                pathname == '/jackpot' ? 'text-[#FFB438]' : 'text-[#828282]'
+                pathname == '/wish' ? 'text-[#FFB438]' : 'text-[#828282]'
               }`}>
-              <div className=''>Jackpot</div>
+              <div className=''>Wish</div>
             </div>
           </div>
-          <Image
-            src={JackpotActive}
-            alt=''
-            className={` hidden w-[157px] ${pathname == '/jackpot' ? 'md:block' : ''}`}
-          />{' '}
+          <Image src={JackpotActive} alt='' className={` hidden w-[157px] ${pathname == '/wish' ? 'md:block' : ''}`} />{' '}
           <Image
             src={JackpotInactive}
             alt=''
-            className={` hidden w-[112px] ${pathname != '/jackpot' ? 'md:block' : ''}`}
+            className={` hidden w-[112px] ${pathname != '/wish' ? 'md:block' : ''}`}
           />
         </div>
         <div
