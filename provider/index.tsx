@@ -1,47 +1,35 @@
 'use client'
 import Modal from '@/components/modal'
+import ConnectWalletModal from '@/components/modal/connectWalletModal'
+import { useClient } from '@/hooks'
 import { Account } from '@/model/account'
-import {
-  CHECK_CODE,
-  GET_ASSETS,
-  GET_USER_CODE,
-  GET_USER_DATA,
-  GET_USER_REFFERAL_CODE,
-  applyCode,
-  checkFollow,
-} from '@/services'
+import { Token } from '@/model/token'
+import { GET_ASSETS, GET_USER_DATA, applyCode } from '@/services'
+import { wallets as c98Mobile } from '@/services/c98MobileWallet'
+import { getGasPriceByChain } from '@/utils'
 import { getItem, removeItem, setItem } from '@/utils/localStorage'
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheObject, split } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { getMainDefinition } from '@apollo/client/utilities'
-import axios from 'axios'
-import { createClient } from 'graphql-ws'
-import getConfig, { setConfig } from 'next/config'
-import localFont from 'next/font/local'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { ReactNode, createContext, useEffect, useState } from 'react'
-import SubcriptionProvider from './subcriptionContext'
-import { NextUIProvider } from '@nextui-org/react'
-import { useClient } from '@/hooks'
-import { GoogleTagManager } from '@next/third-parties/google'
-import { Bounce, ToastContainer } from 'react-toastify'
-import { ChainProvider } from '@cosmos-kit/react'
-import { assets as networkAssets, chains } from 'chain-registry'
-import { isMobile } from 'react-device-detect'
-import { wallets as c98Mobile } from '@/services/c98MobileWallet'
+import { AssetList, Chain } from '@chain-registry/types'
 import { wallets as c98Extension } from '@cosmos-kit/coin98-extension'
 import { wallets as keplrExtension } from '@cosmos-kit/keplr-extension'
 import { wallets as keplrMobile } from '@cosmos-kit/keplr-mobile'
 import { wallets as leapExtension } from '@cosmos-kit/leap-extension'
 import { wallets as leapMobile } from '@cosmos-kit/leap-mobile'
-import { Chain, AssetList } from '@chain-registry/types'
-import { SignerOptions } from '@cosmos-kit/core'
-import { getSigningCosmosClientOptions } from 'osmojs'
-import { GasPrice } from '@cosmjs/stargate'
-import ConnectWalletModal from '@/components/modal/connectWalletModal'
-import { Token } from '@/model/token'
-import { getGasPriceByChain } from '@/utils'
+import { ChainProvider } from '@cosmos-kit/react'
+import { GoogleTagManager } from '@next/third-parties/google'
+import { NextUIProvider } from '@nextui-org/react'
+import axios from 'axios'
+import { chains, assets as networkAssets } from 'chain-registry'
+import { createClient } from 'graphql-ws'
+import getConfig, { setConfig } from 'next/config'
+import localFont from 'next/font/local'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { ReactNode, createContext, useEffect, useState } from 'react'
+import { isMobile } from 'react-device-detect'
+import { Bounce, ToastContainer } from 'react-toastify'
 
 export const Context = createContext<{
   account: Account | undefined
@@ -59,7 +47,7 @@ export const Context = createContext<{
   horoscopeClient: undefined,
   setAccount: () => {},
   disconnect: () => {},
-  submitCode: async () => { },
+  submitCode: async () => {},
 })
 export const privateAxios = axios.create()
 
@@ -252,28 +240,32 @@ function ContextProvider({ children }: { children: ReactNode }) {
       },
     })
     if (v1DragonGems?.data?.[chainKey]?.cw721_token?.length) {
-      let v1List = v1DragonGems?.data?.[chainKey]?.cw721_token.map((token: Token) => {
-        const color = token.media_info.onchain.metadata.attributes.find((attr) => attr.trait_type == 'Color')?.value
-        let type
-        switch (color) {
-          case 'WHITE':
-            type = 'w1'
-            break
-          case 'BLUE':
-            type = 'b1'
-            break
-          case 'GOLD':
-            type = 'g1'
-            break
-          case 'RED':
-            type = 'r1'
-            break
-        }
-        return {
-          ...token,
-          type,
-        }
-      })
+      let v1List = v1DragonGems?.data?.[chainKey]?.cw721_token
+        .filter((token: Token) =>
+          token?.media_info?.onchain?.metadata?.attributes?.find((attr) => attr.trait_type == 'Color')
+        )
+        .map((token: Token) => {
+          const color = token.media_info.onchain.metadata.attributes.find((attr) => attr.trait_type == 'Color')?.value
+          let type
+          switch (color) {
+            case 'WHITE':
+              type = 'w1'
+              break
+            case 'BLUE':
+              type = 'b1'
+              break
+            case 'GOLD':
+              type = 'g1'
+              break
+            case 'RED':
+              type = 'r1'
+              break
+          }
+          return {
+            ...token,
+            type,
+          }
+        })
       list = [...v1List]
     }
     const v2DragonGems = await horoscopeClient?.query({
@@ -284,31 +276,35 @@ function ContextProvider({ children }: { children: ReactNode }) {
       },
     })
     if (v2DragonGems?.data?.[chainKey]?.cw721_token?.length) {
-      let v2List = v2DragonGems?.data?.[chainKey]?.cw721_token.map((token: Token) => {
-        const color = token.media_info.onchain.metadata.attributes.find((attr) => attr.trait_type == 'Color')?.value
-        const star = token.media_info.onchain.metadata.attributes
-          .find((attr) => attr.trait_type == 'Star')
-          ?.value.split('-')[0]
-        let type
-        switch (color) {
-          case 'White':
-            type = 'w'
-            break
-          case 'Blue':
-            type = 'b'
-            break
-          case 'Golden':
-            type = 'g'
-            break
-          case 'Red':
-            type = 'r'
-            break
-        }
-        return {
-          ...token,
-          type: type + star,
-        }
-      })
+      let v2List = v2DragonGems?.data?.[chainKey]?.cw721_token
+        .filter((token: Token) =>
+          token?.media_info?.onchain?.metadata?.attributes?.find((attr) => attr.trait_type == 'Color')
+        )
+        .map((token: Token) => {
+          const color = token.media_info.onchain.metadata.attributes.find((attr) => attr.trait_type == 'Color')?.value
+          const star = token.media_info.onchain.metadata.attributes
+            .find((attr) => attr.trait_type == 'Star')
+            ?.value.split('-')[0]
+          let type
+          switch (color) {
+            case 'White':
+              type = 'w'
+              break
+            case 'Blue':
+              type = 'b'
+              break
+            case 'Golden':
+              type = 'g'
+              break
+            case 'Red':
+              type = 'r'
+              break
+          }
+          return {
+            ...token,
+            type: type + star,
+          }
+        })
       list = [...list, ...v2List]
     }
     const shieldCollection = await horoscopeClient?.query({
@@ -405,7 +401,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
           horoscopeClient,
           assets,
           fetchAssets,
-          lastAssetsUpdate
+          lastAssetsUpdate,
         }}>
         <NextUIProvider>
           <ApolloProvider client={client}>{children}</ApolloProvider>
