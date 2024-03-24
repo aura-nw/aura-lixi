@@ -35,19 +35,19 @@ export default function Gem({ className, type }: { className?: string; type: str
           {(function () {
             switch (type[1]) {
               case '1':
-                return <Image src={White1} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={White1} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '2':
-                return <Image src={White2} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={White2} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '3':
-                return <Image src={White3} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={White3} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '4':
-                return <Image src={White4} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={White4} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '5':
-                return <Image src={White5} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={White5} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '6':
-                return <Image src={White6} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={White6} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '7':
-                return <Image src={White7} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={White7} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               default:
                 return <></>
             }
@@ -60,19 +60,19 @@ export default function Gem({ className, type }: { className?: string; type: str
           {(function () {
             switch (type[1]) {
               case '1':
-                return <Image src={Blue1} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Blue1} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '2':
-                return <Image src={Blue2} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Blue2} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '3':
-                return <Image src={Blue3} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Blue3} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '4':
-                return <Image src={Blue4} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Blue4} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '5':
-                return <Image src={Blue5} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Blue5} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '6':
-                return <Image src={Blue6} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Blue6} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '7':
-                return <Image src={Blue7} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Blue7} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               default:
                 return <></>
             }
@@ -85,19 +85,19 @@ export default function Gem({ className, type }: { className?: string; type: str
           {(function () {
             switch (type[1]) {
               case '1':
-                return <Image src={Gold1} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Gold1} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '2':
-                return <Image src={Gold2} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Gold2} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '3':
-                return <Image src={Gold3} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Gold3} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '4':
-                return <Image src={Gold4} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Gold4} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '5':
-                return <Image src={Gold5} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Gold5} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '6':
-                return <Image src={Gold6} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Gold6} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '7':
-                return <Image src={Gold7} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Gold7} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               default:
                 return <></>
             }
@@ -110,19 +110,19 @@ export default function Gem({ className, type }: { className?: string; type: str
           {(function () {
             switch (type[1]) {
               case '1':
-                return <Image src={Red1} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Red1} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '2':
-                return <Image src={Red2} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Red2} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '3':
-                return <Image src={Red3} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Red3} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '4':
-                return <Image src={Red4} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Red4} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '5':
-                return <Image src={Red5} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Red5} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '6':
-                return <Image src={Red6} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Red6} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               case '7':
-                return <Image src={Red7} alt='' className={`w-10 h-10 ${className}`} />
+                return <Image src={Red7} alt='' className={`w-10 h-10 max-w-none ${className}`} />
               default:
                 return <></>
             }

@@ -21,6 +21,7 @@ import { toast } from 'react-toastify'
 import GoldRing from '../assets/gold-ring.png'
 import getConfig from 'next/config'
 import { useChain } from '@cosmos-kit/react'
+import Fire from '@/assets/Fire.png'
 const initList = {
   w1: 0,
   w2: 0,
@@ -70,7 +71,7 @@ export default function Page() {
   const [submittedGems, setSubmittedGems] = useState<(string | undefined)[]>([])
   const [gems, setGems] = useState<any>(Map(initList))
   const { data: jackpotData } = useQuery(GET_JACKPOT)
-  const { data: userJackpotData } = useQuery(GET_USER_JACKPOT, {
+  const { data: userJackpotData, refetch } = useQuery(GET_USER_JACKPOT, {
     variables: {
       user_id: account?.id,
     },
@@ -148,6 +149,7 @@ export default function Page() {
           onOpen()
           setLoading(false)
           fetchAssets()
+          refetch()
         }, 7000)
       }
     } catch (error: any) {
@@ -209,67 +211,111 @@ export default function Page() {
         <div className='relative'>
           <Image src={TopBar} alt='' className='w-[595px] relative z-10' />
           <div className='relative max-w-[544px] mx-3 md:mx-auto -mt-2 rounded-b-[4px] border border-[#ECCB83] p-5 md:p-8 bg-[linear-gradient(180deg,rgba(76,50,36,0.50)_0%,rgba(80,49,38,0.50)_0.01%,rgba(166,123,81,0.50)_100%)] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] backdrop-blur-[6px]'>
-            {!!jackpotData?.jackpots && !!userJackpotData?.jackpot_users && (
-              <>
-                <div className='absolute inset-x-0 top-28 grid place-items-center'>
-                  <Image src={JackpotBg} alt='' className='w-[314px] h-[297px]' />
-                </div>
-                <div className='relative mt-5 flex flex-col items-center'>
-                  <div>
-                    <Image src={Machine} alt='' className='w-[236px] h-[252px]' />
-                  </div>
-                  <div className='text-xs text-[#FFFFFF] mt-8 text-center'>
-                    {`The Dragon will appear and fulfill your wish at ${moment()
-                      .add(14, 'd')
-                      .format('h a, Do MMM YYYY')} (UTC +7)`}
-                  </div>
-
-                  <div className='mt-4 flex gap-4 flex-wrap max-w-[90vw] items-center justify-center'>
-                    {[...(Array(jackpotData.jackpots?.[0]?.slot).keys() as any)].map((index) => (
-                      <div className='relative' key={index}>
-                        <Image src={GemSlot} alt='' className='w-[87px] h-[93px]' />
-                        {selectedGems[index] && (
-                          <div
-                            className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
-                            onClick={() => {
-                              const newData = [...selectedGems]
-                              newData[index] = undefined
-                              setSelectedGems(newData)
-                            }}>
-                            <div className='absolute inset-0 grid place-items-center invisible'>
-                              <div className='bg-[#000]/50 h-10 w-10 rounded-full grid place-items-center'>
-                                <Image src={IconClose} alt='' className='w-5 h-5' />
-                              </div>
-                            </div>
-                            <Gem type={selectedGems[index] as string} className='h-10 w-10' />
+            {!!jackpotData?.jackpots &&
+              !!userJackpotData?.jackpot_users &&
+              (jackpotData?.jackpots?.[0]?.winning_numbers ? (
+                jackpotData?.jackpots?.[0]?.winner_id ? (
+                  <div className='w-full flex flex-col items-center'>
+                    <div className={`text-xl text-center`}>Congratulation!</div>
+                    <div className={`${Bangkok.className} text-[#FEF368] text-xl font-bold text-center my-1`}>
+                      Dragon Warrior
+                    </div>
+                    <div className='text-sm text-[#FFF7C4]'>24th March 2024</div>
+                    <div className='border-[3px] border-[#E3B480] bg-[rgba(0,0,0,0.39)] rounded p-[10px] text-sm mt-9'>
+                      au19ty38...hsu1ju23
+                    </div>
+                    <div className='flex gap-5 relative mt-24 mb-28'>
+                      {/* <Image src={Fire} alt='' className='absolute left-1/2 -translate-x-1/2 -bottom-10' /> */}
+                      {jackpotData?.jackpots?.[0]?.winning_numbers.split('-').map((gem: any, index: number) => (
+                        <div className='relative' key={index}>
+                          <Image src={GoldRing} alt='' className='w-[127px] h-[136px]' />
+                          <div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'>
+                            <Gem type={gem.toLowerCase()} className='w-[73px] h-[73px]' />
                           </div>
-                        )}
-                      </div>
-                    ))}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-
-                  <div className='italic text-xs text-[#FFF7C4] text-center mt-1'>
-                    {(function () {
-                      switch (jackpotData?.jackpots?.[0]?.max_star) {
-                        case 2:
-                          return 'At this phase, you can only submit 1-star & 2-star gems.'
-
-                        default:
-                          return ''
-                      }
-                    })()}
+                ) : (
+                  <div className='w-full flex flex-col items-center'>
+                    <div className={`${Bangkok.className} text-[#FEF368] text-xl font-bold text-center`}>
+                      The Dragon's Wish
+                      <br /> has been revealed
+                    </div>
+                    <div className='text-sm mt-2'>The chosen one might still be YOU!!!</div>
+                    <div className='flex gap-5 relative my-36'>
+                      {/* <Image src={Fire} alt='' className='absolute left-1/2 -translate-x-1/2 -bottom-10' /> */}
+                      {jackpotData?.jackpots?.[0]?.winning_numbers.split('-').map((gem: any, index: number) => (
+                        <div className='relative' key={index}>
+                          <Image src={GoldRing} alt='' className='w-[127px] h-[136px]' />
+                          <div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'>
+                            <Gem type={gem.toLowerCase()} className='w-[73px] h-[73px]' />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
+                )
+              ) : (
+                <>
+                  <div className='absolute inset-x-0 top-28 grid place-items-center'>
+                    <Image src={JackpotBg} alt='' className='w-[314px] h-[297px]' />
+                  </div>
+                  <div className='relative mt-5 flex flex-col items-center'>
+                    <div>
+                      <Image src={Machine} alt='' className='w-[236px] h-[252px]' />
+                    </div>
+                    <div className='text-xs text-[#FFFFFF] mt-8 text-center'>
+                      {`The Dragon will appear and fulfill your wish at ${moment()
+                        .add(14, 'd')
+                        .format('h a, Do MMM YYYY')} (UTC +7)`}
+                    </div>
+                    <div className='mt-4 flex gap-4 flex-wrap max-w-[90vw] items-center justify-center'>
+                      {[...(Array(jackpotData.jackpots?.[0]?.slot).keys() as any)].map((index) => (
+                        <div className='relative' key={index}>
+                          <Image src={GemSlot} alt='' className='w-[87px] h-[93px]' />
+                          {selectedGems[index] && (
+                            <div
+                              className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
+                              onClick={() => {
+                                const newData = [...selectedGems]
+                                newData[index] = undefined
+                                setSelectedGems(newData)
+                              }}>
+                              <div className='absolute inset-0 grid place-items-center invisible'>
+                                <div className='bg-[#000]/50 h-10 w-10 rounded-full grid place-items-center'>
+                                  <Image src={IconClose} alt='' className='w-5 h-5' />
+                                </div>
+                              </div>
+                              <Gem type={selectedGems[index] as string} className='h-10 w-10' />
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
 
-                  <FilledButton
-                    className='mt-5'
-                    disabled={selectedGems.filter((g) => g).length != jackpotData?.jackpots?.[0]?.slot}
-                    onClick={wishHandler}
-                    isLoading={loading}>
-                    Wish
-                  </FilledButton>
-                </div>
-              </>
-            )}
+                    <div className='italic text-xs text-[#FFF7C4] text-center mt-1'>
+                      {(function () {
+                        switch (jackpotData?.jackpots?.[0]?.max_star) {
+                          case 2:
+                            return 'At this phase, you can only submit 1-star & 2-star gems.'
+
+                          default:
+                            return ''
+                        }
+                      })()}
+                    </div>
+
+                    <FilledButton
+                      className='mt-5'
+                      disabled={selectedGems.filter((g) => g).length != jackpotData?.jackpots?.[0]?.slot}
+                      onClick={wishHandler}
+                      isLoading={loading}>
+                      Wish
+                    </FilledButton>
+                  </div>
+                </>
+              ))}
           </div>
         </div>
 
