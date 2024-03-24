@@ -14,25 +14,28 @@ const roboto = Roboto({
 })
 
 export const metadata: Metadata = {
-  title: `Year of the Dragon’s Li Xi`,
-  description: 'Use Fortune Code to get Li Xi, Share Fortune Code for more Li Xi',
-  metadataBase: new URL('https://lixi.aura.network'),
+  title: `Aura Network Gem Forge: Quest for the Dragon's Wish`,
+  description:
+    "Join the legendary Gem Forge challenge by Aura Network. Embark on the quest to fulfill the Dragon's Wish, forge gems, and vie for the ultimate prize",
+  metadataBase: new URL('https://gem.aura.network'),
   openGraph: {
-    title: `Year of the Dragon’s Li Xi`,
-    description: 'Use Fortune Code to get Li Xi, Share Fortune Code for more Li Xi',
+    title: `Aura Network Gem Forge: Quest for the Dragon's Wish`,
+    description:
+      "Join the legendary Gem Forge challenge by Aura Network. Embark on the quest to fulfill the Dragon's Wish, forge gems, and vie for the ultimate prize",
     images: [
       {
-        url: 'https://campaign-fe.dev.aura.network/assets/thumb.png',
+        url: 'https://gem.aura.network/assets/thumb.png',
       },
     ],
     type: 'website',
-    url: 'https://lixi.aura.network',
+    url: 'https://gem.aura.network',
   },
   twitter: {
     card: 'summary_large_image',
-    title: `Year of the Dragon’s Li Xi`,
-    description: 'Use Fortune Code to get Li Xi, Share Fortune Code for more Li Xi',
-    images: ['https://campaign-fe.dev.aura.network/assets/thumb.png'],
+    title: `Aura Network Gem Forge: Quest for the Dragon's Wish`,
+    description:
+      "Join the legendary Gem Forge challenge by Aura Network. Embark on the quest to fulfill the Dragon's Wish, forge gems, and vie for the ultimate prize",
+    images: ['https://gem.aura.network/assets/thumb.png'],
   },
 }
 
