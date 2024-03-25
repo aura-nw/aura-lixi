@@ -58,6 +58,7 @@ export default function Page() {
   const config = getConfig()
   const { address, chain, getSigningCosmWasmClient } = useChain(config.COSMOSKIT_CHAINKEY)
   const { assets, lastAssetsUpdate, fetchAssets, account } = useContext(Context)
+  const [blackList, setBlackList] = useState<any[]>([])
   const [selectedColorKey, setSelectedColorKey] = useState(new Set(['all_colors']))
   const selectedColorValue = useMemo(
     () => Array.from(selectedColorKey).join(', ').replaceAll('_', ' '),
@@ -81,7 +82,8 @@ export default function Page() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const submissionDisclosure = useDisclosure()
   useEffect(() => {
-    const gemList = assets.reduce(
+    const filteredAssets = assets.filter((a) => !blackList.includes(a.token_id))
+    const gemList = filteredAssets.reduce(
       (total, current) => {
         total[current.type]++
         return total
@@ -94,7 +96,7 @@ export default function Page() {
       }
     }
     setGems(Map(gemList))
-  }, [selectedGems.filter((g) => !g).length, assets?.length])
+  }, [selectedGems.filter((g) => !g).length, assets?.length, blackList.length])
 
   useEffect(() => {
     if (jackpotData?.jackpots?.[0]?.slot) {
@@ -135,7 +137,6 @@ export default function Page() {
           },
         })
       }
-      console.log(msgs)
       const client = await getSigningCosmWasmClient()
       await client.executeMultiple(
         address as string,
@@ -149,6 +150,7 @@ export default function Page() {
       if (res.data) {
         setTimeout(() => {
           setSubmittedGems(selectedGems)
+          setBlackList([...blackList, ...tokens.map((c) => c.token_id)])
           setSelectedGems([])
           onOpen()
           setLoading(false)

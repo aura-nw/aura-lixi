@@ -59,6 +59,8 @@ export default function Home() {
   const { assets, lastAssetsUpdate, fetchAssets } = useContext(Context)
   const { address, chain, getSigningCosmWasmClient } = useChain(config.COSMOSKIT_CHAINKEY)
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
+  const [blackList, setBlackList] = useState<any[]>([])
+  const [tempBlackList, setTempBlackList] = useState<any[]>([])
   const [requestId, setRequestId] = useState()
   const [loading, setLoading] = useState(false)
   const [useShield, setUseShield] = useState(false)
@@ -95,7 +97,8 @@ export default function Home() {
         }
       }
     }
-    const gemList = assets.reduce(
+    const filteredAssets = assets.filter((a) => !blackList.includes(a.token_id))
+    const gemList = filteredAssets.reduce(
       (total, current) => {
         total[current.type]++
         return total
@@ -131,6 +134,7 @@ export default function Home() {
   const forgeGemHandler = async () => {
     try {
       setLoading(true)
+      const bl = []
       const main = assets.find((asset) => asset.type == mainGem)
       const msgs = [
         {
@@ -143,6 +147,7 @@ export default function Home() {
           },
         },
       ]
+      bl.push(main?.token_id)
 
       const material: any[] = []
       for (let i = 0; i < 5; i++) {
@@ -166,6 +171,7 @@ export default function Home() {
               },
             },
           })
+          bl.push(asset?.token_id)
         }
       }
       let shield
@@ -180,7 +186,9 @@ export default function Home() {
             },
           },
         })
+        bl.push(shield?.token_id)
       }
+      setTempBlackList(bl)
       const client = await getSigningCosmWasmClient()
       await client.executeMultiple(
         address as string,
@@ -247,6 +255,7 @@ export default function Home() {
             setTimeout(() => setRequestId(undefined), 500)
           }}
           revealSuccessCallBack={() => {
+            setBlackList([...blackList, ...tempBlackList])
             setMainGem(undefined)
             setMaterialGems([undefined, undefined, undefined, undefined, undefined])
             setUseShield(false)
