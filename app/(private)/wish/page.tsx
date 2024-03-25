@@ -163,7 +163,6 @@ export default function Page() {
       })
     }
   }
-
   return (
     <>
       <NoBackgroundModal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -325,7 +324,7 @@ export default function Page() {
         <div className='relative'>
           <Image src={TopBar2} alt='' className='w-[352px] relative z-10' />
           <div className='relative bg-[#E6D8B9] rounded-b-[4px] p-4 -top-2 w-[338px] mx-auto text-[#292929]'>
-            {assets.filter((asset) => asset.type.split('-')[1] <= (jackpotData?.jackpots?.[0]?.max_star || 7))
+            {assets.filter((asset) => asset.type[1] <= (jackpotData?.jackpots?.[0]?.max_star || 7))
               .length ? (
               <>
                 <div className='flex justify-between gap-1 items-center'>
@@ -476,7 +475,7 @@ export default function Page() {
                 </div>
               </>
             ) : (
-              <div className='flex flex-col items-center text-center min-h-[622px]'>
+              <div className='flex flex-col items-center text-center min-h-[528px]'>
                 <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>No Gems Found</div>
                 <div className='mt-2 mb-4 text-sm'>Let's find some Gems on SeekHYPE marketplace!</div>
                 <FilledButton href={config.SEEKHYPE_DRAGON_COLLECTION_ENDPOINT} target='_blank'>
