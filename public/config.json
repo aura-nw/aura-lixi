@@ -1,6 +1,16 @@
 {
-  "REST_API_ENDPOINT": "https://campaign-api.dev.aura.network",
-  "HASURA_ENDPOINT": "https://campaign-hasura.dev.aura.network",
-  "TWITTER_POST_ID":"1740384898689667455",
-  "AURASCAN_ENDPOINT":"https://explorer.dev.aura.network"
+  "TWITTER_POST_ID": "1740384898689667455",
+  "REST_API_ENDPOINT": "https://campaign-api.euphoria.aura.network",
+  "HASURA_ENDPOINT": "https://campaign-hasura.euphoria.aura.network",
+  "SEEKHYPE_ENDPOINT": "https://staging.seekhype.io",
+  "AURASCAN_ENDPOINT": "https://euphoria.aurascan.io",
+  "HOROSCOPE_ENDPOINT": "https://indexer-v2.staging.aurascan.io",
+  "HOROSCOPE_CHAINKEY":"euphoria",
+  "COSMOSKIT_CHAINKEY": "auratestnet",
+  "SEEKHYPE_DRAGON_COLLECTION_ENDPOINT": "https://staging.seekhype.io/collection/cw721-long-371",
+  "SEEKHYPE_V2_DRAGON_COLLECTION_ENDPOINT": "https://staging.seekhype.io/nft/dragon-gem-v2-438",
+  "DRAGON_GEM_COLLECTION_CONTRACT_ADDRESS": "aura14rrxnmkpnvcmeknjzma0myeepdxaa86wh5837959ek37dmrl2lxqfg66z0",
+  "V2_DRAGON_GEM_COLLECTION_CONTRACT_ADDRESS": "aura1m8thl7lrkka8993c4cxky5st3ewetuv5kkelzya7drdeqrgl5qcs2lqhgs",
+  "SHIELD_COLLECTION_CONTRACT_ADDRESS": "aura12urfchczsz972jvzawyf38dm87vzhsnymrf4y0shzf4dpdnq0s2sq3pakh",
+  "OPERATOR_CONTRACT_ADDRESS": "aura19fmuecv5gk2m5pmh5m3gg5g675fu8mnz6gwwug"
 }

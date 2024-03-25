@@ -1,4 +1,4 @@
-import { privateAxios } from '@/context'
+import { privateAxios } from '@/provider'
 import { gql } from '@apollo/client'
 import axios from 'axios'
 import getConfig from 'next/config'
@@ -8,10 +8,11 @@ export const GET_USER_DATA = gql`
       avatar_url
       username
       id
+      wallet_address
     }
   }
 `
-export const GET_USER_INVENTORY = gql`
+export const GET_USER_ASSETS = gql`
   subscription MyQuery {
     lixi(where: { status: { _eq: "OPENED" } }) {
       created_at
@@ -33,13 +34,35 @@ export const GET_USER_REFFERAL_CODE = gql`
   }
 `
 export const GET_TXS_HISTORY = gql`
-  subscription GET_USER_REFFERAL_CODE {
+  subscription GET_TXS_HISTORY {
     tx_history(order_by: { updated_at: desc }) {
       updated_at
       tx_info {
         tx_hash
       }
       user_id
+    }
+  }
+`
+export const GET_QUESTS = gql`
+  query campaigns {
+    items: campaigns(where: { status: { _eq: "active" } }) {
+      description
+      id
+      title
+      code
+      campaign_social_actions {
+        id
+        target
+        social_action {
+          id
+          name
+          social
+          __typename
+        }
+        __typename
+      }
+      __typename
     }
   }
 `
@@ -62,10 +85,64 @@ export const GET_REQUEST_MANAGER = gql`
     }
   }
 `
+export const GET_JACKPOT = gql`
+  query GET_JACKPOT {
+    jackpots(limit: 1, where: { status: { _eq: "active" } }) {
+      id
+      max_star
+      winner_id
+      winning_numbers
+      slot
+    }
+  }
+`
+export const GET_USER_JACKPOT = gql`
+  query GET_USER_JACKPOT($user_id: Int) {
+    jackpot_users(where: { user_id: { _eq: $user_id } }, order_by: { updated_at: desc }) {
+      jackpot_id
+      purchased_line
+      id
+      updated_at
+    }
+  }
+`
 export const GET_USER_CODE = (id: string) => gql`
   query GET_USER_CODE {
     task_referrals(where: { referee_id: { _eq: ${id} } }) {
       code
+    }
+  }
+`
+export const GET_ASSETS = (chainKey: string) => gql`
+  query queryAssetCW721(
+    $contract_address: String
+    $owner: String = null
+  ) {
+    ${chainKey} {
+      cw721_token(
+        where: {
+          cw721_contract: {
+            smart_contract: { address: { _eq: $contract_address }, name: { _neq: "crates.io:cw4973" } }
+          }
+          owner: { _eq: $owner }
+          burned: { _eq: false }
+        }
+        limit: 10000,
+        order_by: [{ last_updated_height: desc }, { id: desc }]
+      ) {
+        id
+        token_id
+        owner
+        media_info
+        cw721_contract {
+            name
+            symbol
+            smart_contract {
+              name
+              address
+            }
+          }
+      }
     }
   }
 `
@@ -149,7 +226,7 @@ export const openLixi = async (id: string) => {
     })
     return res
   } catch (error: any) {
-    window.alert(error?.message || 'Something went wrong')
+    return error
   }
 }
 export const claimPrize = async (walletAddress: string) => {
@@ -159,12 +236,72 @@ export const claimPrize = async (walletAddress: string) => {
     })
     return res
   } catch (error: any) {
-    window.alert(error?.message || 'Something went wrong')
+    return error
+  }
+}
+export const linkWallet = async (signedDoc: any, signature: any) => {
+  try {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/users/wallets/link`, {
+      signed_doc: signedDoc,
+      signature,
+    })
+    return res
+  } catch (error: any) {
+    return error
+  }
+}
+export const validateQuest = async (id: string) => {
+  try {
+    const res = await privateAxios.get(`${getConfig().REST_API_ENDPOINT}/campaigns/${id}/validate`)
+    return res.data
+  } catch (error: any) {
+    return error
+  }
+}
+export const forgeGem = async (
+  base: {
+    contractAddress: string
+    tokenId: string
+  },
+  materials: {
+    contractAddress: string
+    tokenId: string
+  }[],
+  shield?: {
+    contractAddress: string
+    tokenId: string
+  }
+) => {
+  try {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/nft-forge/forge`, {
+      materials,
+      base,
+      shield,
+    })
+    return res
+  } catch (error: any) {
+    return error
+  }
+}
+export const wish = async (
+  id: string, 
+  gems: {
+    contract_address: string
+    token_id: string
+  }[]
+) => {
+  try {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/jackpots/${id}/purchase`, {
+      tokens: gems
+    })
+    return res
+  } catch (error: any) {
+    return error
   }
 }
 export const sample = async () => {
   try {
   } catch (error: any) {
-    window.alert(error?.message || 'Something went wrong')
+    return error
   }
 }
