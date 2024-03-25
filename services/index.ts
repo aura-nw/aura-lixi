@@ -98,7 +98,7 @@ export const GET_JACKPOT = gql`
 `
 export const GET_USER_JACKPOT = gql`
   query GET_USER_JACKPOT($user_id: Int) {
-    jackpot_users(where: { user_id: { _eq: $user_id } }) {
+    jackpot_users(where: { user_id: { _eq: $user_id } }, order_by: { updated_at: desc }) {
       jackpot_id
       purchased_line
       id
