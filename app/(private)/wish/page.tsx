@@ -58,6 +58,7 @@ export default function Page() {
   const config = getConfig()
   const { address, chain, getSigningCosmWasmClient } = useChain(config.COSMOSKIT_CHAINKEY)
   const { assets, lastAssetsUpdate, fetchAssets, account } = useContext(Context)
+  const filteredAssets = assets.filter((a) => !blackList.includes(a.token_id))
   const [blackList, setBlackList] = useState<any[]>([])
   const [selectedColorKey, setSelectedColorKey] = useState(new Set(['all_colors']))
   const selectedColorValue = useMemo(
@@ -82,7 +83,6 @@ export default function Page() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const submissionDisclosure = useDisclosure()
   useEffect(() => {
-    const filteredAssets = assets.filter((a) => !blackList.includes(a.token_id))
     const gemList = filteredAssets.reduce(
       (total, current) => {
         total[current.type]++
@@ -96,7 +96,7 @@ export default function Page() {
       }
     }
     setGems(Map(gemList))
-  }, [selectedGems.filter((g) => !g).length, assets?.length, blackList.length])
+  }, [selectedGems.filter((g) => !g).length, filteredAssets?.length, blackList.length])
 
   useEffect(() => {
     if (jackpotData?.jackpots?.[0]?.slot) {
@@ -122,7 +122,7 @@ export default function Page() {
       const tokens: any[] = []
       const msgs = []
       for (let i = 0; i < jackpotData?.jackpots?.[0]?.slot; i++) {
-        const asset = assets.find((a) => a.type == selectedGems[i] && !tokens.find((g) => g.token_id == a.token_id))
+        const asset = filteredAssets.find((a) => a.type == selectedGems[i] && !tokens.find((g) => g.token_id == a.token_id))
         tokens.push({
           token_id: asset?.token_id as string,
           contract_address: asset?.cw721_contract.smart_contract.address as string,
@@ -328,7 +328,7 @@ export default function Page() {
         <div className='relative'>
           <Image src={TopBar2} alt='' className='w-[352px] relative z-10' />
           <div className='relative bg-[#E6D8B9] rounded-b-[4px] p-4 -top-2 w-[338px] mx-auto text-[#292929]'>
-            {assets.filter((asset) => asset.type[1] <= (jackpotData?.jackpots?.[0]?.max_star || 7))
+            {filteredAssets.filter((asset) => asset.type[1] <= (jackpotData?.jackpots?.[0]?.max_star || 7))
               .length ? (
               <>
                 <div className='flex justify-between gap-1 items-center'>

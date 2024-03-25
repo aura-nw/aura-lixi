@@ -56,10 +56,11 @@ const initList = {
 }
 export default function Home() {
   const config = getConfig()
+  const [blackList, setBlackList] = useState<any[]>([])
   const { assets, lastAssetsUpdate, fetchAssets } = useContext(Context)
+  const filteredAssets = assets.filter((a) => !blackList.includes(a.token_id))
   const { address, chain, getSigningCosmWasmClient } = useChain(config.COSMOSKIT_CHAINKEY)
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
-  const [blackList, setBlackList] = useState<any[]>([])
   const [tempBlackList, setTempBlackList] = useState<any[]>([])
   const [requestId, setRequestId] = useState()
   const [loading, setLoading] = useState(false)
@@ -97,7 +98,6 @@ export default function Home() {
         }
       }
     }
-    const filteredAssets = assets.filter((a) => !blackList.includes(a.token_id))
     const gemList = filteredAssets.reduce(
       (total, current) => {
         total[current.type]++
@@ -114,7 +114,7 @@ export default function Home() {
       }
     }
     setGems(Map(gemList))
-  }, [mainGem, materialGems, assets?.length])
+  }, [mainGem, materialGems, filteredAssets?.length])
 
   const addGemHandler = (type: string) => {
     if (loading) return
@@ -135,7 +135,7 @@ export default function Home() {
     try {
       setLoading(true)
       const bl = []
-      const main = assets.find((asset) => asset.type == mainGem)
+      const main = filteredAssets.find((asset) => asset.type == mainGem)
       const msgs = [
         {
           contract: main?.cw721_contract.smart_contract.address,
@@ -152,7 +152,7 @@ export default function Home() {
       const material: any[] = []
       for (let i = 0; i < 5; i++) {
         if (materialGems[i] != undefined) {
-          const asset = assets.find(
+          const asset = filteredAssets.find(
             (a) =>
               a.type == materialGems[i] &&
               !material.find((g) => g.tokenId == a.token_id) &&
@@ -176,7 +176,7 @@ export default function Home() {
       }
       let shield
       if (useShield) {
-        shield = assets.find((asset) => asset.type == 'shield')
+        shield = filteredAssets.find((asset) => asset.type == 'shield')
         msgs.push({
           contract: shield?.cw721_contract.smart_contract.address,
           msg: {
@@ -412,10 +412,10 @@ export default function Home() {
               </div>
               <div
                 className={`mx-auto w-fit flex items-center mt-10 md:mt-20 gap-3 cursor-pointer ${
-                  assets.filter((asset) => asset.type == 'shield').length ? '' : 'opacity-50 pointer-events-none'
+                  filteredAssets.filter((asset) => asset.type == 'shield').length ? '' : 'opacity-50 pointer-events-none'
                 }`}
                 onClick={() =>
-                  assets.filter((asset) => asset.type == 'shield').length && !loading
+                  filteredAssets.filter((asset) => asset.type == 'shield').length && !loading
                     ? setUseShield(!useShield)
                     : undefined
                 }>
@@ -437,7 +437,7 @@ export default function Home() {
         <div className='relative'>
           <Image src={TopBar2} alt='' className='w-[352px] relative z-10' />
           <div className='relative bg-[#E6D8B9] rounded-b-[4px] p-4 -top-2 w-[338px] mx-auto text-[#292929]'>
-            {assets.length ? (
+            {filteredAssets.length ? (
               <div className='min-h-[622px]'>
                 <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>Your Gems</div>
                 <div className='mt-2 text-sm'>Select gems here to forge</div>
@@ -581,7 +581,7 @@ export default function Home() {
                     <div>
                       <Image src={ShieldItem} alt='' />
                     </div>
-                    <div className=''>{assets.filter((asset) => asset.type == 'shield').length}</div>
+                    <div className=''>{filteredAssets.filter((asset) => asset.type == 'shield').length}</div>
                   </div>
                 </div>
               </div>
