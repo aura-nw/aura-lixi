@@ -23,6 +23,7 @@ import TopBar2 from './assets/top-bar-2.svg'
 import TopBar from './assets/top-bar.svg'
 import TopBarMobile from './assets/top-bar_mobile.svg'
 import { RevealForgingResult } from './components/revealForgingResult'
+import { Token } from '@/model/token'
 const initList = {
   w1: 0,
   w2: 0,
@@ -58,7 +59,7 @@ export default function Home() {
   const config = getConfig()
   const [blackList, setBlackList] = useState<any[]>([])
   const { assets, lastAssetsUpdate, fetchAssets } = useContext(Context)
-  const filteredAssets = assets.filter((a) => !blackList.includes(a.token_id))
+  const [filteredAssets, setFilteredAssets] = useState<Token[]>([])
   const { address, chain, getSigningCosmWasmClient } = useChain(config.COSMOSKIT_CHAINKEY)
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const [tempBlackList, setTempBlackList] = useState<any[]>([])
@@ -115,6 +116,13 @@ export default function Home() {
     }
     setGems(Map(gemList))
   }, [mainGem, materialGems, filteredAssets?.length])
+
+  
+  useEffect(() => {
+    const fa = assets.filter((a) => !blackList.includes(a.token_id))
+    setFilteredAssets([...fa])
+  }, [assets.length, blackList.length])
+
 
   const addGemHandler = (type: string) => {
     if (loading) return

@@ -23,6 +23,7 @@ import getConfig from 'next/config'
 import { useChain } from '@cosmos-kit/react'
 import Fire from '@/assets/Fire.png'
 import { shorten } from '@/utils'
+import { Token } from '@/model/token'
 const initList = {
   w1: 0,
   w2: 0,
@@ -58,8 +59,9 @@ export default function Page() {
   const config = getConfig()
   const { address, chain, getSigningCosmWasmClient } = useChain(config.COSMOSKIT_CHAINKEY)
   const { assets, lastAssetsUpdate, fetchAssets, account } = useContext(Context)
-  const filteredAssets = assets.filter((a) => !blackList.includes(a.token_id))
+  const [filteredAssets, setFilteredAssets] = useState<Token[]>([])
   const [blackList, setBlackList] = useState<any[]>([])
+
   const [selectedColorKey, setSelectedColorKey] = useState(new Set(['all_colors']))
   const selectedColorValue = useMemo(
     () => Array.from(selectedColorKey).join(', ').replaceAll('_', ' '),
@@ -82,6 +84,12 @@ export default function Page() {
   const [loading, setLoading] = useState(false)
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const submissionDisclosure = useDisclosure()
+
+  useEffect(() => {
+    const fa = assets.filter((a) => !blackList.includes(a.token_id))
+    setFilteredAssets([...fa])
+  }, [assets.length, blackList.length])
+
   useEffect(() => {
     const gemList = filteredAssets.reduce(
       (total, current) => {
@@ -122,7 +130,9 @@ export default function Page() {
       const tokens: any[] = []
       const msgs = []
       for (let i = 0; i < jackpotData?.jackpots?.[0]?.slot; i++) {
-        const asset = filteredAssets.find((a) => a.type == selectedGems[i] && !tokens.find((g) => g.token_id == a.token_id))
+        const asset = filteredAssets.find(
+          (a) => a.type == selectedGems[i] && !tokens.find((g) => g.token_id == a.token_id)
+        )
         tokens.push({
           token_id: asset?.token_id as string,
           contract_address: asset?.cw721_contract.smart_contract.address as string,
@@ -173,7 +183,7 @@ export default function Page() {
           <div className={`${Bangkok.className} text-xl font-bold`}>Your wish has been sent to the Dragon</div>
           <div className='text-sm mt-4'>
             The Dragon will respond to your
-            <br /> wishes at <span className='text-[##FFF7C4]'>12 am, 24th Mar 2024</span>
+            <br /> wishes at <span className='text-[##FFF7C4]'>10th April 2024</span>
           </div>
           <div className='mt-8 flex gap-4'>
             {submittedGems.map((gem, index) => (
@@ -328,8 +338,7 @@ export default function Page() {
         <div className='relative'>
           <Image src={TopBar2} alt='' className='w-[352px] relative z-10' />
           <div className='relative bg-[#E6D8B9] rounded-b-[4px] p-4 -top-2 w-[338px] mx-auto text-[#292929]'>
-            {filteredAssets.filter((asset) => asset.type[1] <= (jackpotData?.jackpots?.[0]?.max_star || 7))
-              .length ? (
+            {filteredAssets.filter((asset) => asset.type[1] <= (jackpotData?.jackpots?.[0]?.max_star || 7)).length ? (
               <>
                 <div className='flex justify-between gap-1 items-center'>
                   <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>Your Gems</div>
