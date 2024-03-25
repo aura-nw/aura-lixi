@@ -46,10 +46,12 @@ export function Header() {
                 <div className='flex justify-between items-center'>
                   <div>{shorten(address, 8, 8)}</div>
                   <Snippet
+                    disableTooltip
                     classNames={{
                       base: 'bg-[transparent] text-[#fff] p-0',
                       pre: 'hidden',
                       copyButton: 'h-5',
+                      
                     }}>
                     {address}
                   </Snippet>

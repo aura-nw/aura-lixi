@@ -6,35 +6,33 @@ import useSWR from 'swr'
 export default function QuestItem({ data }: { data: Quest }) {
   const { data: validation, mutate } = useSWR(data.code, () => validateQuest(data.code))
   return (
-    <div className={`p-4 rounded ${validation?.is_valid ? 'bg-[#C0B9A7] flex-row items-center gap-5 justify-between' : 'bg-[#D6CCB5] flex-col'} flex w-full`}>
+    <div
+      className={`p-4 rounded ${
+        validation?.is_valid ? 'bg-[#C0B9A7] flex-row items-center gap-5 justify-between' : 'bg-[#D6CCB5] flex-col'
+      } flex w-full`}>
       <div className='flex flex-col gap-4'>
         <div className='text-[#292929] text-sm'>{data.description}</div>
-        {!validation?.is_valid
-          ? data.campaign_social_actions.map((actions) =>
-              actions.target ? (
-                <Link
-                  className='text-[#6D3A0A] font-medium italic flex items-center gap-2 cursor-pointer'
-                  key={actions.id}
-                  href={actions.target}
-                  target='_blank'>
-                  <div className='w-[9px] h-[9px] rounded-sm rotate-45 bg-[#E75858]'></div>
-                  Go to{' '}
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='15'
-                    height='14'
-                    viewBox='0 0 15 14'
-                    fill='none'
-                    className='block'>
-                    <path
-                      d='M0.761972 0L6.16721 7.7218L0.727905 14H1.95217L6.71438 8.50322L10.562 14H14.7279L9.01842 5.84394L14.0814 0H12.8571L8.47149 5.06227L4.92791 0H0.761972ZM2.56231 0.963405H4.47612L12.9273 13.0366H11.0135L2.56231 0.963405Z'
-                      fill='#6D3A0A'
-                    />
-                  </svg>
-                </Link>
-              ) : undefined
-            )
-          : undefined}
+        {!validation?.is_valid && data?.campaign_social_actions?.[0]?.target ? (
+          <Link
+            className='text-[#6D3A0A] font-medium italic flex items-center gap-2 cursor-pointer'
+            href={`https://twitter.com/AuraNetworkHQ/status/${data.campaign_social_actions[0].target}`}
+            target='_blank'>
+            <div className='w-[9px] h-[9px] rounded-sm rotate-45 bg-[#E75858]'></div>
+            Go to{' '}
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              width='15'
+              height='14'
+              viewBox='0 0 15 14'
+              fill='none'
+              className='block'>
+              <path
+                d='M0.761972 0L6.16721 7.7218L0.727905 14H1.95217L6.71438 8.50322L10.562 14H14.7279L9.01842 5.84394L14.0814 0H12.8571L8.47149 5.06227L4.92791 0H0.761972ZM2.56231 0.963405H4.47612L12.9273 13.0366H11.0135L2.56231 0.963405Z'
+                fill='#6D3A0A'
+              />
+            </svg>
+          </Link>
+        ) : undefined}
       </div>
       {!validation?.is_valid ? (
         <div className='border-t border-[#8D857E] flex justify-center mt-4'>
