@@ -103,13 +103,15 @@ export default function Page() {
   }, [jackpotData?.jackpots])
 
   const addGemHandler = (type: string) => {
-    for (let i = 0; i < jackpotData?.jackpots?.[0]?.slot; i++) {
-      if (selectedGems[i] == undefined) {
-        selectedGems[i] = type
-        break
+    if (jackpotData?.jackpots && !jackpotData?.jackpots?.[0]?.winning_numbers) {
+      for (let i = 0; i < jackpotData?.jackpots?.[0]?.slot; i++) {
+        if (selectedGems[i] == undefined) {
+          selectedGems[i] = type
+          break
+        }
       }
+      setSelectedGems([...selectedGems])
     }
-    setSelectedGems([...selectedGems])
   }
 
   const wishHandler = async () => {
@@ -142,7 +144,7 @@ export default function Page() {
         })),
         'auto'
       )
-      const res = await wish(jackpotData.jackpots[0].id , tokens)
+      const res = await wish(jackpotData.jackpots[0].id, tokens)
       if (res.data) {
         setTimeout(() => {
           setSubmittedGems(selectedGems)

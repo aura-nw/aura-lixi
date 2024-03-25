@@ -406,7 +406,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
         <NextUIProvider>
           <ApolloProvider client={client}>{children}</ApolloProvider>
         </NextUIProvider>
-        <GoogleTagManager gtmId='GTM-K3NWXQS' />
+        <GoogleTagManager gtmId='GTM-5F456FKK' />
         <ToastContainer
           position='top-center'
           autoClose={3000}
