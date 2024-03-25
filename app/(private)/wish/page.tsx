@@ -223,7 +223,7 @@ export default function Page() {
                     </div>
                     <div className='text-sm text-[#FFF7C4]'>24th March 2024</div>
                     <div className='border-[3px] border-[#E3B480] bg-[rgba(0,0,0,0.39)] rounded p-[10px] text-sm mt-9'>
-                      {shorten(jackpotData?.jackpots?.[0]?.winner_address,8,8)}
+                      {shorten(jackpotData?.jackpots?.[0]?.winner_address, 8, 8)}
                     </div>
                     <div className='flex gap-5 relative mt-24 mb-28'>
                       {/* <Image src={Fire} alt='' className='absolute left-1/2 -translate-x-1/2 -bottom-10' /> */}
@@ -231,7 +231,7 @@ export default function Page() {
                         <div className='relative' key={index}>
                           <Image src={GoldRing} alt='' className='w-[127px] h-[136px]' />
                           <div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'>
-                            <Gem type={gem.toLowerCase()} className='w-[73px] h-[73px]' />
+                            <Gem type={gem.toLowerCase()} className='w-[73px] h-[73px] max-w-none' />
                           </div>
                         </div>
                       ))}
@@ -250,7 +250,7 @@ export default function Page() {
                         <div className='relative' key={index}>
                           <Image src={GoldRing} alt='' className='w-[127px] h-[136px]' />
                           <div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'>
-                            <Gem type={gem.toLowerCase()} className='w-[73px] h-[73px]' />
+                            <Gem type={gem.toLowerCase()} className='w-[73px] h-[73px]  max-w-none' />
                           </div>
                         </div>
                       ))}
