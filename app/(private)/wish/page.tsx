@@ -22,6 +22,7 @@ import GoldRing from '../assets/gold-ring.png'
 import getConfig from 'next/config'
 import { useChain } from '@cosmos-kit/react'
 import Fire from '@/assets/Fire.png'
+import { shorten } from '@/utils'
 const initList = {
   w1: 0,
   w2: 0,
@@ -214,7 +215,7 @@ export default function Page() {
             {!!jackpotData?.jackpots &&
               !!userJackpotData?.jackpot_users &&
               (jackpotData?.jackpots?.[0]?.winning_numbers ? (
-                jackpotData?.jackpots?.[0]?.winner_id ? (
+                jackpotData?.jackpots?.[0]?.winner_address ? (
                   <div className='w-full flex flex-col items-center'>
                     <div className={`text-xl text-center`}>Congratulation!</div>
                     <div className={`${Bangkok.className} text-[#FEF368] text-xl font-bold text-center my-1`}>
@@ -222,7 +223,7 @@ export default function Page() {
                     </div>
                     <div className='text-sm text-[#FFF7C4]'>24th March 2024</div>
                     <div className='border-[3px] border-[#E3B480] bg-[rgba(0,0,0,0.39)] rounded p-[10px] text-sm mt-9'>
-                      au19ty38...hsu1ju23
+                      {shorten(jackpotData?.jackpots?.[0]?.winner_address,8,8)}
                     </div>
                     <div className='flex gap-5 relative mt-24 mb-28'>
                       {/* <Image src={Fire} alt='' className='absolute left-1/2 -translate-x-1/2 -bottom-10' /> */}
