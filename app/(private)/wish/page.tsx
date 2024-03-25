@@ -142,7 +142,7 @@ export default function Page() {
         })),
         'auto'
       )
-      const res = await wish(tokens)
+      const res = await wish(jackpotData.jackpots[0].id , tokens)
       if (res.data) {
         setTimeout(() => {
           setSubmittedGems(selectedGems)

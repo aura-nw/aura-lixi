@@ -284,13 +284,14 @@ export const forgeGem = async (
   }
 }
 export const wish = async (
+  id: string, 
   gems: {
     contract_address: string
     token_id: string
   }[]
 ) => {
   try {
-    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/jackpots/1/purchase`, {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/jackpots/${id}/purchase`, {
       tokens: gems
     })
     return res
