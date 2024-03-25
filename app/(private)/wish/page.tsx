@@ -156,6 +156,7 @@ export default function Page() {
         })),
         'auto'
       )
+      console.log('wish', tokens)
       const res = await wish(jackpotData.jackpots[0].id, tokens)
       if (res.data) {
         setTimeout(() => {
@@ -171,7 +172,7 @@ export default function Page() {
     } catch (error: any) {
       setLoading(false)
       console.log(error.message)
-      toast(error.message || 'Failed to forge gem', {
+      toast(error.message || 'Failed to wish', {
         type: 'error',
       })
     }
