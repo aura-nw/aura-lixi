@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 import { makeSignDoc } from '@cosmjs/amino'
 import { GET_USER_DATA, linkWallet } from '@/services'
 import { useApolloClient, useQuery } from '@apollo/client'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import FilledButton from '@/components/button/filled'
 import c98 from '@/assets/c98.svg'
 import keplr from '@/assets/keplr.svg'
@@ -24,7 +24,11 @@ export default function Connect() {
   const { connect, address, chain, closeView, wallet, disconnect } = useChain(config.COSMOSKIT_CHAINKEY)
   const { status: globalStatus, mainWallet } = useWallet()
   const { refetch } = useQuery(GET_USER_DATA)
-
+  useEffect(() => {
+    if (account?.wallet_address && address == account.wallet_address) {
+      redirect('/')
+    }
+  }, [account?.wallet_address, address])
   const connectXHandler = () => {
     window.location.href = `${config.REST_API_ENDPOINT}/auth/twitter`
   }
