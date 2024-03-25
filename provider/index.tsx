@@ -372,6 +372,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
       ]}
       signerOptions={signerOptions as any}
       endpointOptions={{
+        isLazy: true,
         endpoints: {
           auradevnet: {
             rpc: ['https://rpc.dev.aura.network'],
