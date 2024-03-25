@@ -117,12 +117,10 @@ export default function Home() {
     setGems(Map(gemList))
   }, [mainGem, materialGems, filteredAssets?.length])
 
-  
   useEffect(() => {
     const fa = assets.filter((a) => !blackList.includes(a.token_id))
     setFilteredAssets([...fa])
   }, [assets.length, blackList.length])
-
 
   const addGemHandler = (type: string) => {
     if (loading) return
@@ -262,8 +260,8 @@ export default function Home() {
             onClose()
             setTimeout(() => setRequestId(undefined), 500)
           }}
-          revealSuccessCallBack={() => {
-            setBlackList([...blackList, ...tempBlackList])
+          revealSuccessCallBack={(result: string) => {
+            setBlackList(result == 'success' ? [...blackList, ...tempBlackList] : [...blackList, ...tempBlackList.slice(1)])
             setMainGem(undefined)
             setMaterialGems([undefined, undefined, undefined, undefined, undefined])
             setUseShield(false)
@@ -420,7 +418,9 @@ export default function Home() {
               </div>
               <div
                 className={`mx-auto w-fit flex items-center mt-10 md:mt-20 gap-3 cursor-pointer ${
-                  filteredAssets.filter((asset) => asset.type == 'shield').length ? '' : 'opacity-50 pointer-events-none'
+                  filteredAssets.filter((asset) => asset.type == 'shield').length
+                    ? ''
+                    : 'opacity-50 pointer-events-none'
                 }`}
                 onClick={() =>
                   filteredAssets.filter((asset) => asset.type == 'shield').length && !loading

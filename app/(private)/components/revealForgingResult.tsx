@@ -37,7 +37,7 @@ export const RevealForgingResult = ({
       setResult(data.request_manager[0].response.data.result)
       setPrize(data.request_manager[0].response.data.nftReward)
       setTimeout(() => {
-        revealSuccessCallBack()
+        revealSuccessCallBack('success')
         setRequestLoading(false)
       }, 10000)
     }
@@ -51,7 +51,7 @@ export const RevealForgingResult = ({
         )
         onClose()
         setRequestLoading(false)
-        revealSuccessCallBack()
+        revealSuccessCallBack('fail')
       }, 10000)
     }
   }, [data?.request_manager?.[0]?.response?.code])
