@@ -360,6 +360,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
         Initializing
       </Modal>
     )
+  console.log('Dragon Wish v1.0.1')
   return (
     <ChainProvider
       chains={[
