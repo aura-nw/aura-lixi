@@ -63,24 +63,19 @@ export const RevealForgingResult = ({
       </NoBackgroundModal>
     )
   }
-  if (result == 'FAIL') {
+  if (result == 'SUCCESS') {
     return (
       <NoBackgroundModal isOpen={isOpen} onOpenChange={onOpenChange}>
         <div className='flex flex-col items-center text-center'>
-          <div className={`font-bold text-[#FB5050] ${Bangkok.className} text-xl`}>
-            Sorry!
-            <br /> Dragon Gems upgrade failed. Maybe you'll be luckier next time
+          <div className={`font-bold text-[#fff] ${Bangkok.className} text-xl`}>
+            Congratulation!
+            <br /> Your Dragon Gem has been upgraded successfully
           </div>
-          {isUsedShield && (
-            <div className='flex items-center gap-4 mt-4'>
-              <Image src={ShieldItem} alt='' className='w-[45px] h-10' />
-              <div className='max-w-[238px] text-sm'>
-                Phew! The Eternal Shield save your day! Your Dragon Gem is safeguarded
-              </div>
-            </div>
-          )}
+          <div className='text-sm mt-4'>
+            Congratulation <span className='text-[#FCE57C]'>{account?.username}</span>,<br /> your gem has been uprank
+          </div>
           <div className='relative mt-8'>
-            <Image src={isUsedShield ? GoldRing : SilverRing} alt='' className='w-[158px] h-[168px]' />
+            <Image src={GoldRing} alt='' className='w-[158px] h-[168px]' />
             <div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'>
               <Gem type={prize.class.toLowerCase()} className='w-20 h-20' />
             </div>
@@ -101,18 +96,25 @@ export const RevealForgingResult = ({
     return (
       <NoBackgroundModal isOpen={isOpen} onOpenChange={onOpenChange}>
         <div className='flex flex-col items-center text-center'>
-          <div className={`font-bold text-[#fff] ${Bangkok.className} text-xl`}>
-            Congratulation!
-            <br /> Your Dragon Gem has been upgraded successfully
+          <div className={`font-bold text-[#FB5050] ${Bangkok.className} text-xl`}>
+            Sorry!
+            <br /> Dragon Gems upgrade failed. Maybe you'll be luckier next time
           </div>
-          <div className='text-sm mt-4'>
-            Congratulation <span className='text-[#FCE57C]'>{account?.username}</span>,<br /> your gem has been uprank
-          </div>
-          <div className='relative mt-8'>
-            <Image src={GoldRing} alt='' className='w-[158px] h-[168px]' />
-            <div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'>
-              <Gem type={prize.class.toLowerCase()} className='w-20 h-20' />
+          {isUsedShield && (
+            <div className='flex items-center gap-4 mt-4'>
+              <Image src={ShieldItem} alt='' className='w-[45px] h-10' />
+              <div className='max-w-[238px] text-sm'>
+                Phew! The Eternal Shield save your day! Your Dragon Gem is safeguarded
+              </div>
             </div>
+          )}
+          <div className='relative mt-8'>
+            <Image src={isUsedShield ? GoldRing : SilverRing} alt='' className='w-[158px] h-[168px]' />
+            {prize && (
+              <div className='absolute top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2'>
+                <Gem type={prize.class.toLowerCase()} className='w-20 h-20' />
+              </div>
+            )}
           </div>
           <Link
             target='_blank'
