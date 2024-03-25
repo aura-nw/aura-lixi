@@ -161,7 +161,7 @@ export default function Page() {
         setTimeout(() => {
           setSubmittedGems(selectedGems)
           setBlackList([...blackList, ...tokens.map((c) => c.token_id)])
-          setSelectedGems([])
+          setSelectedGems(new Array(jackpotData?.jackpots?.[0]?.slot).fill(undefined))
           onOpen()
           setLoading(false)
           fetchAssets()

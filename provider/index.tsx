@@ -368,6 +368,9 @@ function ContextProvider({ children }: { children: ReactNode }) {
           auradevnet: {
             rpc: ['https://rpc.dev.aura.network'],
           },
+          aura: {
+            rpc: ['https://rpc.aura.network'],
+          },
         },
       }}
       wallets={

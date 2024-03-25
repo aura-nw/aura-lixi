@@ -39,7 +39,7 @@ export const RevealForgingResult = ({
       setTimeout(() => {
         revealSuccessCallBack()
         setRequestLoading(false)
-      }, 15000)
+      }, 10000)
     }
     if (data?.request_manager?.[0]?.response?.code >= 500) {
       setTimeout(() => {
@@ -52,7 +52,7 @@ export const RevealForgingResult = ({
         onClose()
         setRequestLoading(false)
         revealSuccessCallBack()
-      }, 15000)
+      }, 10000)
     }
   }, [data?.request_manager?.[0]?.response?.code])
 
