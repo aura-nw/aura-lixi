@@ -135,6 +135,7 @@ export default function Page() {
           },
         })
       }
+      console.log(msgs)
       const client = await getSigningCosmWasmClient()
       await client.executeMultiple(
         address as string,
