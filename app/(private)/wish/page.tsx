@@ -235,7 +235,7 @@ export default function Page() {
                     <div className={`${Bangkok.className} text-[#FEF368] text-xl font-bold text-center my-1`}>
                       Dragon Warrior
                     </div>
-                    <div className='text-sm text-[#FFF7C4]'>24th March 2024</div>
+                    <div className='text-sm text-[#FFF7C4]'>10th April 2024</div>
                     <div className='border-[3px] border-[#E3B480] bg-[rgba(0,0,0,0.39)] rounded p-[10px] text-sm mt-9'>
                       {shorten(jackpotData?.jackpots?.[0]?.winner_address, 8, 8)}
                     </div>
@@ -281,9 +281,7 @@ export default function Page() {
                       <Image src={Machine} alt='' className='w-[236px] h-[252px]' />
                     </div>
                     <div className='text-xs text-[#FFFFFF] mt-8 text-center'>
-                      {`The Dragon will appear and fulfill your wish at ${moment()
-                        .add(14, 'd')
-                        .format('h a, Do MMM YYYY')} (UTC +7)`}
+                      {`The Dragon will appear and fulfill your wish at 10th April 2024`}
                     </div>
                     <div className='mt-4 flex gap-4 flex-wrap max-w-[90vw] items-center justify-center'>
                       {[...(Array(jackpotData.jackpots?.[0]?.slot).keys() as any)].map((index) => (
