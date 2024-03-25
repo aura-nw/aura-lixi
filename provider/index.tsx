@@ -391,7 +391,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
         isMobile
           ? {
               signClient: {
-                projectId: '2dbe4db7e11c1057cc45b368eeb34319',
+                projectId: 'ea6a6ed53eeb20479f1bca45ecf9ecd6',
                 relayUrl: 'wss://relay.walletconnect.org',
                 metadata: {
                   name: 'Dragon Gem Wish',
