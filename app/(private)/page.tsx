@@ -57,9 +57,7 @@ const initList = {
 }
 export default function Home() {
   const config = getConfig()
-  const [blackList, setBlackList] = useState<any[]>([])
-  const { assets, lastAssetsUpdate, fetchAssets } = useContext(Context)
-  const [filteredAssets, setFilteredAssets] = useState<Token[]>([])
+  const { assets, lastAssetsUpdate, fetchAssets, setBlackListId } = useContext(Context)
   const { address, chain, getSigningCosmWasmClient } = useChain(config.COSMOSKIT_CHAINKEY)
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const [tempBlackList, setTempBlackList] = useState<any[]>([])
@@ -99,7 +97,7 @@ export default function Home() {
         }
       }
     }
-    const gemList = filteredAssets.reduce(
+    const gemList = assets.reduce(
       (total, current) => {
         total[current.type]++
         return total
@@ -115,12 +113,7 @@ export default function Home() {
       }
     }
     setGems(Map(gemList))
-  }, [mainGem, materialGems, filteredAssets?.length])
-
-  useEffect(() => {
-    const fa = assets.filter((a) => !blackList.includes(a.token_id))
-    setFilteredAssets([...fa])
-  }, [assets.length, blackList.length])
+  }, [mainGem, materialGems, assets?.length])
 
   const addGemHandler = (type: string) => {
     if (loading) return
@@ -141,7 +134,7 @@ export default function Home() {
     try {
       setLoading(true)
       const bl = []
-      const main = filteredAssets.find((asset) => asset.type == mainGem)
+      const main = assets.find((asset) => asset.type == mainGem)
       const msgs = [
         {
           contract: main?.cw721_contract.smart_contract.address,
@@ -158,7 +151,7 @@ export default function Home() {
       const material: any[] = []
       for (let i = 0; i < 5; i++) {
         if (materialGems[i] != undefined) {
-          const asset = filteredAssets.find(
+          const asset = assets.find(
             (a) =>
               a.type == materialGems[i] &&
               !material.find((g) => g.tokenId == a.token_id) &&
@@ -182,7 +175,7 @@ export default function Home() {
       }
       let shield
       if (useShield) {
-        shield = filteredAssets.find((asset) => asset.type == 'shield')
+        shield = assets.find((asset) => asset.type == 'shield')
         msgs.push({
           contract: shield?.cw721_contract.smart_contract.address,
           msg: {
@@ -262,7 +255,10 @@ export default function Home() {
             setTimeout(() => setRequestId(undefined), 500)
           }}
           revealSuccessCallBack={(result: string) => {
-            setBlackList(result == 'success' ? [...blackList, ...tempBlackList] : [...blackList, ...tempBlackList.slice(1)])
+            setBlackListId(((prev: string[]) => {
+              const next = [...prev, ...(result == 'success' ? tempBlackList : tempBlackList.slice(1))]
+              return next as string[]
+            }) as any)
             setMainGem(undefined)
             setMaterialGems([undefined, undefined, undefined, undefined, undefined])
             setUseShield(false)
@@ -419,12 +415,10 @@ export default function Home() {
               </div>
               <div
                 className={`mx-auto w-fit flex items-center mt-10 md:mt-20 gap-3 cursor-pointer ${
-                  filteredAssets.filter((asset) => asset.type == 'shield').length
-                    ? ''
-                    : 'opacity-50 pointer-events-none'
+                  assets.filter((asset) => asset.type == 'shield').length ? '' : 'opacity-50 pointer-events-none'
                 }`}
                 onClick={() =>
-                  filteredAssets.filter((asset) => asset.type == 'shield').length && !loading
+                  assets.filter((asset) => asset.type == 'shield').length && !loading
                     ? setUseShield(!useShield)
                     : undefined
                 }>
@@ -446,7 +440,7 @@ export default function Home() {
         <div className='relative'>
           <Image src={TopBar2} alt='' className='w-[352px] relative z-10' />
           <div className='relative bg-[#E6D8B9] rounded-b-[4px] p-4 -top-2 w-[338px] mx-auto text-[#292929]'>
-            {filteredAssets.length ? (
+            {assets.length ? (
               <div className='min-h-[622px]'>
                 <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>Your Gems</div>
                 <div className='mt-2 text-sm'>Select gems here to forge</div>
@@ -590,7 +584,7 @@ export default function Home() {
                     <div>
                       <Image src={ShieldItem} alt='' />
                     </div>
-                    <div className=''>{filteredAssets.filter((asset) => asset.type == 'shield').length}</div>
+                    <div className=''>{assets.filter((asset) => asset.type == 'shield').length}</div>
                   </div>
                 </div>
               </div>

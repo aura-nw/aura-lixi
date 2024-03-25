@@ -36,6 +36,7 @@ export const Context = createContext<{
   assets: Token[]
   fetchAssets: () => void
   setAccount: (account: Account) => void
+  setBlackListId: (list: string[]) => void
   horoscopeClient: ApolloClient<NormalizedCacheObject> | undefined
   disconnect: () => void
   submitCode: (value: string) => Promise<void>
@@ -46,6 +47,7 @@ export const Context = createContext<{
   fetchAssets: () => {},
   horoscopeClient: undefined,
   setAccount: () => {},
+  setBlackListId: () => {},
   disconnect: () => {},
   submitCode: async () => {},
 })
@@ -120,6 +122,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
   const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>()
   const [horoscopeClient, setHoroscopeClient] = useState<ApolloClient<NormalizedCacheObject>>()
   const [assets, setAssets] = useState<Token[]>([])
+  const [blackListId, setBlackListId] = useState<string[]>([])
   const [isInit, setIsInit] = useState(true)
   const [lastAssetsUpdate, setLastAssetsUpdate] = useState<number>()
   const searchParams = useSearchParams()
@@ -228,6 +231,11 @@ function ContextProvider({ children }: { children: ReactNode }) {
       fetchAssets()
     }
   }, [account?.wallet_address, horoscopeClient])
+
+  useEffect(() => {
+    const newList = assets.filter((a) => !blackListId.includes(a.token_id))
+    setAssets([...newList])
+  }, [blackListId.length, assets.length])
 
   const fetchAssets = async () => {
     const chainKey = getConfig().HOROSCOPE_CHAINKEY
@@ -402,6 +410,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
           disconnect,
           submitCode,
           horoscopeClient,
+          setBlackListId,
           assets,
           fetchAssets,
           lastAssetsUpdate,

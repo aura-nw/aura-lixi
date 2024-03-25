@@ -58,9 +58,7 @@ const initList = {
 export default function Page() {
   const config = getConfig()
   const { address, chain, getSigningCosmWasmClient } = useChain(config.COSMOSKIT_CHAINKEY)
-  const { assets, lastAssetsUpdate, fetchAssets, account } = useContext(Context)
-  const [filteredAssets, setFilteredAssets] = useState<Token[]>([])
-  const [blackList, setBlackList] = useState<any[]>([])
+  const { assets, lastAssetsUpdate, fetchAssets, account, setBlackListId } = useContext(Context)
 
   const [selectedColorKey, setSelectedColorKey] = useState(new Set(['all_colors']))
   const selectedColorValue = useMemo(
@@ -86,12 +84,7 @@ export default function Page() {
   const submissionDisclosure = useDisclosure()
 
   useEffect(() => {
-    const fa = assets.filter((a) => !blackList.includes(a.token_id))
-    setFilteredAssets([...fa])
-  }, [assets.length, blackList.length])
-
-  useEffect(() => {
-    const gemList = filteredAssets.reduce(
+    const gemList = assets.reduce(
       (total, current) => {
         total[current.type]++
         return total
@@ -104,7 +97,7 @@ export default function Page() {
       }
     }
     setGems(Map(gemList))
-  }, [selectedGems.filter((g) => !g).length, filteredAssets?.length, blackList.length])
+  }, [selectedGems.filter((g) => !g).length, assets?.length])
 
   useEffect(() => {
     if (jackpotData?.jackpots?.[0]?.slot) {
@@ -130,9 +123,7 @@ export default function Page() {
       const tokens: any[] = []
       const msgs = []
       for (let i = 0; i < jackpotData?.jackpots?.[0]?.slot; i++) {
-        const asset = filteredAssets.find(
-          (a) => a.type == selectedGems[i] && !tokens.find((g) => g.token_id == a.token_id)
-        )
+        const asset = assets.find((a) => a.type == selectedGems[i] && !tokens.find((g) => g.token_id == a.token_id))
         tokens.push({
           token_id: asset?.token_id as string,
           contract_address: asset?.cw721_contract.smart_contract.address as string,
@@ -161,7 +152,10 @@ export default function Page() {
       if (res.data) {
         setTimeout(() => {
           setSubmittedGems(selectedGems)
-          setBlackList([...blackList, ...tokens.map((c) => c.token_id)])
+          setBlackListId(((prev: string[]) => {
+            const next = [...prev, ...tokens.map((c) => c.token_id)]
+            return next as string[]
+          }) as any)
           setSelectedGems(new Array(jackpotData?.jackpots?.[0]?.slot).fill(undefined))
           onOpen()
           setLoading(false)
@@ -339,7 +333,7 @@ export default function Page() {
         <div className='relative'>
           <Image src={TopBar2} alt='' className='w-[352px] relative z-10' />
           <div className='relative bg-[#E6D8B9] rounded-b-[4px] p-4 -top-2 w-[338px] mx-auto text-[#292929]'>
-            {filteredAssets.filter((asset) => asset.type[1] <= (jackpotData?.jackpots?.[0]?.max_star || 7)).length ? (
+            {assets.filter((asset) => asset.type[1] <= (jackpotData?.jackpots?.[0]?.max_star || 7)).length ? (
               <>
                 <div className='flex justify-between gap-1 items-center'>
                   <div className={`text-[#6D3A0A] font-bold ${Bangkok.className} text-2xl`}>Your Gems</div>
