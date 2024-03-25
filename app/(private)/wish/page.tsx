@@ -280,6 +280,7 @@ export default function Page() {
                             <div
                               className='absolute inset-0 grid place-items-center cursor-pointer [&>div]:hover:visible'
                               onClick={() => {
+                                if (loading) return
                                 const newData = [...selectedGems]
                                 newData[index] = undefined
                                 setSelectedGems(newData)
