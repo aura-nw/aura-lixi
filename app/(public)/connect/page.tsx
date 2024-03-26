@@ -32,6 +32,11 @@ export default function Connect() {
   const connectXHandler = () => {
     window.location.href = `${config.REST_API_ENDPOINT}/auth/twitter`
   }
+  useEffect(() => {
+    if (account && !account?.wallet_address && globalStatus == WalletStatus.Connected) {
+      linkWalletHandler()
+    }
+  }, [account, globalStatus])
 
   const linkWalletHandler = async () => {
     try {
