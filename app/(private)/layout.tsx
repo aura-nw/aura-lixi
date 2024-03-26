@@ -21,7 +21,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const { account } = useContext(Context)
   const { status } = useWallet()
-  const { address } = useChain(getConfig().COSMOSKIT_CHAINKEY)
+  const { address, closeView } = useChain(getConfig().COSMOSKIT_CHAINKEY)
   useEffect(() => {
     if (
       !account?.wallet_address ||
@@ -30,6 +30,9 @@ export default function Layout({ children }: { children: ReactNode }) {
       (account.wallet_address && address && account.wallet_address != address)
     ) {
       redirect('/connect')
+    }
+    if (status == WalletStatus.Connected) {
+      closeView()
     }
   }, [account?.wallet_address, status, address])
   return (
