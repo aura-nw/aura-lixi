@@ -92,6 +92,7 @@ export const GET_JACKPOT = gql`
       max_star
       winner_id
       winning_numbers
+      ended_at
       slot
     }
   }
