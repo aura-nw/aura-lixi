@@ -11,19 +11,17 @@ import GemWithFrame from '@/components/gem/gemWithFrame'
 import NoBackgroundModal from '@/components/modal/giftModal'
 import { Bangkok, Context } from '@/provider'
 import { GET_JACKPOT, GET_USER_JACKPOT, wish } from '@/services'
+import { shorten } from '@/utils'
 import { useQuery } from '@apollo/client'
+import { useChain } from '@cosmos-kit/react'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react'
 import { Map } from 'immutable'
 import moment from 'moment'
+import getConfig from 'next/config'
 import Image from 'next/image'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import GoldRing from '../assets/gold-ring.png'
-import getConfig from 'next/config'
-import { useChain } from '@cosmos-kit/react'
-import Fire from '@/assets/Fire.png'
-import { shorten } from '@/utils'
-import { Token } from '@/model/token'
 const initList = {
   w1: 0,
   w2: 0,
@@ -77,6 +75,7 @@ export default function Page() {
   const { data: userJackpotData, refetch } = useQuery(GET_USER_JACKPOT, {
     variables: {
       user_id: account?.id,
+      jackpot_id: jackpotData?.jackpots?.[0]?.id
     },
   })
   const [loading, setLoading] = useState(false)
