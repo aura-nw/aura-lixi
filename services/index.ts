@@ -100,7 +100,7 @@ export const GET_JACKPOT = gql`
 export const GET_USER_JACKPOT = gql`
   query GET_USER_JACKPOT($user_id: Int, $jackpot_id: Int) {
     jackpot_users(
-      where: { user_id: { _eq: $user_id }, jackpot_id: { _eq: $jackpot_id } }
+      where: { user_id: { _eq: $user_id }, jackpot_id: { _eq: $jackpot_id }, tx_status: {_eq: 'success'} }
       order_by: { updated_at: desc }
     ) {
       jackpot_id
@@ -288,7 +288,7 @@ export const forgeGem = async (
   }
 }
 export const wish = async (
-  id: string, 
+  id: string,
   gems: {
     contract_address: string
     token_id: string
@@ -296,7 +296,7 @@ export const wish = async (
 ) => {
   try {
     const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/jackpots/${id}/purchase`, {
-      tokens: gems
+      tokens: gems,
     })
     return res
   } catch (error: any) {
