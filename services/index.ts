@@ -91,6 +91,7 @@ export const GET_JACKPOT = gql`
       id
       max_star
       winner_id
+      winner_address
       winning_numbers
       ended_at
       slot
