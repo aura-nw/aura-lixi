@@ -202,9 +202,9 @@ export default function Page() {
           <div className={`${Bangkok.className} text-xl font-bold`}>Submission history</div>
           <div className='max-h-[60vh] overflow-auto pr-5'>
             {userJackpotData?.jackpot_users.map((d: any) => (
-              <div className='py-3 flex gap-10 border-b border-[#404040]' key={d.updated_at}>
+              <div className='py-3 flex gap-10 border-b border-[#404040]' key={d.created_at}>
                 <div className='p-[10px] text-sm text-[#FFF7C4] w-[150px] whitespace-nowrap'>
-                  {moment(d.updated_at).format('h a, Do MMM YYYY')}
+                  {moment(d.created_at).format('h a, Do MMM YYYY')}
                 </div>
                 <div className='flex gap-5'>
                   {d.purchased_line.split('-').map((d: any, index: number) => (
