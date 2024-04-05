@@ -22,37 +22,8 @@ import Image from 'next/image'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import GoldRing from '../assets/gold-ring.png'
-export const initList = {
-  w1: 0,
-  w2: 0,
-  w3: 0,
-  w4: 0,
-  w5: 0,
-  w6: 0,
-  w7: 0,
-  b1: 0,
-  b2: 0,
-  b3: 0,
-  b4: 0,
-  b5: 0,
-  b6: 0,
-  b7: 0,
-  g1: 0,
-  g2: 0,
-  g3: 0,
-  g4: 0,
-  g5: 0,
-  g6: 0,
-  g7: 0,
-  r1: 0,
-  r2: 0,
-  r3: 0,
-  r4: 0,
-  r5: 0,
-  r6: 0,
-  r7: 0,
-  shield: 0,
-}
+import { initList } from '@/constants'
+
 export default function Page() {
   const config = getConfig()
   const { address, chain, getSigningCosmWasmClient } = useChain(config.COSMOSKIT_CHAINKEY)
