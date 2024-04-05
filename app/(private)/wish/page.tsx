@@ -22,7 +22,7 @@ import Image from 'next/image'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import GoldRing from '../assets/gold-ring.png'
-const initList = {
+export const initList = {
   w1: 0,
   w2: 0,
   w3: 0,

@@ -188,6 +188,7 @@ export default function Home() {
         bl.push(shield?.token_id)
       }
       setTempBlackList(bl)
+      console.log('forge', main, material, shield)
       const client = await getSigningCosmWasmClient()
       await client.executeMultiple(
         address as string,
@@ -212,7 +213,6 @@ export default function Home() {
           : undefined
       )
 
-      console.log('forge', main, material, shield)
       if (result?.data?.data?.requestId) {
         setRequestId(result?.data?.data?.requestId)
         console.log('revealing request id:', result?.data?.data?.requestId)
