@@ -191,7 +191,7 @@ export default function Page() {
               </div>
               <Link
                 target='_blank'
-                href={`${getConfig().AURASCAN_ENDPOINT}/tokens/token-nft/${prize.contractAddress}/${prize.tokenId}`}
+                href={`${getConfig().AURASCAN_ENDPOINT}/tokens/token-nft/${prize.contract}/${prize.tokenId}`}
                 className='text-xs mt-2'>
                 ID: <span>{prize.tokenId}</span>
               </Link>
