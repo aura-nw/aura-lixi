@@ -51,7 +51,6 @@ export function Header() {
                       base: 'bg-[transparent] text-[#fff] p-0',
                       pre: 'hidden',
                       copyButton: 'h-5',
-                      
                     }}>
                     {address}
                   </Snippet>
@@ -60,6 +59,7 @@ export function Header() {
             )}
             <FilledButton
               className='max-w-[156px] !py-1'
+              id='action_logout'
               onClick={() => {
                 disconnect()
                 disconnectWallet?.()

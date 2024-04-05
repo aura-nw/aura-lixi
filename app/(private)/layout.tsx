@@ -40,6 +40,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <div className='flex md:flex-col gap-4 items-center justify-center md:justify-normal'>
         <div
           className='cursor-pointer'
+          id='screen_forge'
           onClick={() => {
             router.push('/')
           }}>
@@ -57,6 +58,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         </div>
         <div
           className='cursor-pointer'
+          id='screen_redeem'
           onClick={() => {
             router.push('/redeem')
           }}>
@@ -69,7 +71,11 @@ export default function Layout({ children }: { children: ReactNode }) {
               <div className='capitalize'>redeem</div>
             </div>
           </div>
-          <Image src={JackpotActive} alt='' className={` hidden w-[157px] ${pathname == '/redeem' ? 'md:block' : ''}`} />{' '}
+          <Image
+            src={JackpotActive}
+            alt=''
+            className={` hidden w-[157px] ${pathname == '/redeem' ? 'md:block' : ''}`}
+          />{' '}
           <Image
             src={JackpotInactive}
             alt=''
@@ -78,6 +84,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         </div>
         <div
           className='cursor-pointer'
+          id='screen_quests'
           onClick={() => {
             router.push('/quests')
           }}>

@@ -294,6 +294,7 @@ export default function Page() {
 
                     <FilledButton
                       className='mt-5'
+                      id='action_wish'
                       disabled={selectedGems.filter((g) => g).length != jackpotData?.jackpots?.[0]?.slot}
                       onClick={wishHandler}
                       isLoading={loading}>

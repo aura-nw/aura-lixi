@@ -27,6 +27,7 @@ export default function ConnectWalletModal({ isOpen, setOpen, walletRepo }: Wall
               return wallet.walletName.includes('keplr') ? (
                 <div
                   key={index}
+                  id='connect-wallet_keplr'
                   className={`p-2 rounded-[8px] flex gap-3 items-center bg-[#fff] ${
                     wallet.walletStatus == 'NotExist'
                       ? 'cursor-not-allowed opacity-60 pointer-events-none'
@@ -44,6 +45,7 @@ export default function ConnectWalletModal({ isOpen, setOpen, walletRepo }: Wall
                       ? 'cursor-not-allowed opacity-60 pointer-events-none'
                       : 'cursor-pointer'
                   }`}
+                  id='connect-wallet_leap'
                   onClick={() => wallet.connect(true)}>
                   <Image src={leap} alt='' />
                   <div className='text-sm font-semibold text-[#161618]'>Leap</div>
@@ -56,6 +58,7 @@ export default function ConnectWalletModal({ isOpen, setOpen, walletRepo }: Wall
                       ? 'cursor-not-allowed opacity-60 pointer-events-none'
                       : 'cursor-pointer'
                   }`}
+                  id='connect-wallet_c98'
                   onClick={() => wallet.connect(true)}>
                   <Image src={c98} alt='' />
                   <div className='text-sm font-semibold text-[#161618]'>Coin98</div>

@@ -398,6 +398,7 @@ export default function Home() {
               </div>
               <div className='mt-4 w-fit mx-auto'>
                 <FilledButton
+                  id='action_forge'
                   isLoading={loading}
                   onClick={forgeGemHandler}
                   disabled={!mainGem || !materialGems.find((g) => g)?.length}>
