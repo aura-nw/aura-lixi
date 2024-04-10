@@ -2,8 +2,8 @@
 
 import ForgeActive from '@/app/(private)/assets/force-active.png'
 import ForgeInactive from '@/app/(private)/assets/force-inactive.png'
-import JackpotActive from '@/app/(private)/assets/jackpot-active.png'
-import JackpotInactive from '@/app/(private)/assets/jackpot-inactive.png'
+import RedeemActive from '@/app/(private)/assets/redeem-active.png'
+import RedeemInactive from '@/app/(private)/assets/redeem-inactive.png'
 import QuestActive from '@/app/(private)/assets/quest-active.png'
 import QuestInactive from '@/app/(private)/assets/quest-inactive.png'
 import Active from '@/app/(private)/assets/active-tab.png'
@@ -72,12 +72,12 @@ export default function Layout({ children }: { children: ReactNode }) {
             </div>
           </div>
           <Image
-            src={JackpotActive}
+            src={RedeemActive}
             alt=''
             className={` hidden w-[157px] ${pathname == '/redeem' ? 'md:block' : ''}`}
           />{' '}
           <Image
-            src={JackpotInactive}
+            src={RedeemInactive}
             alt=''
             className={` hidden w-[112px] ${pathname != '/redeem' ? 'md:block' : ''}`}
           />
