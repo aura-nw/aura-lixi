@@ -172,7 +172,7 @@ ${Date.now()}`
           )
         ) : (
           <>
-            <FilledButton className='mt-16' onClick={connectXHandler}>
+            <FilledButton className='mt-16' onClick={connectXHandler} id='action_connect'>
               Connect{' '}
               <span>
                 <svg

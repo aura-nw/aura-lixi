@@ -1,10 +1,6 @@
-import { Button, CircularProgress, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from '@nextui-org/react'
-import { ReactNode, useEffect } from 'react'
-import Nap from '@/assets/nap.svg'
-import Duoi from '@/assets/duoi.svg'
-import Image from 'next/image'
+import { CircularProgress, Modal, ModalContent } from '@nextui-org/react'
 import confetti from 'canvas-confetti'
-import Link from 'next/link'
+import { ReactNode, useEffect } from 'react'
 export default function NoBackgroundModal({
   isOpen,
   onOpenChange,

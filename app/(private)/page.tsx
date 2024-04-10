@@ -23,38 +23,8 @@ import TopBar2 from './assets/top-bar-2.svg'
 import TopBar from './assets/top-bar.svg'
 import TopBarMobile from './assets/top-bar_mobile.svg'
 import { RevealForgingResult } from './components/revealForgingResult'
-import { Token } from '@/model/token'
-const initList = {
-  w1: 0,
-  w2: 0,
-  w3: 0,
-  w4: 0,
-  w5: 0,
-  w6: 0,
-  w7: 0,
-  b1: 0,
-  b2: 0,
-  b3: 0,
-  b4: 0,
-  b5: 0,
-  b6: 0,
-  b7: 0,
-  g1: 0,
-  g2: 0,
-  g3: 0,
-  g4: 0,
-  g5: 0,
-  g6: 0,
-  g7: 0,
-  r1: 0,
-  r2: 0,
-  r3: 0,
-  r4: 0,
-  r5: 0,
-  r6: 0,
-  r7: 0,
-  shield: 0,
-}
+import { initList } from '@/constants'
+
 export default function Home() {
   const config = getConfig()
   const { assets, lastAssetsUpdate, fetchAssets, setBlackListId } = useContext(Context)
@@ -188,6 +158,7 @@ export default function Home() {
         bl.push(shield?.token_id)
       }
       setTempBlackList(bl)
+      console.log('forge', main, material, shield)
       const client = await getSigningCosmWasmClient()
       await client.executeMultiple(
         address as string,
@@ -212,7 +183,6 @@ export default function Home() {
           : undefined
       )
 
-      console.log('forge', main, material, shield)
       if (result?.data?.data?.requestId) {
         setRequestId(result?.data?.data?.requestId)
         console.log('revealing request id:', result?.data?.data?.requestId)
@@ -428,6 +398,7 @@ export default function Home() {
               </div>
               <div className='mt-4 w-fit mx-auto'>
                 <FilledButton
+                  id='action_forge'
                   isLoading={loading}
                   onClick={forgeGemHandler}
                   disabled={!mainGem || !materialGems.find((g) => g)?.length}>

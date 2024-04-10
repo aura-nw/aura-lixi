@@ -26,9 +26,71 @@ import Red4 from '@/assets/gem/ngoc do 4.png'
 import Red5 from '@/assets/gem/ngoc do 5.png'
 import Red6 from '@/assets/gem/ngoc do 6.png'
 import Red7 from '@/assets/gem/ngoc do 7.png'
+import SRed1 from '@/assets/gem/Sieu Nhan Do.png'
+import SGold1 from '@/assets/gem/Sieu Nhan Vang.png'
+import SBlue1 from '@/assets/gem/Sieu Nhan Xanh.png'
+import SWhite1 from '@/assets/gem/Sieu Nhan Trang.png'
 import Image from 'next/image'
 export default function Gem({ className, type }: { className?: string; type: string }) {
   switch (type[0]) {
+    case 's':
+      switch (type[1]) {
+        case 'w':
+          return (
+            <>
+              {(function () {
+                switch (type[2]) {
+                  case '1':
+                    return <Image src={SWhite1} alt='' className={`w-14 h-14 ${className}`} />
+                  default:
+                    return <></>
+                }
+              })()}
+            </>
+          )
+        case 'b':
+          return (
+            <>
+              {(function () {
+                switch (type[2]) {
+                  case '1':
+                    return <Image src={SBlue1} alt='' className={`w-14 h-14 ${className}`} />
+                  default:
+                    return <></>
+                }
+              })()}
+            </>
+          )
+        case 'g':
+          return (
+            <>
+              {(function () {
+                switch (type[2]) {
+                  case '1':
+                    return <Image src={SGold1} alt='' className={`w-14 h-14 ${className}`} />
+                  default:
+                    return <></>
+                }
+              })()}
+            </>
+          )
+        case 'r':
+          return (
+            <>
+              {(function () {
+                switch (type[2]) {
+                  case '1':
+                    return <Image src={SRed1} alt='' className={`w-14 h-14 ${className}`} />
+                  default:
+                    return <></>
+                }
+              })()}
+            </>
+          )
+
+        default:
+          return <></>
+      }
     case 'w':
       return (
         <>

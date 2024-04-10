@@ -2,8 +2,8 @@
 
 import ForgeActive from '@/app/(private)/assets/force-active.png'
 import ForgeInactive from '@/app/(private)/assets/force-inactive.png'
-import JackpotActive from '@/app/(private)/assets/jackpot-active.png'
-import JackpotInactive from '@/app/(private)/assets/jackpot-inactive.png'
+import RedeemActive from '@/app/(private)/assets/redeem-active.png'
+import RedeemInactive from '@/app/(private)/assets/redeem-inactive.png'
 import QuestActive from '@/app/(private)/assets/quest-active.png'
 import QuestInactive from '@/app/(private)/assets/quest-inactive.png'
 import Active from '@/app/(private)/assets/active-tab.png'
@@ -40,6 +40,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <div className='flex md:flex-col gap-4 items-center justify-center md:justify-normal'>
         <div
           className='cursor-pointer'
+          id='screen_forge'
           onClick={() => {
             router.push('/')
           }}>
@@ -57,27 +58,33 @@ export default function Layout({ children }: { children: ReactNode }) {
         </div>
         <div
           className='cursor-pointer'
+          id='screen_redeem'
           onClick={() => {
-            router.push('/wish')
+            router.push('/redeem')
           }}>
           <div className='relative md:hidden cursor-pointer'>
-            <Image src={pathname == '/wish' ? Active : Inactive} alt='' className={`w-[106px]`} />
+            <Image src={pathname == '/redeem' ? Active : Inactive} alt='' className={`w-[106px]`} />
             <div
               className={`${Bangkok.className} absolute inset-0 grid place-items-center ${
-                pathname == '/wish' ? 'text-[#FFB438]' : 'text-[#828282]'
+                pathname == '/redeem' ? 'text-[#FFB438]' : 'text-[#828282]'
               }`}>
-              <div className=''>Wish</div>
+              <div className='capitalize'>redeem</div>
             </div>
           </div>
-          <Image src={JackpotActive} alt='' className={` hidden w-[157px] ${pathname == '/wish' ? 'md:block' : ''}`} />{' '}
           <Image
-            src={JackpotInactive}
+            src={RedeemActive}
             alt=''
-            className={` hidden w-[112px] ${pathname != '/wish' ? 'md:block' : ''}`}
+            className={` hidden w-[157px] ${pathname == '/redeem' ? 'md:block' : ''}`}
+          />{' '}
+          <Image
+            src={RedeemInactive}
+            alt=''
+            className={` hidden w-[112px] ${pathname != '/redeem' ? 'md:block' : ''}`}
           />
         </div>
         <div
           className='cursor-pointer'
+          id='screen_quests'
           onClick={() => {
             router.push('/quests')
           }}>

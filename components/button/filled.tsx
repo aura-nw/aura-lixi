@@ -9,9 +9,11 @@ export default function FilledButton({
   target,
   disabled,
   isLoading,
+  id,
 }: {
   href?: string
   target?: string
+  id?: string
   children: ReactNode
   onClick?: MouseEventHandler<HTMLButtonElement>
   className?: string
@@ -22,6 +24,7 @@ export default function FilledButton({
     return (
       <a
         href={href}
+        id={id}
         target={target}
         className={` rounded-2xl py-[10px] px-10 ${
           disabled
@@ -45,6 +48,7 @@ export default function FilledButton({
   }
   return (
     <button
+      id={id}
       onClick={!disabled && !isLoading ? onClick : undefined}
       className={` rounded-2xl py-[10px] px-10 ${
         disabled
