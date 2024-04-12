@@ -40,7 +40,6 @@ export default function Layout({ children }: { children: ReactNode }) {
       <div className='flex md:flex-col gap-4 items-center justify-center md:justify-normal'>
         <div
           className='cursor-pointer'
-          id='screen_forge'
           onClick={() => {
             router.push('/')
           }}>
@@ -54,11 +53,15 @@ export default function Layout({ children }: { children: ReactNode }) {
             </div>
           </div>
           <Image src={ForgeActive} alt='' className={`hidden w-[157px] ${pathname == '/' ? 'md:block' : ''}`} />
-          <Image src={ForgeInactive} alt='' className={` hidden w-[112px] ${pathname != '/' ? 'md:block' : ''}`} />
+          <Image
+            src={ForgeInactive}
+            id='screen_forge'
+            alt=''
+            className={` hidden w-[112px] ${pathname != '/' ? 'md:block' : ''}`}
+          />
         </div>
         <div
           className='cursor-pointer'
-          id='screen_redeem'
           onClick={() => {
             router.push('/redeem')
           }}>
@@ -71,20 +74,16 @@ export default function Layout({ children }: { children: ReactNode }) {
               <div className='capitalize'>redeem</div>
             </div>
           </div>
-          <Image
-            src={RedeemActive}
-            alt=''
-            className={` hidden w-[157px] ${pathname == '/redeem' ? 'md:block' : ''}`}
-          />{' '}
+          <Image src={RedeemActive} alt='' className={` hidden w-[157px] ${pathname == '/redeem' ? 'md:block' : ''}`} />{' '}
           <Image
             src={RedeemInactive}
             alt=''
+            id='screen_redeem'
             className={` hidden w-[112px] ${pathname != '/redeem' ? 'md:block' : ''}`}
           />
         </div>
         <div
           className='cursor-pointer'
-          id='screen_quests'
           onClick={() => {
             router.push('/quests')
           }}>
@@ -100,6 +99,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           <Image src={QuestActive} alt='' className={` hidden w-[157px] ${pathname == '/quests' ? 'md:block' : ''}`} />{' '}
           <Image
             src={QuestInactive}
+            id='screen_quests'
             alt=''
             className={` hidden w-[112px] ${pathname != '/quests' ? 'md:block' : ''}`}
           />

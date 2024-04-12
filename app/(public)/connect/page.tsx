@@ -121,7 +121,7 @@ ${Date.now()}`
                     </span>
                     {shorten(address, 5, 5)}
                   </div>
-                  <FilledButton className='mt-6' onClick={() => router.push('/')}>
+                  <FilledButton className='mt-6' onClick={() => router.push('/')} id="continue" >
                     Continue
                   </FilledButton>
                 </>
@@ -140,7 +140,7 @@ ${Date.now()}`
                     </span>
                     {shorten(address)}
                   </div>
-                  <FilledButton className='mt-6' onClick={() => disconnect()}>
+                  <FilledButton className='mt-6' onClick={() => disconnect()} id="disconnect_wallet">
                     Disconnect
                   </FilledButton>
                   <div className='mt-6 italic text-sm text-[#FEA768]'>
@@ -151,7 +151,7 @@ ${Date.now()}`
               )
             ) : (
               <>
-                <FilledButton className='mt-16' onClick={() => connect()}>
+                <FilledButton className='mt-16' onClick={() => connect()} id="connect_wallet">
                   Connect Wallet
                 </FilledButton>
                 <div className='mt-6 italic text-sm text-[#FEA768]'>
@@ -162,7 +162,7 @@ ${Date.now()}`
             )
           ) : (
             <>
-              <FilledButton className='mt-16' onClick={() => connect()}>
+              <FilledButton className='mt-16' onClick={() => connect()} id="connect_wallet">
                 Connect Wallet
               </FilledButton>
               <div className='mt-6 italic text-sm text-[#FEA768]'>
