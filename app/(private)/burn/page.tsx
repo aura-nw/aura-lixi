@@ -1,12 +1,9 @@
 'use client'
-import IconClose from '@/assets/ic_close.svg'
-import ShieldItem from '@/assets/mat khien.png'
 import FilledButton from '@/components/button/filled'
-import Checkbox from '@/components/checkbox'
-import Gem from '@/components/gem'
 import GemWithFrame from '@/components/gem/gemWithFrame'
+import { initList } from '@/constants'
 import { Bangkok, Context } from '@/provider'
-import { forgeGem } from '@/services'
+import { burn, forgeGem } from '@/services'
 import { useChain } from '@cosmos-kit/react'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react'
 import Immutable, { Map } from 'immutable'
@@ -15,16 +12,11 @@ import getConfig from 'next/config'
 import Image from 'next/image'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
-import ForgeBg from '../assets/force-bg.svg'
-import GemSlot from '../assets/gem-slot.svg'
-import GemSlotActive from '../assets/gem-slot_active.svg'
-import Shield from '../assets/shield.svg'
 import TopBar2 from '../assets/top-bar-2.svg'
 import TopBar from '../assets/top-bar.svg'
 import TopBarMobile from '../assets/top-bar_mobile.svg'
 import { RevealForgingResult } from '../components/revealForgingResult'
-import { initList } from '@/constants'
-
+import GemBurn from '@/app/(private)/assets/gem-burn.png'
 export default function Home() {
   const config = getConfig()
   const { assets, lastAssetsUpdate, fetchAssets, setBlackListId } = useContext(Context)
@@ -106,33 +98,16 @@ export default function Home() {
     }
   }
 
-  const forgeGemHandler = async () => {
+  const burnHandler = async () => {
     try {
       setLoading(true)
-      const bl = []
-      const main = assets.find((asset) => asset.type == mainGem)
-      const msgs = [
-        {
-          contract: main?.cw721_contract.smart_contract.address,
-          msg: {
-            approve: {
-              spender: config.OPERATOR_CONTRACT_ADDRESS,
-              token_id: main?.token_id,
-            },
-          },
-        },
-      ]
-      bl.push(main?.token_id)
-
+      const bl: any[] = []
       const material: any[] = []
-      for (let i = 0; i < 5; i++) {
-        if (materialGems[i] != undefined) {
-          const asset = assets.find(
-            (a) =>
-              a.type == materialGems[i] &&
-              !material.find((g) => g.tokenId == a.token_id) &&
-              main?.token_id != a.token_id
-          )
+      const msgs: any[] = []
+
+      list.forEach((gem) => {
+        for (let i = 0; i < gem.amount; i++) {
+          const asset = assets.find((a) => a.type == gem.type && !material.find((g) => g.tokenId == a.token_id))
           material.push({
             contractAddress: asset?.cw721_contract.smart_contract.address as string,
             tokenId: asset?.token_id as string,
@@ -148,23 +123,11 @@ export default function Home() {
           })
           bl.push(asset?.token_id)
         }
-      }
-      let shield
-      if (useShield) {
-        shield = assets.find((asset) => asset.type == 'shield')
-        msgs.push({
-          contract: shield?.cw721_contract.smart_contract.address,
-          msg: {
-            approve: {
-              spender: config.OPERATOR_CONTRACT_ADDRESS,
-              token_id: shield?.token_id,
-            },
-          },
-        })
-        bl.push(shield?.token_id)
-      }
+      })
+
       setTempBlackList(bl)
-      console.log('forge', main, material, shield)
+      console.log('burn', material)
+      return
       const client = await getSigningCosmWasmClient()
       await client.executeMultiple(
         address as string,
@@ -175,19 +138,7 @@ export default function Home() {
         'auto'
       )
 
-      const result = await forgeGem(
-        {
-          contractAddress: main?.cw721_contract.smart_contract.address as string,
-          tokenId: main?.token_id as string,
-        },
-        material,
-        useShield
-          ? {
-              contractAddress: shield?.cw721_contract.smart_contract.address as string,
-              tokenId: shield?.token_id as string,
-            }
-          : undefined
-      )
+      const result = await burn(material)
 
       if (result?.data?.data?.requestId) {
         setRequestId(result?.data?.data?.requestId)
@@ -217,6 +168,8 @@ export default function Home() {
       })
     }
   }
+
+  const gemCount = list.reduce((total, current) => (total += +current.amount), 0)
 
   return (
     <>
@@ -422,73 +375,89 @@ export default function Home() {
               {list.length ? (
                 list.map((gem) => {
                   return (
-                    <div key={gem.type} className='p-[10px] rounded-[4px] flex gap-4 bg-[#D6CCB5]'>
-                      <GemWithFrame type={gem.type as any} />
-                      <div className='flex flex-col gap-1'>
-                        <div className='text-[#545454] text-xs'>
-                          {`${(function () {
-                            switch (gem.type[0]) {
-                              case 'w':
-                                return 'White'
-                              case 'b':
-                                return 'Blue'
-                              case 'g':
-                                return 'Gold'
-                              case 'r':
-                                return 'Red'
-                            }
-                          })()} Gem ${gem.type[1]}`}
-                        </div>
-                        <div className='flex items-center gap-4'>
-                          <input
-                            type='number'
-                            onChange={(e) => {
-                              const v = e.target.value as any
-                              const newList = [...list]
-                              const index = newList.findIndex((g) => g.type == gem.type)
-                              newList[index].amount = !isNaN(v) ? v : '0'
-                              setList(newList)
-                            }}
-                            className='text-sm text-[#545454] p-2 bg-[#fff] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.20)_inset] rounded-md text-center w-full'
-                          />
-                          <svg
-                            xmlns='http://www.w3.org/2000/svg'
-                            width='10'
-                            height='10'
-                            viewBox='0 0 10 10'
-                            fill='none'
-                            className='cursor-pointer'
-                            onClick={() => addGemHandler(gem.type)}>
-                            <path
-                              d='M9 1L1 9'
-                              stroke='#885E23'
-                              stroke-width='2'
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                            />
-                            <path
-                              d='M1 1L9 9'
-                              stroke='#885E23'
-                              stroke-width='2'
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
+                    <GemInput
+                      key={gem.type}
+                      gem={gem}
+                      gems={gems}
+                      list={list}
+                      setList={setList}
+                      addGemHandler={addGemHandler}
+                    />
                   )
                 })
               ) : (
                 <div className='text-sm text-center w-full'>No gems selected</div>
               )}
             </div>
-            <FilledButton className='w-fit mx-auto' onClick={() => console.log(list)}>
-              Burn
-            </FilledButton>
+            <div className='flex gap-4'>
+              <div className='px-[10px] py-[6px] rounded-md flex gap-[11px] items-center bg-[#D6CCB5] text-[#545454] shrink-0'>
+                <Image src={GemBurn} alt='' />
+                <div className={`${gemCount > 50 ? 'text-[#DC3535]' : ''}`}>{`${gemCount}/50`}</div>
+              </div>
+              <FilledButton className='w-full mx-auto' onClick={burnHandler} disabled={!gemCount || gemCount > 50}>
+                Burn
+              </FilledButton>
+            </div>
           </div>
         </div>
       </div>
     </>
+  )
+}
+const GemInput = ({ gem, gems, list, setList, addGemHandler }: any) => {
+  const [value, setValue] = useState(0)
+  return (
+    <div className='p-[10px] rounded-[4px] flex gap-4 bg-[#D6CCB5]'>
+      <GemWithFrame type={gem.type as any} />
+      <div className='flex flex-col gap-1'>
+        <div className='text-[#545454] text-xs'>
+          {`${(function () {
+            switch (gem.type[0]) {
+              case 'w':
+                return 'White'
+              case 'b':
+                return 'Blue'
+              case 'g':
+                return 'Gold'
+              case 'r':
+                return 'Red'
+            }
+          })()} Gem ${gem.type[1]}`}
+        </div>
+        <div className='flex items-center gap-4'>
+          <input
+            type='number'
+            max={gems.get(gem.type)}
+            value={value}
+            onChange={(e) => {
+              const v = e.target.value as any
+              const newList = [...list]
+              const index = newList.findIndex((g) => g.type == gem.type)
+              newList[index].amount = !isNaN(v)
+                ? +gems.get(gem.type) > +v
+                  ? v > 0
+                    ? v
+                    : ''
+                  : gems.get(gem.type)
+                : '0'
+              setValue(newList[index].amount)
+              setList(newList)
+            }}
+            className='text-sm text-[#545454] p-2 bg-[#fff] shadow-[0px_1px_4px_0px_rgba(0,0,0,0.20)_inset] rounded-md text-center w-full'
+          />
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            width='10'
+            height='10'
+            viewBox='0 0 10 10'
+            fill='none'
+            className='cursor-pointer'
+            onClick={() => addGemHandler(gem.type)}>
+            <path d='M9 1L1 9' stroke='#885E23' stroke-width='2' strokeLinecap='round' strokeLinejoin='round' />
+            <path d='M1 1L9 9' stroke='#885E23' stroke-width='2' strokeLinecap='round' strokeLinejoin='round' />
+          </svg>
+        </div>
+      </div>
+    </div>
   )
 }

@@ -4,6 +4,8 @@ import ForgeActive from '@/app/(private)/assets/force-active.png'
 import ForgeInactive from '@/app/(private)/assets/force-inactive.png'
 import RedeemActive from '@/app/(private)/assets/redeem-active.png'
 import RedeemInactive from '@/app/(private)/assets/redeem-inactive.png'
+import BurnActive from '@/app/(private)/assets/burn-active.png'
+import BurnInactive from '@/app/(private)/assets/burn-inactive.png'
 import QuestActive from '@/app/(private)/assets/quest-active.png'
 import QuestInactive from '@/app/(private)/assets/quest-inactive.png'
 import Active from '@/app/(private)/assets/active-tab.png'
@@ -80,6 +82,28 @@ export default function Layout({ children }: { children: ReactNode }) {
             alt=''
             id='screen_redeem'
             className={` hidden w-[112px] ${pathname != '/redeem' ? 'md:block' : ''}`}
+          />
+        </div>
+        <div
+          className='cursor-pointer'
+          onClick={() => {
+            router.push('/burn')
+          }}>
+          <div className='relative md:hidden cursor-pointer'>
+            <Image src={pathname == '/burn' ? Active : Inactive} alt='' className={`w-[106px]`} />
+            <div
+              className={`${Bangkok.className} absolute inset-0 grid place-items-center ${
+                pathname == '/burn' ? 'text-[#FFB438]' : 'text-[#828282]'
+              }`}>
+              <div className='capitalize'>Burn</div>
+            </div>
+          </div>
+          <Image src={BurnActive} alt='' className={` hidden w-[157px] ${pathname == '/burn' ? 'md:block' : ''}`} />{' '}
+          <Image
+            src={BurnInactive}
+            alt=''
+            id='screen_Burn'
+            className={` hidden w-[112px] ${pathname != '/burn' ? 'md:block' : ''}`}
           />
         </div>
         <div

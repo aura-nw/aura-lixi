@@ -319,6 +319,21 @@ export const redeem = async (
     return error
   }
 }
+export const burn = async (
+  gems: {
+    contract_address: string
+    token_id: string
+  }[]
+) => {
+  try {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/nft-burn/burn`, {
+      materials: gems,
+    })
+    return res
+  } catch (error: any) {
+    return error
+  }
+}
 export const sample = async () => {
   try {
   } catch (error: any) {
