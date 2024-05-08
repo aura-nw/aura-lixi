@@ -1,5 +1,5 @@
 'use client'
-import DragonLogo from '@/components/homeComponents/assets/dragon-logo.svg'
+import DragonLogo from './assets/logo.svg'
 import { Bangkok, Context } from '@/provider'
 import { useChain, useWallet } from '@cosmos-kit/react'
 import { WalletStatus } from 'cosmos-kit'
@@ -97,12 +97,8 @@ ${Date.now()}`
   return (
     <main className='relative min-h-screen'>
       <div className='flex flex-col items-center pt-[130px] px-1 text-center'>
-        <Image src={DragonLogo} alt='' className='w-[110px]' />
-        <div
-          className={`${Bangkok.className} mt-5 text-[#EE3724] uppercase drop-shadow-[0px_3.276px_3.276px_rgba(0,0,0,0.50)] text-[52px] font-bold leading-tight tracking-[0.524px] text-stroke`}>
-          Gem Forge
-        </div>
-        <div className={`text-[#F9C174] text-xl font-bold uppercase tracking-[14px]`}>Quest for the Dragon's Wish</div>
+        <Image src={DragonLogo} alt='' className='max-w-[508px] w-full' />
+        <div className={`text-[#F9C174] text-xl font-bold uppercase tracking-[14px] mt-4`}>Quest for the Dragon's Wish</div>
         {account ? (
           account.wallet_address ? (
             address ? (

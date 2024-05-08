@@ -1,11 +1,13 @@
 'use client'
+import GemBurn from '@/app/(private)/assets/gem-burn.png'
 import FilledButton from '@/components/button/filled'
 import GemWithFrame from '@/components/gem/gemWithFrame'
 import { initList } from '@/constants'
 import { Bangkok, Context } from '@/provider'
-import { burn, forgeGem } from '@/services'
+import { burn } from '@/services'
 import { useChain } from '@cosmos-kit/react'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react'
+import BigNumber from 'bignumber.js'
 import Immutable, { Map } from 'immutable'
 import moment from 'moment'
 import getConfig from 'next/config'
@@ -15,18 +17,13 @@ import { toast } from 'react-toastify'
 import TopBar2 from '../assets/top-bar-2.svg'
 import TopBar from '../assets/top-bar.svg'
 import TopBarMobile from '../assets/top-bar_mobile.svg'
-import { RevealForgingResult } from '../components/revealForgingResult'
-import GemBurn from '@/app/(private)/assets/gem-burn.png'
+import ResultModal from './components/prizeModal'
 export default function Home() {
   const config = getConfig()
   const { assets, lastAssetsUpdate, fetchAssets, setBlackListId } = useContext(Context)
   const { address, chain, getSigningCosmWasmClient } = useChain(config.COSMOSKIT_CHAINKEY)
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
-  const [tempBlackList, setTempBlackList] = useState<any[]>([])
-  const [requestId, setRequestId] = useState()
   const [loading, setLoading] = useState(false)
-  const [useShield, setUseShield] = useState(false)
-  const [activeSlot, setActiveSlot] = useState(0)
   const [selectedColorKey, setSelectedColorKey] = useState(new Set(['all_colors']))
   const selectedColorValue = useMemo(
     () => Array.from(selectedColorKey).join(', ').replaceAll('_', ' '),
@@ -38,28 +35,11 @@ export default function Home() {
     [selectedRankKey]
   )
 
-  const [mainGem, setMainGem] = useState<string | undefined>()
-  const [materialGems, setMaterialGems] = useState<(string | undefined)[]>([
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-  ])
   const [list, setList] = useState<any[]>([])
   const [gems, setGems] = useState<Immutable.MapOf<any>>(Map(initList))
+  const [prize, setPrize] = useState<number | undefined>()
 
   useEffect(() => {
-    if (!mainGem) {
-      setActiveSlot(0)
-    } else {
-      for (let i = 0; i < 5; i++) {
-        if (materialGems[i] == undefined) {
-          setActiveSlot(i + 1)
-          break
-        }
-      }
-    }
     const gemList = assets.reduce(
       (total, current) => {
         total[current.type]++
@@ -67,16 +47,8 @@ export default function Home() {
       },
       { ...initList }
     )
-    if (mainGem) {
-      ;(gemList as any)[mainGem]--
-    }
-    for (let i = 0; i < 5; i++) {
-      if (materialGems[i] != undefined) {
-        ;(gemList as any)[materialGems[i] as string]--
-      }
-    }
     setGems(Map(gemList))
-  }, [mainGem, materialGems, assets?.length])
+  }, [assets?.length])
 
   const addGemHandler = (type: string) => {
     if (loading) return
@@ -104,7 +76,6 @@ export default function Home() {
       const bl: any[] = []
       const material: any[] = []
       const msgs: any[] = []
-
       list.forEach((gem) => {
         for (let i = 0; i < gem.amount; i++) {
           const asset = assets.find((a) => a.type == gem.type && !material.find((g) => g.tokenId == a.token_id))
@@ -124,10 +95,6 @@ export default function Home() {
           bl.push(asset?.token_id)
         }
       })
-
-      setTempBlackList(bl)
-      console.log('burn', material)
-      return
       const client = await getSigningCosmWasmClient()
       await client.executeMultiple(
         address as string,
@@ -139,31 +106,31 @@ export default function Home() {
       )
 
       const result = await burn(material)
-
-      if (result?.data?.data?.requestId) {
-        setRequestId(result?.data?.data?.requestId)
-        console.log('revealing request id:', result?.data?.data?.requestId)
+      if (typeof result?.data?.data?.auraPrize != 'undefined') {
+        setPrize(BigNumber(result?.data?.data?.auraPrize).div(BigNumber(10).pow(6)).toNumber())
         onOpen()
+        setBlackListId(((prev: string[]) => {
+          const next = [...prev, ...bl]
+          return next as string[]
+        }) as any)
+        setList([])
+        fetchAssets()
       } else {
+        setPrize(undefined)
         toast(
-          result?.data?.data?.requestId
-            ? `Reveal gem with request ${
-                result?.data?.data?.requestId
-              } failed. Please contact us via Discord or Telegram. Respone: ${JSON.stringify(result?.data)}`
-            : `Can not fetch your request ID. Please contact us via Discord or Telegram. Respone: ${JSON.stringify(
-                result?.data
-              )}`,
+          `Can not fetch your result. Please contact us via Discord or Telegram. Respone: ${JSON.stringify(
+            result?.data
+          )}`,
           {
             type: 'error',
           }
         )
-        onClose()
       }
       setLoading(false)
     } catch (error: any) {
       setLoading(false)
       console.log(error)
-      toast(error.message || 'Failed to forge gem', {
+      toast(error.message || 'Failed to burn gem', {
         type: 'error',
       })
     }
@@ -173,27 +140,8 @@ export default function Home() {
 
   return (
     <>
-      {requestId && (
-        <RevealForgingResult
-          requestId={requestId}
-          usedShield={useShield}
-          isOpen={isOpen}
-          onOpenChange={onOpenChange}
-          onClose={() => {
-            onClose()
-            setTimeout(() => setRequestId(undefined), 500)
-          }}
-          revealSuccessCallBack={(result: string) => {
-            setBlackListId(((prev: string[]) => {
-              const next = [...prev, ...(result == 'success' ? tempBlackList : tempBlackList.slice(1))]
-              return next as string[]
-            }) as any)
-            setMainGem(undefined)
-            setMaterialGems([undefined, undefined, undefined, undefined, undefined])
-            setUseShield(false)
-            fetchAssets()
-          }}
-        />
+      {typeof prize != undefined && (
+        <ResultModal prize={prize} isOpen={isOpen} onOpenChange={onOpenChange} onClose={onClose} />
       )}
       <div className='flex flex-wrap gap-5 md:gap-2 justify-center'>
         <div className='relative'>
@@ -306,11 +254,6 @@ export default function Home() {
                             if (gems.get(color + star) != 0) {
                               return (
                                 <div
-                                  title={
-                                    activeSlot == 0 && star == '7'
-                                      ? 'The gem has reached the max power level and cannot be upgraded.'
-                                      : ''
-                                  }
                                   key={color + star}
                                   className={`flex flex-col items-center gap-[6px] h-fit cursor-pointer relative`}
                                   onClick={() => addGemHandler(color + star)}>
@@ -394,7 +337,11 @@ export default function Home() {
                 <Image src={GemBurn} alt='' />
                 <div className={`${gemCount > 50 ? 'text-[#DC3535]' : ''}`}>{`${gemCount}/50`}</div>
               </div>
-              <FilledButton className='w-full mx-auto' onClick={burnHandler} disabled={!gemCount || gemCount > 50}>
+              <FilledButton
+                className='w-full mx-auto'
+                onClick={burnHandler}
+                isLoading={loading}
+                disabled={!gemCount || gemCount > 50}>
                 Burn
               </FilledButton>
             </div>

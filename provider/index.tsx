@@ -84,29 +84,37 @@ export const Mori = localFont({
 const testnetChains: Chain[] = [
   {
     bech32_prefix: 'aura',
-    chain_id: 'aura-testnet-2',
-    chain_name: 'auradevnet',
+    chain_id: 'aura_6321-3',
+    chain_name: 'aura_euphoria_evm',
     network_type: 'testnet',
-    pretty_name: 'Aura Network Devnet',
+    pretty_name: 'Aura Euphoria Network',
     slip44: 118,
     status: 'live',
+    explorers: [
+      {
+        url: 'https://rpc.euphoria.aura.network',
+      },
+      {
+        url: 'https://lcd.euphoria.aura.network',
+      },
+    ],
   },
 ]
 const testnetAssets: AssetList[] = [
   {
     assets: [
       {
-        base: 'utaura',
+        base: 'ueaura',
         denom_units: [
-          { denom: 'utaura', exponent: 0 },
-          { denom: 'taura', exponent: 6 },
+          { denom: 'ueaura', exponent: 0 },
+          { denom: 'eaura', exponent: 6 },
         ],
-        display: 'taura',
+        display: 'eaura',
         name: 'Aura',
-        symbol: 'TAURA',
+        symbol: 'EAURA',
       },
     ],
-    chain_name: 'auradevnet',
+    chain_name: 'aura_euphoria_evm',
   },
 ]
 
@@ -331,7 +339,8 @@ function ContextProvider({ children }: { children: ReactNode }) {
       })
       list = [...list, ...shieldList]
     }
-    setAssets(list)
+    const newList = list.filter((a) => !blackListId.includes(a.token_id))
+    setAssets([...newList])
     setLastAssetsUpdate(Date.now())
   }
 
@@ -363,20 +372,14 @@ function ContextProvider({ children }: { children: ReactNode }) {
   console.log('Dragon Wish v1.0.2')
   return (
     <ChainProvider
-      chains={[
-        ...testnetChains,
-        ...chains.filter((chain) => chain.chain_name == 'aura' || chain.chain_name == 'auratestnet'),
-      ]}
-      assetLists={[
-        ...testnetAssets,
-        ...networkAssets.filter((chain) => chain.chain_name == 'aura' || chain.chain_name == 'auratestnet'),
-      ]}
+      chains={[...testnetChains, ...chains.filter((chain) => chain.chain_name == 'aura')]}
+      assetLists={[...testnetAssets, ...networkAssets.filter((chain) => chain.chain_name == 'aura')]}
       signerOptions={signerOptions as any}
       endpointOptions={{
         isLazy: true,
         endpoints: {
-          auradevnet: {
-            rpc: ['https://rpc.dev.aura.network'],
+          aura_euphoria_evm: {
+            rpc: ['https://rpc.euphoria.aura.network'],
           },
           aura: {
             rpc: ['https://rpc.aura.network'],
