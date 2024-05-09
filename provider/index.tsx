@@ -7,6 +7,8 @@ import { Token } from '@/model/token'
 import { GET_ASSETS, GET_BALANCE, GET_USER_DATA, applyCode } from '@/services'
 import { wallets as c98Mobile } from '@/services/c98MobileWallet'
 import { getGasPriceByChain } from '@/utils'
+import { Euphoria } from '@/utils/cosmos-kit/chains'
+import { EuphoriaAsset } from '@/utils/cosmos-kit/assets'
 import { getItem, removeItem, setItem } from '@/utils/localStorage'
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheObject, split } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
@@ -84,42 +86,8 @@ export const Mori = localFont({
     },
   ],
 })
-const testnetChains: Chain[] = [
-  {
-    bech32_prefix: 'aura',
-    chain_id: 'aura_6321-3',
-    chain_name: 'auratestnet',
-    network_type: 'testnet',
-    pretty_name: 'Aura Euphoria Network',
-    slip44: 118,
-    status: 'live',
-    explorers: [
-      {
-        url: 'https://rpc.euphoria.aura.network',
-      },
-      {
-        url: 'https://lcd.euphoria.aura.network',
-      },
-    ],
-  },
-]
-const testnetAssets: AssetList[] = [
-  {
-    assets: [
-      {
-        base: 'ueaura',
-        denom_units: [
-          { denom: 'ueaura', exponent: 0 },
-          { denom: 'eaura', exponent: 6 },
-        ],
-        display: 'eaura',
-        name: 'Aura',
-        symbol: 'EAURA',
-      },
-    ],
-    chain_name: 'auratestnet',
-  },
-]
+const testnetChains: Chain[] = [Euphoria]
+const testnetAssets: AssetList[] = [EuphoriaAsset]
 
 const signerOptions = {
   preferredSignType: (chain: Chain) => {

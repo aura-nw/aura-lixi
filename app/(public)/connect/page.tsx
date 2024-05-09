@@ -24,11 +24,6 @@ export default function Connect() {
   const { connect, address, chain, closeView, wallet, disconnect } = useChain(config.COSMOSKIT_CHAINKEY)
   const { status: globalStatus, mainWallet } = useWallet()
   const { refetch } = useQuery(GET_USER_DATA)
-  useEffect(() => {
-    if (account?.wallet_address && address == account.wallet_address) {
-      redirect('/')
-    }
-  }, [account?.wallet_address, address])
   const connectXHandler = () => {
     window.location.href = `${config.REST_API_ENDPOINT}/auth/twitter`
   }

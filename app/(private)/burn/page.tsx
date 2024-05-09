@@ -5,7 +5,7 @@ import GemWithFrame from '@/components/gem/gemWithFrame'
 import { initList } from '@/constants'
 import { Bangkok, Context } from '@/provider'
 import { burn } from '@/services'
-import { useChain } from '@cosmos-kit/react'
+import { useChain, useWallet } from '@cosmos-kit/react'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, useDisclosure } from '@nextui-org/react'
 import BigNumber from 'bignumber.js'
 import Immutable, { Map } from 'immutable'
@@ -21,7 +21,8 @@ import ResultModal from './components/prizeModal'
 export default function Home() {
   const config = getConfig()
   const { assets, lastAssetsUpdate, fetchAssets, setBlackListId } = useContext(Context)
-  const { address, chain, getSigningCosmWasmClient } = useChain(config.COSMOSKIT_CHAINKEY)
+  const { address, chain, getSigningCosmWasmClient, chainWallet } = useChain(config.COSMOSKIT_CHAINKEY)
+  const { wallet } = useWallet()
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure()
   const [loading, setLoading] = useState(false)
   const [selectedColorKey, setSelectedColorKey] = useState(new Set(['all_colors']))
