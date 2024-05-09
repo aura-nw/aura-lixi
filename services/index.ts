@@ -101,7 +101,7 @@ export const GET_JACKPOT = gql`
 export const GET_USER_JACKPOT = gql`
   query GET_USER_JACKPOT($user_id: Int, $jackpot_id: Int) {
     jackpot_users(
-      where: { user_id: { _eq: $user_id }, jackpot_id: { _eq: $jackpot_id }, tx_status: {_eq: "success"} }
+      where: { user_id: { _eq: $user_id }, jackpot_id: { _eq: $jackpot_id }, tx_status: { _eq: "success" } }
       order_by: { created_at: desc }
     ) {
       jackpot_id
@@ -150,6 +150,18 @@ export const GET_ASSETS = (chainKey: string) => gql`
       }
     }
   }
+`
+export const GET_BALANCE = (chainKey: string) => gql`
+query getBalance($address: String!, $denom: String) {
+  ${chainKey} {
+    account_balance(
+      where: {account: {address: {_eq: $address}}, denom: {_eq: $denom}}
+    ) {
+      amount
+      denom
+    }
+  }
+}
 `
 export const GET_USER_REF_HISTORY = (id: string) => gql`
   query GET_USER_REF_HISTORY {

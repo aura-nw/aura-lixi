@@ -4,7 +4,7 @@ import ConnectWalletModal from '@/components/modal/connectWalletModal'
 import { useClient } from '@/hooks'
 import { Account } from '@/model/account'
 import { Token } from '@/model/token'
-import { GET_ASSETS, GET_USER_DATA, applyCode } from '@/services'
+import { GET_ASSETS, GET_BALANCE, GET_USER_DATA, applyCode } from '@/services'
 import { wallets as c98Mobile } from '@/services/c98MobileWallet'
 import { getGasPriceByChain } from '@/utils'
 import { getItem, removeItem, setItem } from '@/utils/localStorage'
@@ -22,6 +22,7 @@ import { ChainProvider } from '@cosmos-kit/react'
 import { GoogleTagManager } from '@next/third-parties/google'
 import { NextUIProvider } from '@nextui-org/react'
 import axios from 'axios'
+import BigNumber from 'bignumber.js'
 import { chains, assets as networkAssets } from 'chain-registry'
 import { createClient } from 'graphql-ws'
 import getConfig, { setConfig } from 'next/config'
@@ -33,6 +34,7 @@ import { Bounce, ToastContainer } from 'react-toastify'
 
 export const Context = createContext<{
   account: Account | undefined
+  balance: number
   assets: Token[]
   fetchAssets: () => void
   setAccount: (account: Account) => void
@@ -43,6 +45,7 @@ export const Context = createContext<{
   lastAssetsUpdate?: number
 }>({
   account: undefined,
+  balance: 0,
   assets: [],
   fetchAssets: () => {},
   horoscopeClient: undefined,
@@ -127,6 +130,7 @@ const signerOptions = {
 }
 function ContextProvider({ children }: { children: ReactNode }) {
   const [account, setAccount] = useState<Account>()
+  const [balance, setBalance] = useState<number>(0)
   const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>()
   const [horoscopeClient, setHoroscopeClient] = useState<ApolloClient<NormalizedCacheObject>>()
   const [assets, setAssets] = useState<Token[]>([])
@@ -255,6 +259,20 @@ function ContextProvider({ children }: { children: ReactNode }) {
         owner: account?.wallet_address,
       },
     })
+    const addressBalance = await horoscopeClient?.query({
+      query: GET_BALANCE(chainKey),
+      variables: {
+        address: account?.wallet_address,
+        denom: chainKey == 'euphoria' ? 'ueaura' : 'uaura',
+      },
+    })
+    if (addressBalance?.data?.euphoria?.account_balance?.[0]?.amount) {
+      setBalance(
+        +BigNumber(addressBalance?.data?.euphoria?.account_balance?.[0]?.amount)
+          .div(BigNumber(10 ** 6))
+          .toFixed()
+      )
+    }
     if (v1DragonGems?.data?.[chainKey]?.cw721_token?.length) {
       let v1List = v1DragonGems?.data?.[chainKey]?.cw721_token
         .filter((token: Token) =>
@@ -419,6 +437,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
           assets,
           fetchAssets,
           lastAssetsUpdate,
+          balance,
         }}>
         <NextUIProvider>
           <ApolloProvider client={client}>{children}</ApolloProvider>
