@@ -85,7 +85,7 @@ const testnetChains: Chain[] = [
   {
     bech32_prefix: 'aura',
     chain_id: 'aura_6321-3',
-    chain_name: 'aura_euphoria_evm',
+    chain_name: 'auratestnet',
     network_type: 'testnet',
     pretty_name: 'Aura Euphoria Network',
     slip44: 118,
@@ -114,7 +114,7 @@ const testnetAssets: AssetList[] = [
         symbol: 'EAURA',
       },
     ],
-    chain_name: 'aura_euphoria_evm',
+    chain_name: 'auratestnet',
   },
 ]
 
@@ -378,7 +378,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
       endpointOptions={{
         isLazy: true,
         endpoints: {
-          aura_euphoria_evm: {
+          auratestnet: {
             rpc: ['https://rpc.euphoria.aura.network'],
           },
           aura: {
