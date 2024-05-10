@@ -28,6 +28,11 @@ export default function Connect() {
     window.location.href = `${config.REST_API_ENDPOINT}/auth/twitter`
   }
   useEffect(() => {
+    if (account?.wallet_address && address == account.wallet_address) {
+      closeView()
+    }
+  }, [account?.wallet_address, address])
+  useEffect(() => {
     if (account && !account?.wallet_address && globalStatus == WalletStatus.Connected) {
       linkWalletHandler()
     }
@@ -93,7 +98,9 @@ ${Date.now()}`
     <main className='relative min-h-screen'>
       <div className='flex flex-col items-center pt-[130px] px-1 text-center'>
         <Image src={DragonLogo} alt='' className='max-w-[508px] w-full' />
-        <div className={`text-[#F9C174] text-xl font-bold uppercase tracking-[14px] mt-4`}>Quest for the Dragon's Wish</div>
+        <div className={`text-[#F9C174] text-xl font-bold uppercase tracking-[14px] mt-4`}>
+          Quest for the Dragon's Wish
+        </div>
         {account ? (
           account.wallet_address ? (
             address ? (
@@ -112,7 +119,7 @@ ${Date.now()}`
                     </span>
                     {shorten(address, 5, 5)}
                   </div>
-                  <FilledButton className='mt-6' onClick={() => router.push('/')} id="continue" >
+                  <FilledButton className='mt-6' onClick={() => router.push('/')} id='continue'>
                     Continue
                   </FilledButton>
                 </>
@@ -131,7 +138,7 @@ ${Date.now()}`
                     </span>
                     {shorten(address)}
                   </div>
-                  <FilledButton className='mt-6' onClick={() => disconnect()} id="disconnect_wallet">
+                  <FilledButton className='mt-6' onClick={() => disconnect()} id='disconnect_wallet'>
                     Disconnect
                   </FilledButton>
                   <div className='mt-6 italic text-sm text-[#FEA768]'>
@@ -142,7 +149,7 @@ ${Date.now()}`
               )
             ) : (
               <>
-                <FilledButton className='mt-16' onClick={() => connect()} id="connect_wallet">
+                <FilledButton className='mt-16' onClick={() => connect()} id='connect_wallet'>
                   Connect Wallet
                 </FilledButton>
                 <div className='mt-6 italic text-sm text-[#FEA768]'>
@@ -153,7 +160,7 @@ ${Date.now()}`
             )
           ) : (
             <>
-              <FilledButton className='mt-16' onClick={() => connect()} id="connect_wallet">
+              <FilledButton className='mt-16' onClick={() => connect()} id='connect_wallet'>
                 Connect Wallet
               </FilledButton>
               <div className='mt-6 italic text-sm text-[#FEA768]'>
