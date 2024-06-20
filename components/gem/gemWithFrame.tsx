@@ -44,7 +44,7 @@ export default function GemWithFrame({
     | 'w5'
     | 'w6'
     | 'w7'
-    | 'sw1'
+    | 'sw'
     | 'b1'
     | 'b2'
     | 'b3'
@@ -52,7 +52,7 @@ export default function GemWithFrame({
     | 'b5'
     | 'b6'
     | 'b7'
-    | 'sb1'
+    | 'sb'
     | 'g1'
     | 'g2'
     | 'g3'
@@ -60,7 +60,7 @@ export default function GemWithFrame({
     | 'g5'
     | 'g6'
     | 'g7'
-    | 'sg1'
+    | 'sg'
     | 'r1'
     | 'r2'
     | 'r3'
@@ -68,7 +68,7 @@ export default function GemWithFrame({
     | 'r5'
     | 'r6'
     | 'r7'
-    | 'sr1'
+    | 'sr'
 }) {
   switch (type[0]) {
     case 's':
@@ -78,14 +78,7 @@ export default function GemWithFrame({
             <div
               className={`bg-gradient-to-b from-[#CECECE] via-[#FFFFFF] to-[#B0B0B0] rounded-md w-[60px] h-[60px] p-[3px]`}>
               <div className='bg-[radial-gradient(50%_50%_at_50%_50%,#6E6E6E63_0.07%,#11111163_100%)] w-full h-full grid place-items-center rounded-[4px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)_inset,0px_4px_4px_0px_rgba(0,0,0,0.25)_inset]'>
-                {(function () {
-                  switch (type[2]) {
-                    case '1':
-                      return <Image src={SWhite1} alt='' className='w-14 h-14' />
-                    default:
-                      return <></>
-                  }
-                })()}
+                <Image src={SWhite1} alt='' className='w-14 h-14' />
               </div>
             </div>
           )
@@ -93,14 +86,7 @@ export default function GemWithFrame({
           return (
             <div className={`bg-gradient-to-b from-[#AFD4FF] to-[#00B8C4] rounded-md w-[60px] h-[60px] p-[3px]`}>
               <div className='bg-[radial-gradient(50%_50%_at_50%_50%,#90E4FF_0.07%,#006576_100%)] w-full h-full grid place-items-center rounded-[4px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)_inset,0px_4px_4px_0px_rgba(0,0,0,0.25)_inset]'>
-                {(function () {
-                  switch (type[2]) {
-                    case '1':
-                      return <Image src={SBlue1} alt='' className='w-14 h-14' />
-                    default:
-                      return <></>
-                  }
-                })()}
+                <Image src={SBlue1} alt='' className='w-14 h-14' />
               </div>
             </div>
           )
@@ -109,14 +95,7 @@ export default function GemWithFrame({
             <div
               className={`bg-gradient-to-b from-[#ECAB2C] via-[#FFEFC0] to-[#ECAB2C] rounded-md w-[60px] h-[60px] p-[3px]`}>
               <div className='bg-[radial-gradient(50%_50%_at_50%_50%,#FBE1AF_0.07%,#956233_100%)] w-full h-full grid place-items-center rounded-[4px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)_inset,0px_4px_4px_0px_rgba(0,0,0,0.25)_inset]'>
-                {(function () {
-                  switch (type[2]) {
-                    case '1':
-                      return <Image src={SGold1} alt='' className='w-14 h-14' />
-                    default:
-                      return <></>
-                  }
-                })()}
+                <Image src={SGold1} alt='' className='w-14 h-14' />
               </div>
             </div>
           )
@@ -125,14 +104,7 @@ export default function GemWithFrame({
             <div
               className={`bg-gradient-to-b from-[#952D33] via-[#FFB6D5] to-[#992229] rounded-md w-[60px] h-[60px] p-[3px]`}>
               <div className='bg-[radial-gradient(50%_50%_at_50%_50%,#ED8183_0.07%,#663435_100%)] w-full h-full grid place-items-center rounded-[4px] shadow-[0px_4px_10px_0px_rgba(0,0,0,0.25)_inset,0px_4px_4px_0px_rgba(0,0,0,0.25)_inset]'>
-                {(function () {
-                  switch (type[2]) {
-                    case '1':
-                      return <Image src={SRed1} alt='' className='w-14 h-14' />
-                    default:
-                      return <></>
-                  }
-                })()}
+                <Image src={SRed1} alt='' className='w-14 h-14' />
               </div>
             </div>
           )

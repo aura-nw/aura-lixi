@@ -346,6 +346,23 @@ export const burn = async (
     return error
   }
 }
+export const migrate = async (
+  gems: {
+    contractAddress: string
+    tokenId: string
+  }[],
+  toEVMAddress: string
+) => {
+  try {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/nft-migrate/migrate`, {
+      gems,
+      toEVMAddress,
+    })
+    return res
+  } catch (error: any) {
+    return error
+  }
+}
 export const sample = async () => {
   try {
   } catch (error: any) {

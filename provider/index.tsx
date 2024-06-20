@@ -270,6 +270,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
         })
       list = [...v1List]
     }
+
     const v2DragonGems = await horoscopeClient?.query({
       query: GET_ASSETS(chainKey),
       variables: {
@@ -309,6 +310,44 @@ function ContextProvider({ children }: { children: ReactNode }) {
         })
       list = [...list, ...v2List]
     }
+    
+    const supremeDragonGems = await horoscopeClient?.query({
+      query: GET_ASSETS(chainKey),
+      variables: {
+        contract_address: getConfig().SUPREME_DRAGON_GEM_COLLECTION_CONTRACT_ADDRESS,
+        owner: account?.wallet_address,
+      },
+    })
+    if (supremeDragonGems?.data?.[chainKey]?.cw721_token?.length) {
+      let supremeList = supremeDragonGems?.data?.[chainKey]?.cw721_token
+        .filter((token: Token) =>
+          token?.media_info?.onchain?.metadata?.attributes?.find((attr) => attr.trait_type == 'Color')
+        )
+        .map((token: Token) => {
+          const color = token.media_info.onchain.metadata.attributes.find((attr) => attr.trait_type == 'Color')?.value
+          let type
+          switch (color) {
+            case 'White':
+              type = 'sw'
+              break
+            case 'Blue':
+              type = 'sb'
+              break
+            case 'Golden':
+              type = 'sg'
+              break
+            case 'Red':
+              type = 'sr'
+              break
+          }
+          return {
+            ...token,
+            type: type,
+          }
+        })
+      list = [...list, ...supremeList]
+    }
+
     const shieldCollection = await horoscopeClient?.query({
       query: GET_ASSETS(chainKey),
       variables: {
