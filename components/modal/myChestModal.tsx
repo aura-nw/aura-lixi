@@ -182,7 +182,7 @@ export default function MyChestModal({ isOpen, onOpenChange, onClose }: any) {
                 <GemWithFrame type='sg' />
               </div>
               <div className='flex flex-col justify-between w-full'>
-                <div className='text-[#545454] text-xs'>Red Supreme</div>
+                <div className='text-[#545454] text-xs'>Gold Supreme</div>
                 <div className='flex gap-2 items-center w-full'>
                   <input
                     type='number'
@@ -204,7 +204,7 @@ export default function MyChestModal({ isOpen, onOpenChange, onClose }: any) {
                 <GemWithFrame type='sb' />
               </div>
               <div className='flex flex-col justify-between w-full'>
-                <div className='text-[#545454] text-xs'>Red Supreme</div>
+                <div className='text-[#545454] text-xs'>Blue Supreme</div>
                 <div className='flex gap-2 items-center w-full'>
                   <input
                     type='number'
@@ -226,7 +226,7 @@ export default function MyChestModal({ isOpen, onOpenChange, onClose }: any) {
                 <GemWithFrame type='sw' />
               </div>
               <div className='flex flex-col justify-between w-full'>
-                <div className='text-[#545454] text-xs'>Red Supreme</div>
+                <div className='text-[#545454] text-xs'>White Supreme</div>
                 <div className='flex gap-2 items-center w-full'>
                   <input
                     type='number'
@@ -261,7 +261,7 @@ export default function MyChestModal({ isOpen, onOpenChange, onClose }: any) {
                 Migrate
               </FilledButton>
             </div>
-            <Link href=''>
+            <Link href='https://insight.aura.network/introducing-aura-evm-expanding-possibilities-for-web3-developers/' target='_blank'>
               <div className='text-[#1DA0D7] underline flex items-center gap-1 justify-center mt-4'>
                 Aura EVM
                 <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'>
