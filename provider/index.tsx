@@ -7,6 +7,8 @@ import { Token } from '@/model/token'
 import { GET_ASSETS, GET_USER_DATA, applyCode } from '@/services'
 import { wallets as c98Mobile } from '@/services/c98MobileWallet'
 import { getGasPriceByChain } from '@/utils'
+import { MainnetAsset } from '@/utils/cosmos-kit/assets'
+import { Mainnet } from '@/utils/cosmos-kit/chains'
 import { getItem, removeItem, setItem } from '@/utils/localStorage'
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheObject, split } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
@@ -363,14 +365,8 @@ function ContextProvider({ children }: { children: ReactNode }) {
   console.log('Dragon Wish v1.0.2')
   return (
     <ChainProvider
-      chains={[
-        ...testnetChains,
-        ...chains.filter((chain) => chain.chain_name == 'aura' || chain.chain_name == 'auratestnet'),
-      ]}
-      assetLists={[
-        ...testnetAssets,
-        ...networkAssets.filter((chain) => chain.chain_name == 'aura' || chain.chain_name == 'auratestnet'),
-      ]}
+      chains={[...testnetChains, Mainnet]}
+      assetLists={[...testnetAssets, MainnetAsset]}
       signerOptions={signerOptions as any}
       endpointOptions={{
         isLazy: true,
