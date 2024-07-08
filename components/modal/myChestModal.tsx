@@ -120,7 +120,7 @@ export default function MyChestModal({ isOpen, onOpenChange, onClose }: any) {
     } catch (error: any) {
       setLoading(false)
       console.log(error)
-      toast(error.message || 'Failed to burn gem', {
+      toast(error.message || 'Failed to migrate gem', {
         type: 'error',
       })
     }

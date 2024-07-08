@@ -82,7 +82,7 @@ export const RevealForgingResult = ({
           </div>
           <Link
             target='_blank'
-            href={`${getConfig().AURASCAN_ENDPOINT}/tokens/token-nft/${prize.contractAddress}/${prize.tokenId}`}
+            href={`${getConfig().AURASCAN_ENDPOINT}/tokens/cw721/${prize.contractAddress}/${prize.tokenId}`}
             className='text-xs mt-2'>
             ID: <span>{prize.tokenId}</span>
           </Link>
@@ -118,7 +118,7 @@ export const RevealForgingResult = ({
           </div>
           <Link
             target='_blank'
-            href={`${getConfig().AURASCAN_ENDPOINT}/tokens/token-nft/${prize.contractAddress}/${prize.tokenId}`}
+            href={`${getConfig().AURASCAN_ENDPOINT}/tokens/cw721/${prize.contractAddress}/${prize.tokenId}`}
             className='text-xs mt-2'>
             ID: <span>{prize.tokenId}</span>
           </Link>

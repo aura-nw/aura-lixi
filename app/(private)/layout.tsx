@@ -84,7 +84,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             className={` hidden w-[112px] ${pathname != '/redeem' ? 'md:block' : ''}`}
           />
         </div>
-        <div
+        {/* <div
           className='cursor-pointer'
           onClick={() => {
             router.push('/burn')
@@ -105,7 +105,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             id='screen_Burn'
             className={` hidden w-[112px] ${pathname != '/burn' ? 'md:block' : ''}`}
           />
-        </div>
+        </div> */}
         <div
           className='cursor-pointer'
           onClick={() => {
