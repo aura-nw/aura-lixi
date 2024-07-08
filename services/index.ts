@@ -101,7 +101,7 @@ export const GET_JACKPOT = gql`
 export const GET_USER_JACKPOT = gql`
   query GET_USER_JACKPOT($user_id: Int, $jackpot_id: Int) {
     jackpot_users(
-      where: { user_id: { _eq: $user_id }, jackpot_id: { _eq: $jackpot_id }, tx_status: {_eq: "success"} }
+      where: { user_id: { _eq: $user_id }, jackpot_id: { _eq: $jackpot_id }, tx_status: { _eq: "success" } }
       order_by: { created_at: desc }
     ) {
       jackpot_id
@@ -150,6 +150,18 @@ export const GET_ASSETS = (chainKey: string) => gql`
       }
     }
   }
+`
+export const GET_BALANCE = (chainKey: string) => gql`
+query getBalance($address: String!, $denom: String) {
+  ${chainKey} {
+    account_balance(
+      where: {account: {address: {_eq: $address}}, denom: {_eq: $denom}}
+    ) {
+      amount
+      denom
+    }
+  }
+}
 `
 export const GET_USER_REF_HISTORY = (id: string) => gql`
   query GET_USER_REF_HISTORY {
@@ -313,6 +325,38 @@ export const redeem = async (
   try {
     const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/nft-combine/combine`, {
       materials: gems,
+    })
+    return res
+  } catch (error: any) {
+    return error
+  }
+}
+export const burn = async (
+  gems: {
+    contract_address: string
+    token_id: string
+  }[]
+) => {
+  try {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/nft-burn/burn`, {
+      materials: gems,
+    })
+    return res
+  } catch (error: any) {
+    return error
+  }
+}
+export const migrate = async (
+  gems: {
+    contractAddress: string
+    tokenId: string
+  }[],
+  toEVMAddress: string
+) => {
+  try {
+    const res = await privateAxios.post(`${getConfig().REST_API_ENDPOINT}/nft-migrate/migrate`, {
+      gems,
+      toEVMAddress,
     })
     return res
   } catch (error: any) {

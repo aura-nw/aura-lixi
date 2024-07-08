@@ -36,7 +36,7 @@ export default function FilledButton({
             classNames={{
               label: 'text-[#FFF8D5]',
               indicator: 'stroke-[#8E0B09]',
-              base: '-my-1',
+              base: '-my-1 mx-auto',
             }}
             size='sm'
           />
@@ -60,7 +60,7 @@ export default function FilledButton({
           classNames={{
             label: 'text-[#FFF8D5]',
             indicator: 'stroke-[#8E0B09]',
-            base: '-my-1',
+            base: '-my-1 mx-auto',
           }}
           size='sm'
         />

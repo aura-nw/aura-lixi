@@ -1,5 +1,5 @@
 'use client'
-import DragonLogo from '@/components/homeComponents/assets/dragon-logo.svg'
+import DragonLogo from './assets/logo.svg'
 import { Bangkok, Context } from '@/provider'
 import { useChain, useWallet } from '@cosmos-kit/react'
 import { WalletStatus } from 'cosmos-kit'
@@ -24,14 +24,14 @@ export default function Connect() {
   const { connect, address, chain, closeView, wallet, disconnect } = useChain(config.COSMOSKIT_CHAINKEY)
   const { status: globalStatus, mainWallet } = useWallet()
   const { refetch } = useQuery(GET_USER_DATA)
-  useEffect(() => {
-    if (account?.wallet_address && address == account.wallet_address) {
-      redirect('/')
-    }
-  }, [account?.wallet_address, address])
   const connectXHandler = () => {
     window.location.href = `${config.REST_API_ENDPOINT}/auth/twitter`
   }
+  useEffect(() => {
+    if (account?.wallet_address && address == account.wallet_address) {
+      closeView()
+    }
+  }, [account?.wallet_address, address])
   useEffect(() => {
     if (account && !account?.wallet_address && globalStatus == WalletStatus.Connected) {
       linkWalletHandler()
@@ -97,12 +97,10 @@ ${Date.now()}`
   return (
     <main className='relative min-h-screen'>
       <div className='flex flex-col items-center pt-[130px] px-1 text-center'>
-        <Image src={DragonLogo} alt='' className='w-[110px]' />
-        <div
-          className={`${Bangkok.className} mt-5 text-[#EE3724] uppercase drop-shadow-[0px_3.276px_3.276px_rgba(0,0,0,0.50)] text-[52px] font-bold leading-tight tracking-[0.524px] text-stroke`}>
-          Gem Forge
+        <Image src={DragonLogo} alt='' className='max-w-[508px] w-full' />
+        <div className={`text-[#F9C174] text-xl font-bold uppercase tracking-[14px] mt-4`}>
+          Quest for the Dragon's Wish
         </div>
-        <div className={`text-[#F9C174] text-xl font-bold uppercase tracking-[14px]`}>Quest for the Dragon's Wish</div>
         {account ? (
           account.wallet_address ? (
             address ? (
@@ -121,7 +119,7 @@ ${Date.now()}`
                     </span>
                     {shorten(address, 5, 5)}
                   </div>
-                  <FilledButton className='mt-6' onClick={() => router.push('/')} id="continue" >
+                  <FilledButton className='mt-6' onClick={() => router.push('/')} id='continue'>
                     Continue
                   </FilledButton>
                 </>
@@ -140,7 +138,7 @@ ${Date.now()}`
                     </span>
                     {shorten(address)}
                   </div>
-                  <FilledButton className='mt-6' onClick={() => disconnect()} id="disconnect_wallet">
+                  <FilledButton className='mt-6' onClick={() => disconnect()} id='disconnect_wallet'>
                     Disconnect
                   </FilledButton>
                   <div className='mt-6 italic text-sm text-[#FEA768]'>
@@ -151,7 +149,7 @@ ${Date.now()}`
               )
             ) : (
               <>
-                <FilledButton className='mt-16' onClick={() => connect()} id="connect_wallet">
+                <FilledButton className='mt-16' onClick={() => connect()} id='connect_wallet'>
                   Connect Wallet
                 </FilledButton>
                 <div className='mt-6 italic text-sm text-[#FEA768]'>
@@ -162,7 +160,7 @@ ${Date.now()}`
             )
           ) : (
             <>
-              <FilledButton className='mt-16' onClick={() => connect()} id="connect_wallet">
+              <FilledButton className='mt-16' onClick={() => connect()} id='connect_wallet'>
                 Connect Wallet
               </FilledButton>
               <div className='mt-6 italic text-sm text-[#FEA768]'>

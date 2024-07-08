@@ -4,11 +4,13 @@ import ConnectWalletModal from '@/components/modal/connectWalletModal'
 import { useClient } from '@/hooks'
 import { Account } from '@/model/account'
 import { Token } from '@/model/token'
-import { GET_ASSETS, GET_USER_DATA, applyCode } from '@/services'
+import { GET_ASSETS, GET_BALANCE, GET_USER_DATA, applyCode } from '@/services'
 import { wallets as c98Mobile } from '@/services/c98MobileWallet'
 import { getGasPriceByChain } from '@/utils'
 import { MainnetAsset } from '@/utils/cosmos-kit/assets'
 import { Mainnet } from '@/utils/cosmos-kit/chains'
+import { Euphoria } from '@/utils/cosmos-kit/chains'
+import { EuphoriaAsset } from '@/utils/cosmos-kit/assets'
 import { getItem, removeItem, setItem } from '@/utils/localStorage'
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache, NormalizedCacheObject, split } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
@@ -24,6 +26,7 @@ import { ChainProvider } from '@cosmos-kit/react'
 import { GoogleTagManager } from '@next/third-parties/google'
 import { NextUIProvider } from '@nextui-org/react'
 import axios from 'axios'
+import BigNumber from 'bignumber.js'
 import { chains, assets as networkAssets } from 'chain-registry'
 import { createClient } from 'graphql-ws'
 import getConfig, { setConfig } from 'next/config'
@@ -35,6 +38,7 @@ import { Bounce, ToastContainer } from 'react-toastify'
 
 export const Context = createContext<{
   account: Account | undefined
+  balance: number
   assets: Token[]
   fetchAssets: () => void
   setAccount: (account: Account) => void
@@ -45,6 +49,7 @@ export const Context = createContext<{
   lastAssetsUpdate?: number
 }>({
   account: undefined,
+  balance: 0,
   assets: [],
   fetchAssets: () => {},
   horoscopeClient: undefined,
@@ -83,34 +88,8 @@ export const Mori = localFont({
     },
   ],
 })
-const testnetChains: Chain[] = [
-  {
-    bech32_prefix: 'aura',
-    chain_id: 'aura-testnet-2',
-    chain_name: 'auradevnet',
-    network_type: 'testnet',
-    pretty_name: 'Aura Network Devnet',
-    slip44: 118,
-    status: 'live',
-  },
-]
-const testnetAssets: AssetList[] = [
-  {
-    assets: [
-      {
-        base: 'utaura',
-        denom_units: [
-          { denom: 'utaura', exponent: 0 },
-          { denom: 'taura', exponent: 6 },
-        ],
-        display: 'taura',
-        name: 'Aura',
-        symbol: 'TAURA',
-      },
-    ],
-    chain_name: 'auradevnet',
-  },
-]
+const testnetChains: Chain[] = [Euphoria]
+const testnetAssets: AssetList[] = [EuphoriaAsset]
 
 const signerOptions = {
   preferredSignType: (chain: Chain) => {
@@ -121,6 +100,7 @@ const signerOptions = {
 }
 function ContextProvider({ children }: { children: ReactNode }) {
   const [account, setAccount] = useState<Account>()
+  const [balance, setBalance] = useState<number>(0)
   const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>()
   const [horoscopeClient, setHoroscopeClient] = useState<ApolloClient<NormalizedCacheObject>>()
   const [assets, setAssets] = useState<Token[]>([])
@@ -249,6 +229,20 @@ function ContextProvider({ children }: { children: ReactNode }) {
         owner: account?.wallet_address,
       },
     })
+    const addressBalance = await horoscopeClient?.query({
+      query: GET_BALANCE(chainKey),
+      variables: {
+        address: account?.wallet_address,
+        denom: chainKey == 'euphoria' ? 'ueaura' : 'uaura',
+      },
+    })
+    if (addressBalance?.data?.euphoria?.account_balance?.[0]?.amount) {
+      setBalance(
+        +BigNumber(addressBalance?.data?.euphoria?.account_balance?.[0]?.amount)
+          .div(BigNumber(10 ** 6))
+          .toFixed()
+      )
+    }
     if (v1DragonGems?.data?.[chainKey]?.cw721_token?.length) {
       let v1List = v1DragonGems?.data?.[chainKey]?.cw721_token
         .filter((token: Token) =>
@@ -278,6 +272,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
         })
       list = [...v1List]
     }
+
     const v2DragonGems = await horoscopeClient?.query({
       query: GET_ASSETS(chainKey),
       variables: {
@@ -317,6 +312,44 @@ function ContextProvider({ children }: { children: ReactNode }) {
         })
       list = [...list, ...v2List]
     }
+    
+    const supremeDragonGems = await horoscopeClient?.query({
+      query: GET_ASSETS(chainKey),
+      variables: {
+        contract_address: getConfig().SUPREME_DRAGON_GEM_COLLECTION_CONTRACT_ADDRESS,
+        owner: account?.wallet_address,
+      },
+    })
+    if (supremeDragonGems?.data?.[chainKey]?.cw721_token?.length) {
+      let supremeList = supremeDragonGems?.data?.[chainKey]?.cw721_token
+        .filter((token: Token) =>
+          token?.media_info?.onchain?.metadata?.attributes?.find((attr) => attr.trait_type == 'Color')
+        )
+        .map((token: Token) => {
+          const color = token.media_info.onchain.metadata.attributes.find((attr) => attr.trait_type == 'Color')?.value
+          let type
+          switch (color) {
+            case 'White':
+              type = 'sw'
+              break
+            case 'Blue':
+              type = 'sb'
+              break
+            case 'Golden':
+              type = 'sg'
+              break
+            case 'Red':
+              type = 'sr'
+              break
+          }
+          return {
+            ...token,
+            type: type,
+          }
+        })
+      list = [...list, ...supremeList]
+    }
+
     const shieldCollection = await horoscopeClient?.query({
       query: GET_ASSETS(chainKey),
       variables: {
@@ -333,7 +366,8 @@ function ContextProvider({ children }: { children: ReactNode }) {
       })
       list = [...list, ...shieldList]
     }
-    setAssets(list)
+    const newList = list.filter((a) => !blackListId.includes(a.token_id))
+    setAssets([...newList])
     setLastAssetsUpdate(Date.now())
   }
 
@@ -371,8 +405,8 @@ function ContextProvider({ children }: { children: ReactNode }) {
       endpointOptions={{
         isLazy: true,
         endpoints: {
-          auradevnet: {
-            rpc: ['https://rpc.dev.aura.network'],
+          auratestnet: {
+            rpc: ['https://rpc.euphoria.aura.network'],
           },
           aura: {
             rpc: ['https://rpc.aura.network'],
@@ -412,6 +446,7 @@ function ContextProvider({ children }: { children: ReactNode }) {
           assets,
           fetchAssets,
           lastAssetsUpdate,
+          balance,
         }}>
         <NextUIProvider>
           <ApolloProvider client={client}>{children}</ApolloProvider>
